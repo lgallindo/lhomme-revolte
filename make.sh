@@ -1,14 +1,19 @@
 #!/bin/sh
 
 # Optional helper build script for Anarch.
+# by drummyfish, released under CC0 1.0, public domain
 #
 # usage:
 #
-# ./make.sh platform [compiler]
+# ./make.sh [frontend [compiler]]
+
+C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -D _DEFAULT_SOURCE -o anarch"
+# note: _DEFAULT_SOURCE shuts up the warning about undeclared usleep
 
 if [ $# -lt 1 ]; then
-  echo "need a parameter (sdl, pokitto, gb, emscripten, ...)"
-  exit 0
+  FRONTEND="sdl"
+else
+  FRONTEND="$1"
 fi
 
 clear; clear; 
@@ -18,38 +23,32 @@ C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-paramete
 COMPILER='g++'
 
 if [ $# -eq 2 ]; then
-  COMPILER=$2
+  COMPILER="$2"
 
   if [ $2 = "tcc" ]; then # you'll probably want to modify this
     C_FLAGS="${C_FLAGS} -L/usr/lib/x86_64-linux-gnu/pulseaudio/ 
       -I/home//git/tcc/tcc-0.9.27/include
       -I/usr/lib/gcc/x86_64-linux-gnu/8/include/"
   fi
+else
+  COMPILER="cc"
 fi
 
 echo "compiling"
 
-if [ $1 = "sdl" ]; then
+if [ "$FRONTEND" = "sdl" ]; then
   # PC SDL build, requires:
   # - g++
   # - SDL2 (dev) package
 
   SDL_FLAGS=`sdl2-config --cflags --libs`
   COMMAND="${COMPILER} ${C_FLAGS} main_sdl.c -I/usr/local/include ${SDL_FLAGS}"
+elif [ "$FRONTEND" = "x11" ]; then
+  # X11 build
 
-  echo ${COMMAND}
-
-  ${COMMAND}
-elif [ $1 = "x11" ]; then
-  # X11 build, requires:
-  # - libx11-dev
-
-  COMMAND="${COMPILER} ${C_FLAGS} main_x11.c -lX11"
-
-  echo ${COMMAND}
-
-  ${COMMAND}
-elif [ $1 = "ncurses" ]; then
+  X11_FLAGS=`pkg-config --cflags --libs x11`
+  COMMAND="${COMPILER} ${C_FLAGS} main_x11.c ${X11_FLAGS}"
+elif [ "$FRONTEND" = "ncurses" ]; then
   # ncurses build, requires:
   # - libncurses-dev
 
@@ -57,46 +56,31 @@ elif [ $1 = "ncurses" ]; then
 
   echo ${COMMAND}
 
-  ${COMMAND}
-elif [ $1 = "saf" ]; then
+  NCURSES_FLAGS=`ncurses5-config --cflags --libs` # may need edit
+  COMMAND="${COMPILER} ${C_FLAGS} main_ncurses.c ${NCURSES_FLAGS}"
+elif [ "$FRONTEND" = "saf" ]; then
   # SAF build using SDL, requires:
   # - saf.h
   # - SDL2 (dev) package
 
   SDL_FLAGS=`sdl2-config --cflags --libs --static-libs`
   COMMAND="${COMPILER} ${C_FLAGS} main_saf.c -I/usr/local/include ${SDL_FLAGS}"
-
-  echo ${COMMAND}
-
-  ${COMMAND}
-elif [ $1 = "terminal" ]; then
+elif [ "$FRONTEND" = "terminal" ]; then
   # PC terminal build, requires:
   # - g++
 
   COMMAND="${COMPILER} ${C_FLAGS} main_terminal.c"
-
-  echo ${COMMAND}
-
-  ${COMMAND}
-elif [ $1 = "csfml" ]; then
+elif [ "$FRONTEND" = "csfml" ]; then
   # csfml build, requires:
   # - csfml
 
   COMMAND="${COMPILER} ${C_FLAGS} main_csfml.c -lcsfml-graphics -lcsfml-window -lcsfml-system -lcsfml-audio"
+elif [ "$FRONTEND" = "test" ]; then
+  # test build, requires:
+  # - g++
 
-  echo ${COMMAND}
-
-  ${COMMAND}
-elif [ $1 = "test" ]; then
-  # automatic test build, requires:
-  # - gcc
-
-  C_FLAGS="-O3 -g -fsanitize=address,undefined"
-  COMMAND="${COMPILER} ${C_FLAGS} -o revolte_$1 main_test.c"
-  echo ${COMMAND}
-
-  ${COMMAND}
-elif [ $1 = "pokitto" ]; then
+  COMMAND="${COMPILER} ${C_FLAGS} main_test.c"
+elif [ "$FRONTEND" = "pokitto" ]; then
   # Pokitto build, requires:
   # - PokittoLib, in this folder create a symlink named "PokittoLib" to the 
   #   "Pokitto" subfolder of PokittoLib
@@ -105,51 +89,18 @@ elif [ $1 = "pokitto" ]; then
   #   "bin" subfolder
   # - files like My_settings.h required by Pokitto
 
-  make
-  ./PokittoEmu BUILD/firmware.bin 
-elif [ $1 = "emscripten" ]; then
+  COMMAND="make && ./PokittoEmu BUILD/firmware.bin"
+elif [ "$FRONTEND" = "emscripten" ]; then
   # emscripten (browser Javascript) build, requires:
   # - emscripten
 
-  ../emsdk/upstream/emscripten/emcc ./main_sdl.c -s USE_SDL=2 -O3 -lopenal --shell-file HTMLshell.html -o revolte_$1.html -s EXPORTED_FUNCTIONS='["_main","_webButton"]' -s EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]'
-elif [ $1 = "sdl1" ]; then
-  # PC SDL 1.2 build, requires:
-  # - g++
-  # - SDL 1.2 (dev) package
-
-  SDL_FLAGS=`sdl-config --libs`
-  COMMAND="${COMPILER} ${C_FLAGS} main_sdl1.c -I/usr/local/include ${SDL_FLAGS}"
-
-  echo ${COMMAND}
-
-  ${COMMAND}
-elif [ $1 = "miyoo" ]; then
-  # SDL 1.2 build for miyoo, requires:
-  # - arm-linux-g++
-  # - SDL 1.2 (dev) package
-
-  COMPILER="arm-linux-g++"
-  SYSROOT=`${COMPILER} --print-sysroot`
-  SDL_FLAGS=`${SYSROOT}/usr/bin/sdl-config --libs`
-  COMMAND="${COMPILER} ${C_FLAGS} main_sdl1.c ${SDL_FLAGS} -DMIYOO"
-
-  echo ${COMMAND}
-
-  ${COMMAND}
-elif [ $1 = "retrofw" ]; then
-  # SDL 1.2 build for retrofw, requires:
-  # - mipsel-linux-g++
-  # - SDL 1.2 (dev) package
-
-  COMPILER="mipsel-linux-g++"
-  SYSROOT=`${COMPILER} --print-sysroot`
-  SDL_FLAGS=`${SYSROOT}/usr/bin/sdl-config --libs`
-  COMMAND="${COMPILER} ${C_FLAGS} main_sdl1.c ${SDL_FLAGS} -DRETROFW"
-
-  echo ${COMMAND}
-
-  ${COMMAND}
-  mv revolte_retrofw revolte && mksquashfs revolte icon.png LICENSE README.md revolte.retrofw.desktop revolte.opk -noappend -no-xattrs
+  COMMAND="../emsdk/upstream/emscripten/emcc ./main_sdl.c -s USE_SDL=2 -O3 -lopenal --shell-file HTMLshell.html -o anarch.html -s EXPORTED_FUNCTIONS='[\"_main\",\"_webButton\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'"
 else
   echo "unknown parameter: $1"
+  return 1
 fi
+  
+echo ${COMMAND}
+${COMMAND}
+
+return $?

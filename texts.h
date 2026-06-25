@@ -3,7 +3,6 @@
 
   This file contains texts to be used in the game.
 
-
   Released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
   plus a waiver of all other intellectual property. The goal of this work is
   be and remain completely in the public domain forever, available for any use
@@ -33,7 +32,7 @@ static const char *SFG_menuItemTexts[] =
 #define SFG_TEXT_SAVED "saved"
 #define SFG_TEXT_LEVEL_COMPLETE "level done"
 
-#define SFG_VERSION_STRING "1.1d"
+#define SFG_VERSION_STRING "2.0d"
 /**<
   Version numbering is following: major.minor for stable releases,
   in-development unstable versions have the version of the latest stable +

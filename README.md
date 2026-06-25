@@ -1,6 +1,6 @@
 # L'Homme Révolté
 
-**L'Homme Révolté** (formerly *Anarch*) is a unique, public domain (CC0), FPS game engine designed to run on absolutely anything (from modern PCs to tiny microcontrollers). It features 10 levels, raycasted graphics, and a minimalist design.
+**L'Homme Révolté** is a FPS game engine designed to run on absolutely anything (from modern PCs to tiny microcontrollers). It features 10 levels, raycasted graphics, and a minimalist design.
 
 ## Philosophy
 
