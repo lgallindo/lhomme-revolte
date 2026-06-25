@@ -2,6 +2,7 @@
 
 - Prefer TDD whenever possible.
 - We handle warnings as soon as they appear.
+- No dynamic libraries. Statically link everything across all platforms.
 
 ## Git Protocol Constraints
 - No fast-forward merges without explicit user approval (`--no-ff`).

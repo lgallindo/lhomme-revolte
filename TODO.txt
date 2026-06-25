@@ -133,9 +133,9 @@ bugs:
   This warning is intentionally bypassed. It is a fundamental macro in legacy libX11.
   Fixing it requires ripping out the engine's X11 keyboard input translation layer and
   replacing it with XKB.
-  Current dependencies: <X11/Xlib.h>, <X11/keysym.h>, <X11/Xutil.h> (links -lX11).
+  Current dependencies: <X11/Xlib.h>, <X11/keysym.h>, <X11/Xutil.h> (statically links libX11).
   With XKB: would require <xkbcommon/xkbcommon.h> and <xkbcommon/xkbcommon-x11.h>
-  (linking -lxkbcommon and -lxkbcommon-x11), plus migrating all event handling to
+  (statically linking libxkbcommon and libxkbcommon-x11), plus migrating all event handling to
   the xkb state machine. Deemed out of scope.
 done:
 
