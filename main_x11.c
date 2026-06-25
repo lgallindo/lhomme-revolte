@@ -127,7 +127,7 @@ void SFG_playSound(uint8_t soundIndex, uint8_t volume)
 int main(int argc, char *argv[])
 {
   puts(
-    "Anarch v" SFG_VERSION_STRING "X11 frontend (no sound)\n"
+    "L'Homme Révolté v" SFG_VERSION_STRING "X11 frontend (no sound)\n"
     "by drummyfish, released under CC0 1.0, public domain");
 
   SFG_init();

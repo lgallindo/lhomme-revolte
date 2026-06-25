@@ -25,3 +25,5 @@ documentation: drummyfish
 assistance: drummyfish
 office maintenance: drummyfish
 special thanks to: no one
+
+L'Homme Révolté fork by L. Gallindo.

@@ -289,8 +289,8 @@ int main(int argc, char *argv[])
   {
     if (argv[i][0] == '-' && argv[i][1] == 'h' && argv[i][2] == 0)
     {
-      puts("Anarch (CSFML), version " SFG_VERSION_STRING "\n");
-      puts("Anarch is a unique suckless FPS game. Collect weapons and items and destroy");
+      puts("L'Homme Révolté (CSFML), version " SFG_VERSION_STRING "\n");
+      puts("L'Homme Révolté is a unique suckless FPS game. Collect weapons and items and destroy");
       puts("robot enemies in your way in order to get to the level finish. Some door are");
       puts("locked and require access cards. Good luck!\n");
       puts("created by Miloslav \"drummyfish\" Ciz, 2020, released under CC0 1.0 (public domain)\n");
@@ -345,7 +345,7 @@ int main(int argc, char *argv[])
 
   sfSprite* windowSprite = sfSprite_create();
 
-  window = sfRenderWindow_create(mode, "Anarch", 
+  window = sfRenderWindow_create(mode, "L'Homme Révolté", 
     fullScreen ? sfFullscreen : (sfResize | sfClose ), NULL);
 
   sfSprite_setTexture(windowSprite, windowTexture, sfTrue);
