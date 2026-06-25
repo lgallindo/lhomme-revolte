@@ -2,7 +2,7 @@ This is a mod that replaces assets (images and sounds) with procedurally
 generated ones, making the game really small, but also looking a bit worse and
 take more RAM. Makefile is also modified to optimize for lowest size and
 self-compress the executable, which with the gcc compiler achieved size under 60
-kb. By drummyfish, released under CC0, public domain.
+kb. By drummerfish, released under CC0, public domain.
 
 diff --git a/game.h b/game.h
 index 24285cb..b8bdb20 100755

@@ -1007,7 +1007,7 @@ void SFG_pixelFunc(RCL_PixelInfo *pixel)
         ) * SFG_RAYCASTING_SUBSAMPLE + SFG_game.backgroundScroll) % SFG_GAME_RESOLUTION_Y], 
       (SFG_game.backgroundScaleMap[(pixel->position.y          // ^ TODO: get rid of mod?
   #if SFG_BACKGROUND_BLUR != 0
-        + SFG_backgroundBlurOffsets[SFG_backgroundBlurIndex + 1]
+        + SFG_backgroundBlurOffsets[(SFG_backgroundBlurIndex + 1) % 8]
   #endif
         ) % SFG_GAME_RESOLUTION_Y])                                               
       );

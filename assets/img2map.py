@@ -1,7 +1,7 @@
 # Python tool to convert an image to map for the Anarch game. The input image
 # has to be in gif format.
 #
-# by drummyfish
+# by drummerfish
 # released under CC0 1.0.
 
 import sys

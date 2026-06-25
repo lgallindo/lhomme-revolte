@@ -92,7 +92,7 @@ uint8_t SFG_getNextMusicSample(void)
     case 1:
     {
       uint32_t a = (S >> 10);
-      result = S & (3 << (((a ^ (a << ((S >> 6) % 32)))) % 32));
+      result = S & (3U << (((a ^ (a << ((S >> 6) % 32)))) % 32));
 
       break;
     }
@@ -130,9 +130,9 @@ uint8_t SFG_getNextMusicSample(void)
     case 5:
     {
       uint32_t a = S >> ((S >> 6) % 32);
-      uint32_t b = 0x011121 >> (((a + S) >> 11) % 32);
+      uint32_t b = 0x011121U >> (((a + S) >> 11) % 32);
       result = 
-        (((S >> 9) + (S ^ (S << 1))) & (0x7f >> (((S >> 15) & 0x03) % 32))) 
+        (((S >> 9) + (S ^ (S << 1))) & (0x7fU >> (((S >> 15) & 0x03) % 32))) 
         & (b + a);
 
       break;

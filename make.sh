@@ -22,7 +22,7 @@ if [ $# -eq 2 ]; then
 
   if [ $2 = "tcc" ]; then # you'll probably want to modify this
     C_FLAGS="${C_FLAGS} -L/usr/lib/x86_64-linux-gnu/pulseaudio/ 
-      -I/home/tastyfish/git/tcc/tcc-0.9.27/include
+      -I/home//git/tcc/tcc-0.9.27/include
       -I/usr/lib/gcc/x86_64-linux-gnu/8/include/"
   fi
 fi
@@ -88,11 +88,11 @@ elif [ $1 = "csfml" ]; then
 
   ${COMMAND}
 elif [ $1 = "test" ]; then
-  # test build, requires:
-  # - g++
+  # automatic test build, requires:
+  # - gcc
 
-  COMMAND="${COMPILER} ${C_FLAGS} main_test.c"
-
+  C_FLAGS="-O3 -g -fsanitize=address,undefined"
+  COMMAND="${COMPILER} ${C_FLAGS} -o revolte_$1 main_test.c"
   echo ${COMMAND}
 
   ${COMMAND}

@@ -1,6 +1,6 @@
 # Python tool to convert font image to C bit array.
 #
-# by drummyfish
+# by drummerfish
 # released under CC0 1.0.
 
 from PIL import Image

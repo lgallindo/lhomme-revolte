@@ -1,6 +1,6 @@
 Anarch cooperative multiplayer mod. More info in README_multiplayer.txt.
 
-by drummyfish, released under CC0 1.0, public domain
+by drummerfish, released under CC0 1.0, public domain
 
 diff --git a/README_multiplayer.txt b/README_multiplayer.txt
 new file mode 100644
@@ -10,7 +10,7 @@ index 0000000..51925e1
 @@ -0,0 +1,100 @@
 +ANARCH: COOPERATIVE MULTIPLAYER MOD README
 +
-+by drummyfish, released under CC0 1.0, public domain
++by drummerfish, released under CC0 1.0, public domain
 +
 +This mod adds cooperative multiplayer for up to 4 players. The game is further
 +modified a bit to make it better playable that way -- for example dying just
@@ -2356,7 +2356,7 @@ index b2b28ae..61abbc5 100644
    {
 -    puts("Anarch (SDL), version " SFG_VERSION_STRING "\n");
 +    puts("Anarch (SDL): cooperative multiplayer, version " SFG_VERSION_STRING "\n");
-     puts("Anarch is a unique suckless FPS game. Collect weapons and items and destroy");
+     puts("Anarch is a unique FPS game. Collect weapons and items and destroy");
      puts("robot enemies in your way in order to get to the level finish. Some door are");
      puts("locked and require access cards. Good luck!\n");
 @@ -423,7 +553,10 @@ int main(int argc, char *argv[])

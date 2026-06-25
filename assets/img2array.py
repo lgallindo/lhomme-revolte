@@ -1,6 +1,6 @@
 # Python tool to convert an image to C array for small3dlib.
 #
-# by drummyfish
+# by drummerfish
 # released under CC0 1.0.
 
 import sys
@@ -19,7 +19,7 @@ def printHelp():
   print("  -c      compress (4 bpp, 16 color palette), only with -pT")
   print("  -t      transpose (store by columns)")
   print("");
-  print("by Miloslav \"drummyfish\" Ciz")
+  print("Original Engine")
   print("released under CC0 1.0")
 
 def rgbTo565(rgb):

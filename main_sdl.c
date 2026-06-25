@@ -414,7 +414,7 @@ int main(int argc, char *argv[])
   if (argHelp)
   {
     puts("L'Homme Révolté (SDL), version " SFG_VERSION_STRING "\n");
-    puts("L'Homme Révolté is a unique suckless FPS game. Collect weapons and items and destroy");
+    puts("L'Homme Révolté is a unique FPS game. Collect weapons and items and destroy");
     puts("robot enemies in your way in order to get to the level finish. Some door are");
     puts("locked and require access cards. Good luck!\n");
     puts("CLI flags:\n");

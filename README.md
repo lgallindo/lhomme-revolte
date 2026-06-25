@@ -1,6 +1,6 @@
 # L'Homme Révolté
 
-**L'Homme Révolté** (formerly *Anarch*) is a unique, public domain (CC0), suckless FPS game engine designed to run on absolutely anything (from modern PCs to tiny microcontrollers). It features 10 levels, raycasted graphics, and a minimalist design.
+**L'Homme Révolté** (formerly *Anarch*) is a unique, public domain (CC0), FPS game engine designed to run on absolutely anything (from modern PCs to tiny microcontrollers). It features 10 levels, raycasted graphics, and a minimalist design.
 
 ## Philosophy
 
@@ -11,7 +11,7 @@ Inspired by Albert Camus' *L'Homme Révolté* (The Rebel), this project rebels a
 - **Extreme Portability:** Runs on X11, SDL, SDL 1.2, terminal, ncurses, CSFML, web browsers (Emscripten), Pokitto, and more.
 - **Zero Dependencies:** Written in pure C99, requiring only a standard C library.
 - **Tiny Footprint:** The entire game logic, assets, and engine fit into less than 200KB of compiled binary.
-- **Public Domain:** Released under CC0 1.0. Do whatever you want with it.
+- **Public Domain / GPL:** The original engine is released under CC0 1.0. All new code added in this fork is licensed under the GPL.
 
 ## Compiling
 
@@ -36,5 +36,5 @@ Run the resulting binary (e.g., `./revolte_sdl`).
 - **Tab / Backspace:** Map
 
 ## Credits
-Forked and maintained by L. Gallindo.
-Original engine (*Anarch*) created by Miloslav "drummyfish" Ciz, 2020.
+Forked and maintained by lgallindo, 2026.
+Original engine (*Anarch*) created 2020.

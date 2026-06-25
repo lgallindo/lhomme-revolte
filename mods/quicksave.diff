@@ -1,5 +1,5 @@
 This mod adds a simple quicksave/quickload functionality, quicksaves do NOT
-survive game restart, they are only kept in RAM. By drummyfish, released under
+survive game restart, they are only kept in RAM. By drummerfish, released under
 CC0 1.0, public domain.
 
 diff --git a/game.h b/game.h

@@ -1,7 +1,7 @@
 This mod adds full z-buffer that mostly fixes the incorrect sprite visibility,
 however RAM consumption increases quite a bit. Note that visiblity inaccuracies
 may still occur as e.g. floor depth is not accurate and isn't used, but the game
-generally looks much better. By drummyfish, released under CC0 1.0, public
+generally looks much better. By drummerfish, released under CC0 1.0, public
 domain.
 
 diff --git a/constants.h b/constants.h

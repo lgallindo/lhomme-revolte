@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Anarch
-Comment=The suckless FPS game
+Comment=The FPS game
 Exec=anarch
 Terminal=false
 Type=Game

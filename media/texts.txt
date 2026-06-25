@@ -40,24 +40,24 @@ share on:
   - Raddle
   - reddit :(
   - WM Commons
-  - suckless IRC/maillist
+  - IRC/maillist
   - send to Luke Smith
 
 ============ tags ============
 
-#anarcho-pacifism #game #retro #pseudo3d #foss #free #countercomplex
+#anarcho- #game #retro #pseudo3d #foss #free #countercomplex
 
 ===== general: by length =====
 
 Anarch: a Very Special Game
 
-Anarch: super small public domain no-dependency from-scratch suckless Doom clone
+Anarch: super small public domain no-dependency from-scratch Doom clone
 
-I've made this super small public domain no-dependency from-scratch suckless
+I've made this super small public domain no-dependency from-scratch 
 Doom clone.
 
 Anarch: extremely small, completely public domain, no-dependency, no-file,
-portable suckless anarcho-pacifist from-scratch 90s-style Doom clone that runs
+portable anarcho-pacifist from-scratch 90s-style Doom clone that runs
 everywhere, made for the benefit of all living beings.
 
 Anarch is a completely public domain, free software 90s-style anarcho-pacifist
@@ -95,7 +95,7 @@ As a game, Anarch offers:
 
 ======== short manual ========
 
-Anarch is a unique suckless FPS game. Collect weapons and items and destroy
+Anarch is a unique FPS game. Collect weapons and items and destroy
 robot enemies in your way in order to get to the level finish. Some door are
 locked and require access cards. Good luck!
 
@@ -188,7 +188,7 @@ out yourself :) Besides that there are secret areas on each map.
 
 ========== gb meta ===========
 
-This is a GB Meta port of my suckless, platform-independent Doom-like game
+This is a GB Meta port of my , platform-independent Doom-like game
 Anarch, made with the help of a raycasting library (raycastlib) I've made and
 also showcased here on GB Meta some time ago.
 
@@ -226,12 +226,12 @@ recordings.
 
 ======== social nets =========
 
-# Releasing my long in development suckless game Anarch!
+# Releasing my long in development game Anarch!
 
 I hold.
 
 It is extremely small, completely public domain (CC0) free software, has
-no-dependencies, is extremely portable, suckless, made completely from-scratch
+no-dependencies, is extremely portable, , made completely from-scratch
 in the 90s-style of the original Doom. I made it for the benefit of all living
 beings and am now sharing it with you. Enjoy and spread it around!
 
@@ -243,12 +243,12 @@ repository: <REPOURL>
 
 play in browser: <PLAYINBROWSER>
 
-#game #libregame #suckless #freesoftware #freeculture #publicdomain #CC0 #indie
+#game #libregame ##freesoftware #freeculture #publicdomain #CC0 #indie
 
 ======= video trailer =======
 
 This is a trailer for my public domain Doom-like game Anarch. The game is very
-special, extremely small, suckless, with tiny hardware demands, running
+special, extremely small, , with tiny hardware demands, running
 basically on any platforms. It has many nice properties and is one of its kind.
 It is completely free, both as in gratis and freedom. To get it, visit
 <WEBSITE>.
@@ -264,14 +264,14 @@ palette.
 
 ======= libregamewiki ========
 
-Anarch is a completely public domain, free software, suckless 90s-style
+Anarch is a completely public domain, free software, 90s-style
 from scratch. The game's aim is to experiment with a different game development
 philosophy.
 
 ABOUT
 
-philosophies and ideas, including suckless programming, extreme portability,
-anti-copyright, selflessness and anarcho-pacifism.
+philosophies and ideas, including programming, extreme portability,
+anti-copyright, selflessness and anarcho-.
 
 The game is a "pseudo 3D" first person shooter, like Doom, and consists of 10
 levels. The graphics uses a 256 color palette and is a little simpler than that
@@ -303,7 +303,7 @@ Some of the aspects of the game worth mentioning are:
 
 Hello,
 
-I am releasing version 1.0 of my suckless game Anarch which I've been working
+I am releasing version 1.0 of my game Anarch which I've been working
 on on evenings for maybe two years.
 
 It's probably a little different from what you expect from a typical modern
@@ -312,7 +312,7 @@ differently. It looks like from early 90s and will seem shitty and backwards,
 but it's just aiming for different goals than wide popularity or making profit.
 
 It is extremely small, completely public domain, no-dependency, no-file,
-very portable suckless anarcho-pacifist from-scratch 90s-style Doom clone that
+very portable anarcho-pacifist from-scratch 90s-style Doom clone that
 runs everywhere (needs just 32 KB RAM and 40 MHz CPU), made for the benefit of
 all living beings. For more see the page at libregamewiki: <LIBREGAMEWIKILINK>.
 
@@ -343,4 +343,4 @@ Releasing my long in development #game #Anarch! <link>. Also stop using
 
 ==== website ====
 
-Anarch:      Very special suckless FPS Doom-like game in pure C.
+Anarch:      Very special FPS Doom-like game in pure C.

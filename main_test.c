@@ -84,17 +84,17 @@ void printTestHeading(const char *text)
   printf("\n~~~~~ testing: %s ~~~~~\n\n",text);
 }
 
-const char colors[8] = " .,-;imX";
+const char colors[9] = " .,-;imX";
 
 void printScreen()
 {
-  const char *c = screen;
+  const char *c = (const char *)screen;
 
   for (uint8_t y = 0; y < SFG_SCREEN_RESOLUTION_Y; ++y)
   {
     for (uint8_t x = 0; x < SFG_SCREEN_RESOLUTION_X; ++x)
     {
-      putchar(*c != 7 ? colors[(*c) % 8] : '@');
+      putchar(*c != 7 ? colors[((uint8_t)*c) % 8] : '@');
       ++c;
     }
 

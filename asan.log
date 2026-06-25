@@ -1,0 +1,56 @@
+sounds.h:95:23: runtime error: left shift of 3 by 31 places cannot be represented in type 'int'
+game.h:1010:64: runtime error: index 8 out of bounds for type 'signed char [8]'
+game.h:1010:64: runtime error: load of address 0x597a2876c8e8 with insufficient space for an object of type 'const int8_t'
+0x597a2876c8e8: note: pointer points here
+ 01 04 0f 09  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00
+              ^ 
+=================================================================
+==621933==ERROR: AddressSanitizer: global-buffer-overflow on address 0x597a2876c8e8 at pc 0x597a287330a8 bp 0x7ffdda41ffa0 sp 0x7ffdda41ff90
+READ of size 1 at 0x597a2876c8e8 thread T0
+    #0 0x597a287330a7 in SFG_pixelFunc(RCL_PixelInfo*) /home/lgms/code/research/anarch/game.h:1010
+    #1 0x597a28734a32 in _RCL_drawHorizontalColumn /home/lgms/code/research/anarch/raycastlib.h:1128
+    #2 0x597a28734a32 in _RCL_columnFunctionComplex(RCL_HitResult*, unsigned short, unsigned short, RCL_Ray) /home/lgms/code/research/anarch/raycastlib.h:1338
+    #3 0x597a2875c2fd in RCL_castRaysMultiHit(RCL_Camera, int (*)(short, short), int (*)(short, short), void (*)(RCL_HitResult*, unsigned short, unsigned short, RCL_Ray), RCL_RayConstraints) /home/lgms/code/research/anarch/raycastlib.h:1004
+    #4 0x597a2875c2fd in RCL_renderComplex(RCL_Camera, int (*)(short, short), int (*)(short, short), int (*)(short, short), RCL_RayConstraints) /home/lgms/code/research/anarch/raycastlib.h:1602
+    #5 0x597a2875c2fd in SFG_draw() /home/lgms/code/research/anarch/game.h:4725
+    #6 0x597a28760149 in SFG_mainLoopBody() /home/lgms/code/research/anarch/game.h:4999
+    #7 0x597a2871aa96 in main /home/lgms/code/research/anarch/main_test.c:189
+    #8 0x79b43b22a600  (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a600) (BuildId: 90ebd03ae9d9f42b23b4eb82fdf70352cf744198)
+    #9 0x79b43b22a717 in __libc_start_main (/usr/lib/x86_64-linux-gnu/libc.so.6+0x2a717) (BuildId: 90ebd03ae9d9f42b23b4eb82fdf70352cf744198)
+    #10 0x597a2871b874 in _start (/home/lgms/code/research/anarch/revolte_test+0x44874) (BuildId: d53c5c2735113d6652f3ff21f6e57f232769ad1e)
+
+0x597a2876c8e8 is located 56 bytes before global variable 'SFG_ditheringPatterns' defined in 'game.h:522:22' (0x597a2876c920) of size 72
+0x597a2876c8e8 is located 0 bytes after global variable 'SFG_backgroundBlurOffsets' defined in 'game.h:860:21' (0x597a2876c8e0) of size 8
+SUMMARY: AddressSanitizer: global-buffer-overflow /home/lgms/code/research/anarch/game.h:1010 in SFG_pixelFunc(RCL_PixelInfo*)
+Shadow bytes around the buggy address:
+  0x597a2876c600: 00 01 f9 f9 f9 f9 f9 f9 00 01 f9 f9 f9 f9 f9 f9
+  0x597a2876c680: 03 f9 f9 f9 f9 f9 f9 f9 07 f9 f9 f9 f9 f9 f9 f9
+  0x597a2876c700: 00 03 f9 f9 f9 f9 f9 f9 04 f9 f9 f9 f9 f9 f9 f9
+  0x597a2876c780: 00 00 f9 f9 f9 f9 f9 f9 00 00 00 00 00 03 f9 f9
+  0x597a2876c800: f9 f9 f9 f9 00 00 f9 f9 f9 f9 f9 f9 00 01 f9 f9
+=>0x597a2876c880: f9 f9 f9 f9 00 01 f9 f9 f9 f9 f9 f9 00[f9]f9 f9
+  0x597a2876c900: f9 f9 f9 f9 00 00 00 00 00 00 00 00 00 f9 f9 f9
+  0x597a2876c980: f9 f9 f9 f9 05 f9 f9 f9 f9 f9 f9 f9 04 f9 f9 f9
+  0x597a2876ca00: f9 f9 f9 f9 06 f9 f9 f9 f9 f9 f9 f9 00 01 f9 f9
+  0x597a2876ca80: f9 f9 f9 f9 04 f9 f9 f9 f9 f9 f9 f9 05 f9 f9 f9
+  0x597a2876cb00: f9 f9 f9 f9 05 f9 f9 f9 f9 f9 f9 f9 06 f9 f9 f9
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==621933==ABORTING
