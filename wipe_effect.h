@@ -4,6 +4,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#ifndef WIPE_PIXEL_TYPE
+#define WIPE_PIXEL_TYPE uint16_t
+#endif
+
 /**
  * Initializes the randomized Y-offsets for the screen melt effect.
  * @param wipe_y An array of size `width` to hold the offsets.
@@ -28,7 +32,7 @@ static inline void wipe_initMelt(int* wipe_y, int width) {
  * @param height The screen height.
  * @return 1 if the melt is complete, 0 if it is still ongoing.
  */
-static inline int wipe_doMelt(uint16_t* screen, const uint16_t* start_scr, const uint16_t* end_scr, int* wipe_y, int width, int height) {
+static inline int wipe_doMelt(WIPE_PIXEL_TYPE* screen, const WIPE_PIXEL_TYPE* start_scr, const WIPE_PIXEL_TYPE* end_scr, int* wipe_y, int width, int height) {
     int done = 1;
     for (int i = 0; i < width; i++) {
         if (wipe_y[i] < 0) {

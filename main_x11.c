@@ -36,6 +36,13 @@
 
 #include "game.h"
 #include "palette.h"
+#define WIPE_PIXEL_TYPE uint_least16_t
+#include "wipe_effect.h"
+#include <string.h>
+
+static uint_least16_t wipe_scr_start[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
+static uint_least16_t wipe_scr_end[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
+static int wipe_y[SFG_SCREEN_RESOLUTION_X];
 
 uint_least16_t x11_screen[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
 // ^ Each value is current (lower 8 bits) and previous pixel.
@@ -87,7 +94,10 @@ uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
   }
   else
   {
-    fread(data,1,SFG_SAVE_SIZE,f);
+    if (fread(data, 1, SFG_SAVE_SIZE, f) != SFG_SAVE_SIZE)
+    {
+      puts("X11: warning: save file size mismatch or read error");
+    }
     fclose(f);
   }
 
@@ -204,7 +214,47 @@ int main(int argc, char *argv[])
   {
     uint_least16_t *pixel;
 
+    uint8_t stateBefore = SFG_game.state;
+    if (stateBefore == SFG_GAME_STATE_MENU || stateBefore == SFG_GAME_STATE_WIN || stateBefore == SFG_GAME_STATE_LOSE || stateBefore == SFG_GAME_STATE_INTRO) {
+        memcpy(wipe_scr_start, x11_screen, sizeof(x11_screen));
+    }
+
     running = SFG_mainLoopBody();
+
+    if ( (stateBefore == SFG_GAME_STATE_MENU && SFG_game.state != SFG_GAME_STATE_MENU) ||
+         (stateBefore == SFG_GAME_STATE_WIN && SFG_game.state != SFG_GAME_STATE_WIN) ||
+         (stateBefore == SFG_GAME_STATE_LOSE && SFG_game.state == SFG_GAME_STATE_MENU) ) {
+         
+         memcpy(wipe_scr_end, x11_screen, sizeof(x11_screen));
+         wipe_initMelt(wipe_y, SFG_SCREEN_RESOLUTION_X);
+         
+         int done = 0;
+         while (!done && running) {
+            done = wipe_doMelt(x11_screen, wipe_scr_start, wipe_scr_end, wipe_y, SFG_SCREEN_RESOLUTION_X, SFG_SCREEN_RESOLUTION_Y);
+            
+            uint_least16_t pixelNow = 0, pixelPrev = 1;
+            XSetForeground(display,context,x11_palette[pixelNow]);
+            for (int i = 0; i < SFG_SCREEN_RESOLUTION_Y; ++i) {
+                uint_least16_t *px = x11_screen + SFG_SCREEN_RESOLUTION_X * drawLine;
+                for (int x = 0; x < SFG_SCREEN_RESOLUTION_X; ++x) {
+                    uint_least16_t pixels = *px;
+                    if ((pixels >> 8) != (pixels & 0x00ff)) {
+                        pixelNow = pixels & 0x00ff;
+                        if (pixelNow != pixelPrev) {
+                            XSetForeground(display,context,x11_palette[pixelNow]);
+                        }
+                        pixelPrev = pixelNow;
+                        *px = ((*px) & 0x00ff) | ((*px) << 8);
+                        XDrawPoint(display,window,context,x,drawLine);
+                    }
+                    px++;
+                }
+                drawLine = (drawLine + 1) % SFG_SCREEN_RESOLUTION_Y;
+            }
+            XFlush(display);
+            SFG_sleepMs(10);
+         }
+    }
 
     uint_least16_t pixelNow = 0, pixelPrev = 1;
     XSetForeground(display,context,x11_palette[pixelNow]);

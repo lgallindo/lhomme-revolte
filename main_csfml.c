@@ -36,6 +36,13 @@
 
 #include "game.h"
 #include "sounds.h"
+#define WIPE_PIXEL_TYPE uint32_t
+#include "wipe_effect.h"
+#include <string.h>
+
+static uint32_t wipe_scr_start[WINDOW_SIZE];
+static uint32_t wipe_scr_end[WINDOW_SIZE];
+static int wipe_y[SFG_SCREEN_RESOLUTION_X];
 
 uint32_t windowPixels[WINDOW_SIZE];
 
@@ -172,7 +179,10 @@ uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
 
   if (f != NULL)
   {
-    fread(data,1,SFG_SAVE_SIZE,f);
+    if (fread(data, 1, SFG_SAVE_SIZE, f) != SFG_SAVE_SIZE)
+    {
+      puts("CSFML: warning: save file size mismatch or read error");
+    }
     fclose(f);
   }
 
@@ -357,6 +367,11 @@ int main(int argc, char *argv[])
 
   while (sfRenderWindow_isOpen(window))
   {
+    uint8_t stateBefore = SFG_game.state;
+    if (stateBefore == SFG_GAME_STATE_MENU || stateBefore == SFG_GAME_STATE_WIN || stateBefore == SFG_GAME_STATE_LOSE || stateBefore == SFG_GAME_STATE_INTRO) {
+        memcpy(wipe_scr_start, windowPixels, sizeof(windowPixels));
+    }
+
     while (sfRenderWindow_pollEvent(window,&event))
       if (event.type == sfEvtClosed)
         sfRenderWindow_close(window);
@@ -367,6 +382,27 @@ int main(int argc, char *argv[])
 
     if (!SFG_mainLoopBody())
       break;
+
+    if ( (stateBefore == SFG_GAME_STATE_MENU && SFG_game.state != SFG_GAME_STATE_MENU) ||
+         (stateBefore == SFG_GAME_STATE_WIN && SFG_game.state != SFG_GAME_STATE_WIN) ||
+         (stateBefore == SFG_GAME_STATE_LOSE && SFG_game.state == SFG_GAME_STATE_MENU) ) {
+         
+         memcpy(wipe_scr_end, windowPixels, sizeof(windowPixels));
+         wipe_initMelt(wipe_y, SFG_SCREEN_RESOLUTION_X);
+         
+         int done = 0;
+         while (!done && sfRenderWindow_isOpen(window)) {
+            done = wipe_doMelt(windowPixels, wipe_scr_start, wipe_scr_end, wipe_y, SFG_SCREEN_RESOLUTION_X, SFG_SCREEN_RESOLUTION_Y);
+            while (sfRenderWindow_pollEvent(window,&event)) {
+               if (event.type == sfEvtClosed) { sfRenderWindow_close(window); done = 1; }
+            }
+            sfTexture_updateFromPixels(windowTexture,(const sfUint8 *) windowPixels, SFG_SCREEN_RESOLUTION_X,SFG_SCREEN_RESOLUTION_Y,0,0);
+            sfRenderWindow_clear(window, sfBlack);
+            sfRenderWindow_drawSprite(window,windowSprite,NULL);
+            sfRenderWindow_display(window);
+            SFG_sleepMs(10);
+         }
+    }
 
     sfTexture_updateFromPixels(windowTexture,(const sfUint8 *) windowPixels,
       SFG_SCREEN_RESOLUTION_X,SFG_SCREEN_RESOLUTION_Y,0,0);
