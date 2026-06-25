@@ -41,6 +41,15 @@ if [ $1 = "sdl" ]; then
   echo ${COMMAND}
 
   ${COMMAND}
+elif [ $1 = "x11" ]; then
+  # X11 build, requires:
+  # - libx11-dev
+
+  COMMAND="${COMPILER} ${C_FLAGS} main_x11.c -lX11"
+
+  echo ${COMMAND}
+
+  ${COMMAND}
 elif [ $1 = "ncurses" ]; then
   # ncurses build, requires:
   # - libncurses-dev
