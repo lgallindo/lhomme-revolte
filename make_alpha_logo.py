@@ -2,7 +2,7 @@ from PIL import Image
 
 try:
     # 1. Open original high-res concept
-    img = Image.open('/home/lgms/code/research/worktrees/camera-effects/media/concept_vibe_revolte.png').convert("RGBA")
+    img = Image.open('/home/lgms/code/research/worktrees/camera-effects/media/concept_iconic_revolte.png').convert("RGBA")
     
     # 2. Resize to strict 32x32 bounds BEFORE compiler (Nearest Neighbor to preserve retro feel)
     img = img.resize((32, 32), Image.Resampling.NEAREST)
