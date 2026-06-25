@@ -5,19 +5,9 @@
 #
 # usage:
 #
-# usage:
-#
-# ./make.sh [frontend [compiler [linkage]]]
-#
-# linkage can be 'static' (default) or 'dynamic'.
-#
-# Note on alternative C libraries (musl, dietlibc):
-# To compile with musl, install musl-tools and pass 'musl-gcc' as the compiler.
-# To compile with dietlibc, install dietlibc-dev and pass 'diet gcc' as the compiler.
-# Beware that compiling X11 or SDL natively against musl/dietlibc often requires
-# manually compiling those entire graphical stacks against the alternative libc first.
+# ./make.sh [frontend [compiler]]
 
-C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -D_DEFAULT_SOURCE"
+C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -D _DEFAULT_SOURCE -o anarch"
 # note: _DEFAULT_SOURCE shuts up the warning about undeclared usleep
 
 if [ $# -lt 1 ]; then
@@ -28,12 +18,24 @@ fi
 
 clear; clear; 
 
-clear; clear; 
+LINK_MODE="${LINK_MODE:-static}"
+C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -D_DEFAULT_SOURCE -o revolte_$1"
+
+if [ "$LINK_MODE" = "static" ]; then
+  C_FLAGS="${C_FLAGS} -static"
+  SDL_FLAGS=$(sdl2-config --cflags --static-libs)
+  X11_FLAGS=$(pkg-config --cflags --static --libs x11)
+else
+  SDL_FLAGS=$(sdl2-config --cflags --libs)
+  X11_FLAGS=$(pkg-config --cflags --libs x11)
+fi
 
 COMPILER='g++'
 
 if [ $# -eq 2 ]; then
   COMPILER="$2"
+  # Note: To use musl or dietlibc, pass 'musl-gcc' or 'diet gcc' as the second arg.
+  # Example: LINK_MODE=static ./make.sh x11 musl-gcc
 
   if [ $2 = "tcc" ]; then # you'll probably want to modify this
     C_FLAGS="${C_FLAGS} -L/usr/lib/x86_64-linux-gnu/pulseaudio/ 
@@ -44,57 +46,27 @@ else
   COMPILER="cc"
 fi
 
-LINKAGE="static"
-if [ $# -ge 3 ]; then
-  LINKAGE="$3"
-fi
-
-if [ "$LINKAGE" = "dynamic" ]; then
-  LINK_FLAG=""
-  SDL_CONFIG_ARGS="--libs"
-  PKG_CONFIG_ARGS="--libs"
-else
-  LINK_FLAG="-static"
-  SDL_CONFIG_ARGS="--static-libs"
-  PKG_CONFIG_ARGS="--static --libs"
-fi
-
-C_FLAGS="${C_FLAGS} ${LINK_FLAG} -o revolte_$1"
-
 echo "compiling"
 
 if [ "$FRONTEND" = "sdl" ]; then
-  # PC SDL build, requires:
-  # - g++
-  # - SDL2 (dev) package
-
-  SDL_FLAGS=`sdl2-config --cflags ${SDL_CONFIG_ARGS}`
+  # PC SDL build
   COMMAND="${COMPILER} ${C_FLAGS} main_sdl.c -I/usr/local/include ${SDL_FLAGS}"
 elif [ "$FRONTEND" = "sdl_lq" ]; then
-  # PC SDL build (Low Quality / scaled down), restores classic GAME_LQ
-  SDL_FLAGS=`sdl2-config --cflags ${SDL_CONFIG_ARGS}`
+  # PC SDL build (Low Quality)
   COMMAND="${COMPILER} ${C_FLAGS} -DGAME_LQ main_sdl.c -I/usr/local/include ${SDL_FLAGS}"
 elif [ "$FRONTEND" = "x11" ]; then
   # X11 build
-
-  X11_FLAGS=`pkg-config --cflags ${PKG_CONFIG_ARGS} x11`
   COMMAND="${COMPILER} ${C_FLAGS} main_x11.c ${X11_FLAGS}"
 elif [ "$FRONTEND" = "ncurses" ]; then
-  # ncurses build, requires:
-  # - libncurses-dev
-
-  COMMAND="${COMPILER} ${C_FLAGS} main_ncurses.c -lncurses"
-
-  echo ${COMMAND}
-
-  NCURSES_FLAGS=`ncurses5-config --cflags --libs` # may need edit
+  # ncurses build, requires libncurses-dev
+  NCURSES_FLAGS=$(ncurses-config --cflags --libs 2>/dev/null || ncurses6-config --cflags --libs)
   COMMAND="${COMPILER} ${C_FLAGS} main_ncurses.c ${NCURSES_FLAGS}"
 elif [ "$FRONTEND" = "saf" ]; then
   # SAF build using SDL, requires:
   # - saf.h
   # - SDL2 (dev) package
 
-  SDL_FLAGS=`sdl2-config --cflags ${SDL_CONFIG_ARGS}`
+  SDL_FLAGS=`sdl2-config --cflags --libs --static-libs`
   COMMAND="${COMPILER} ${C_FLAGS} main_saf.c -I/usr/local/include ${SDL_FLAGS}"
 elif [ "$FRONTEND" = "terminal" ]; then
   # PC terminal build, requires:
