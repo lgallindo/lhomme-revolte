@@ -98,6 +98,8 @@
 
 #include "game.h"
 #include "sounds.h"
+#include "wipe_effect.h"
+#include <string.h>
 
 const uint8_t *sdlKeyboardState;
 uint8_t webKeyboardState[SFG_KEY_COUNT];
@@ -153,7 +155,10 @@ uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
   }
   else
   {
-    fread(data,1,SFG_SAVE_SIZE,f);
+    if (fread(data, 1, SFG_SAVE_SIZE, f) != SFG_SAVE_SIZE)
+    {
+      puts("SDL: warning: save file size mismatch or read error");
+    }
     fclose(f);
   }
 
@@ -278,9 +283,18 @@ int8_t SFG_keyPressed(uint8_t key)
   
 int running;
 
+static uint16_t wipe_scr_start[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
+static uint16_t wipe_scr_end[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
+static int wipe_y[SFG_SCREEN_RESOLUTION_X];
+
 void mainLoopIteration(void)
 {
   SDL_Event event;
+
+  uint8_t stateBefore = SFG_game.state;
+  if (stateBefore == SFG_GAME_STATE_MENU || stateBefore == SFG_GAME_STATE_WIN || stateBefore == SFG_GAME_STATE_LOSE) {
+      memcpy(wipe_scr_start, sdlScreen, sizeof(sdlScreen));
+  }
 
 #ifdef __EMSCRIPTEN__
   // hack, without it sound won't work because of shitty browser audio policies
@@ -308,6 +322,27 @@ void mainLoopIteration(void)
 
   if (!SFG_mainLoopBody())
     running = 0;
+
+  if ( (stateBefore == SFG_GAME_STATE_MENU && SFG_game.state != SFG_GAME_STATE_MENU) ||
+       (stateBefore == SFG_GAME_STATE_WIN && SFG_game.state == SFG_GAME_STATE_MENU) ||
+       (stateBefore == SFG_GAME_STATE_LOSE && SFG_game.state == SFG_GAME_STATE_MENU) ) {
+       
+       memcpy(wipe_scr_end, sdlScreen, sizeof(sdlScreen));
+       wipe_initMelt(wipe_y, SFG_SCREEN_RESOLUTION_X);
+       
+       int done = 0;
+       while (!done && running) {
+          done = wipe_doMelt(sdlScreen, wipe_scr_start, wipe_scr_end, wipe_y, SFG_SCREEN_RESOLUTION_X, SFG_SCREEN_RESOLUTION_Y);
+          while (SDL_PollEvent(&event)) {
+             if (event.type == SDL_QUIT) { running = 0; done = 1; }
+          }
+          SDL_UpdateTexture(texture,NULL,sdlScreen, SFG_SCREEN_RESOLUTION_X * sizeof(uint16_t));
+          SDL_RenderClear(renderer);
+          SDL_RenderCopy(renderer,texture,NULL,NULL);
+          SDL_RenderPresent(renderer);
+          SDL_Delay(10);
+       }
+  }
 
   SDL_UpdateTexture(texture,NULL,sdlScreen,
     SFG_SCREEN_RESOLUTION_X * sizeof(uint16_t));

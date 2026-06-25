@@ -18,7 +18,7 @@ fi
 
 clear; clear; 
 
-C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o revolte_$1"
+C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -D_DEFAULT_SOURCE -o revolte_$1"
 
 COMPILER='g++'
 
@@ -43,6 +43,10 @@ if [ "$FRONTEND" = "sdl" ]; then
 
   SDL_FLAGS=`sdl2-config --cflags --libs`
   COMMAND="${COMPILER} ${C_FLAGS} main_sdl.c -I/usr/local/include ${SDL_FLAGS}"
+elif [ "$FRONTEND" = "sdl_lq" ]; then
+  # PC SDL build (Low Quality / scaled down), restores classic GAME_LQ
+  SDL_FLAGS=`sdl2-config --cflags --libs`
+  COMMAND="${COMPILER} ${C_FLAGS} -DGAME_LQ main_sdl.c -I/usr/local/include ${SDL_FLAGS}"
 elif [ "$FRONTEND" = "x11" ]; then
   # X11 build
 
@@ -103,4 +107,4 @@ fi
 echo ${COMMAND}
 ${COMMAND}
 
-return $?
+exit $?
