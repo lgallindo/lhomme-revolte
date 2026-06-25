@@ -54,10 +54,13 @@
 - **PLAN-005 (SDD Discovery)**: If the repository includes Spec Driven Development (SDD) definitions (e.g., `SPEC_DRIVEN_DEVELOPMENT.md` or templates in `.lifecycle/templates/`), the agent MUST consult them before drafting plans. Approved SPECs are the authoritative source for functional requirements. (CORE-008)
 
 ## Communication Protocol
-- **COMM-000 (Pre-flight Parsing)**: Before doing anything (even intent analysis), parse each user prompt into requests for information, calls to action, and planning directives. Establish a task dependency graph based on that and act on it: information requests are delivered ASAP, then calls to action are executed, then plans are written. Print this graph in the chat.
-- **COMM-001 (Leader 1)**: The first item of each non-trivial message is `Prompt: [Single sentence summary of user request]`.
-- **COMM-002 (Leader 2)**: The second item of each non-trivial message is `Intent: [Single sentence summary of what will be done]`.
-- **COMM-003 (Leader 3)**: The third item of each non-trivial message is a single sentence **Adversarial Review** of Prompt and Intent.
+- **COMM-000 (Prompt Complexity)**: Classify every prompt as trivial or non-trivial. A trivial prompt has one or two short sentences, no destructive action, no multi-step dependency, and no ambiguity. All other prompts are non-trivial.
+- **COMM-001 (Trivial Prompts)**: If the prompt is trivial, ignore `NONTRIVIAL-*` rules and resolve it immediately.
+- **NONTRIVIAL-000 (Pre-flight Parsing)**: If the prompt is non-trivial, after prompt-complexity classification and before execution or intent analysis, break it into Atomic Prompt Items. Classify each item as `Information_Provenance`, `Call_to_Action`, or `Planning_Step`. Explicitly tabulate each item's ID, description, and class.
+- **NONTRIVIAL-001 (Dependency Graph)**: If the prompt is non-trivial, write a Dependency Graph of the Atomic Prompt Items. An Atomic Prompt Item without dependencies is a Root; an Atomic Prompt Item without dependents is a Leaf. Explicitly draw the graph in ASCII or Mermaid.
+- **NONTRIVIAL-002 (Leaf Intent)**: If the prompt is non-trivial, give each Leaf Atomic Prompt Item a single-sentence Intent. Provide a single-sentence aggressive adversarial analysis of each Leaf item's Description, Dependencies, Class, and Intent. Explicitly tabulate each Leaf, Intent, and adversarial analysis.
+- **NONTRIVIAL-003 (Execution Order)**: If the prompt is non-trivial, resolve Atomic Prompt Items according to the Dependency Graph. At each step, among currently unblocked items, prioritize `Information_Provenance`, then `Call_to_Action`, then `Planning_Step`. Isolated items are both Root and Leaf; resolve them using the same priority order.
+- **NONTRIVIAL-004 (Results Table)**: If the prompt is non-trivial, update the Leaf/Intent/Adversarial Analysis table with `Status`, `Result`, and `Evidence/Output`.
 
 ## Message Trailer
 - **TRLR-001 (Answer Summary)**: Provide a one-sentence summary of the answer.
@@ -65,5 +68,5 @@
 - **TRLR-003 (Conversation State)**: Provide a one-sentence summary of the conversation and defined goals/milestones.
 - **TRLR-004 (Adversarial Audit)**: Provide an **aggressive and pessimistic** adversarial analysis of the entire message, including technical items and a compliance audit.
 - **TRLR-005 (Protocol Reminder)**: Explicitly state: "This response adheres to the 7-rule trailer standard (Summary, Tool Table, Conversation State, Aggressive Adversarial Audit, Protocol Reminder, Message ID, and Timestamp)."
-- **TRLR-006 (Sequence ID)**: Provide the Message Sequential ID.
+- **TRLR-006 (Message ID)**: Include `Message ID: <stable monotonic id>`. If the numeric Message ID is a multiple of 3, re-read `AGENTS.md`.
 - **TRLR-007 (Timestamp)**: Provide the ISO-8601 Timestamp with timezone.
