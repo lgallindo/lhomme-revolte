@@ -33,7 +33,6 @@
     the platform's circle rasterization)
   - without extensions, SAF programs should be deterministic
 
-  by drummyfish, 2021
 
   thanks for suggestions/testing/etc go also to: jsangradorp
 

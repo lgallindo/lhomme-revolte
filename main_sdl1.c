@@ -8,7 +8,6 @@
   This frontend is not strictly minimal, it could be reduced a lot. If you want
   a learning example of frontend, look at another, simpler one, e.g. terminal.
 
-  by Miloslav Ciz (drummyfish), 2019
 
   Released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
   plus a waiver of all other intellectual property. The goal of this work is to
@@ -449,7 +448,6 @@ int main(int argc, char *argv[])
     puts("L'Homme Révolté is a unique suckless FPS game. Collect weapons and items and destroy");
     puts("robot enemies in your way in order to get to the level finish. Some door are");
     puts("locked and require access cards. Good luck!\n");
-    puts("created by Miloslav \"drummyfish\" Ciz, 2020, released under CC0 1.0 (public domain)\n");
     puts("CLI flags:\n");
     puts("-h   print this help and exit");
     puts("-w   force window");

@@ -4,7 +4,6 @@
   This is Ringo (MAKERphone) implementation of the game front end, using the
   official library and Arduino libraries.
 
-  by Miloslav Ciz (drummyfish), 2020
 
   For some reason makerphone display accepts 565 RGB values but displays them
   as 332, so the colors are a little distorted.

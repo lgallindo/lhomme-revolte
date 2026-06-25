@@ -5,7 +5,6 @@
   and it will write out the 3D model in OBJ format, so just redirect it to some
   file, then you can happily import the model in any 3D software.
 
-  by drummyfish, released under CC0 1.0, public domain
 */
 
 #include <stdio.h>

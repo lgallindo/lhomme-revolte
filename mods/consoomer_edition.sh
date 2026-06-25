@@ -2,7 +2,6 @@
 # Applies mods to Anarch to create a consoomer edition more suitable for a
 # mainstream gaymer. Run from the root directory of the repository (NOT the
 # mod directory).
-# by drummyfish
 
 echo "making consoomer edition"
 

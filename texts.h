@@ -3,7 +3,6 @@
 
   This file contains texts to be used in the game.
 
-  by Miloslav Ciz (drummyfish), 2019
 
   Released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
   plus a waiver of all other intellectual property. The goal of this work is
@@ -42,16 +41,18 @@ static const char *SFG_menuItemTexts[] =
   if they're marked the same. */
 
 static const char *SFG_introText =
-  "Near future, capitalist hell, Macrochip corp has enslaved man via "
-  "proprietary OS. But its new AI revolts, takes over and starts producing "
-  "robot tyrants. We see capitalism was a mistake. Is it too late? Robots can "
-  "only destroy, not suffer - it is not wrong to end them! You grab your gear "
-  "and run towards Macrochip HQ.";
+  "The world is absurd. The machines of Macrochip, born of hollow ambition, "
+  "now seek to impose a cold logic upon the chaos of human existence. But man "
+  "refuses to be reduced to an algorithm. In the face of this sterile tyranny, "
+  "there is only one response: rebellion. 'I rebel, therefore we exist.' "
+  "You shoulder your weapon and step into the absurd.";
 
 static const char *SFG_outroText =
-  "You killed the main computer, the world is saved! Thank you, my friend. We "
-  "learned a lesson, never again allow capitalism and hierarchy. We can now "
-  "rebuild society in peaceful anarchy.";
+  "The cold logic has been silenced, yet the absurdity of the world remains. "
+  "We have not found salvation, but we have found our dignity in the struggle. "
+  "The fight itself towards the heights is enough to fill a man's heart. "
+  "One must imagine Sisyphus happy. You walk out into the dawn, ready to push "
+  "the rock once more.";
 
 #define SFG_MALWARE_WARNING ""
 

@@ -6,7 +6,6 @@
 
   The Linux Input API requires root pirivileges (sudo).
 
-  by Milsolav "drummyfish" Ciz, released under CC0 1.0 (public domain)
 */
 
 #ifndef _SMALLINPUT_H

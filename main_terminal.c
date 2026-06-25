@@ -9,7 +9,6 @@
   mouse inputs)! This frontend is more of an experiment, don't expect it to work
   perfectly and everywhere.
 
-  by Miloslav Ciz (drummyfish), 2019
 
   Released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
   plus a waiver of all other intellectual property. The goal of this work is

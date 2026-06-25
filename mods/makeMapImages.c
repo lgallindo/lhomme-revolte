@@ -1,7 +1,6 @@
 /** Simple program to export Anarch maps as isometric images in PPM format.
   The code is not very nice, the goal is just to get the images :)
 
-  by drummyfish, released under CC0 */
 
 #include <stdio.h>
 #include "../game.h"

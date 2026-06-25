@@ -1,7 +1,6 @@
 #!/bin/sh
 
 # Optional helper build script for Anarch.
-# by drummyfish, released under CC0 1.0, public domain
 #
 # usage:
 #

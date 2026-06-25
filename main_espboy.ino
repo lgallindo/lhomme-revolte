@@ -4,7 +4,6 @@
   This is ESPboy implementation of the game front end, using Arduino
   libraries.
 
-  by Miloslav Ciz (drummyfish), 2021
 
   Sadly compiling can't be done with any other optimization flag than -Os.
 

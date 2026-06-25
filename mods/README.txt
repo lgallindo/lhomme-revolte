@@ -1,6 +1,5 @@
 ANARCH MODS
 
-All mods here are created solely by drummyfish and released under the same terms
 as Anarch, i.e. completely public domain (CC0).
 
 Single file mods are right in this directory, multiple file mods are in their

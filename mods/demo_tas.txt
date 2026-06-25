@@ -1,6 +1,5 @@
 # WORK IN PROGRESS
 # Tools assisted speedrun demo for Anarch.
-# by drummyfish, released under CC0 1.0, public domain
 # Anarch demo, 700 x 512, 60 FPS, v. 1.1d
 # level 1:
 #   CMPNLMRLjcbaldru 

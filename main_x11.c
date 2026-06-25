@@ -4,7 +4,6 @@
   This is X11 implementation of the game front end, without sound. This can be
   used as a fallback on most Unices where other frontends somehow fail.
 
-  by Miloslav Ciz (drummyfish), 2019
 
   Released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
   plus a waiver of all other intellectual property. The goal of this work is to
@@ -127,8 +126,7 @@ void SFG_playSound(uint8_t soundIndex, uint8_t volume)
 int main(int argc, char *argv[])
 {
   puts(
-    "L'Homme Révolté v" SFG_VERSION_STRING "X11 frontend (no sound)\n"
-    "by drummyfish, released under CC0 1.0, public domain");
+    "L'Homme Révolté v" SFG_VERSION_STRING "X11 frontend (no sound)\n");
 
   SFG_init();
 

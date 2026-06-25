@@ -21,7 +21,6 @@ These are some ideas about what you can do with this game:
   By taking this to the extreme you could fit this game into just a few kb.
 - Add demo recording support.
 - Write an AI that plays the game.
-- Use it to promote anarchism, free SW, suckless SW, open consoles etc.
 - Use it in demoscene.
 - Use the assets in another project.
 - Make the game run ENTIRELY in a GPU shader (will probably need heavier
