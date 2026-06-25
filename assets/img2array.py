@@ -37,7 +37,7 @@ GUARDS = False
 OUT_WIDTH = 64
 OUT_HEIGHT = 64
 USE_565 = False
-TRANSPOSE = False
+TRANSPOSE = True
 COMPRESS = False
 
 for s in sys.argv:
@@ -67,8 +67,10 @@ if not USE_PALETTE:
 imageArray = []
 paletteColors = []
 paletteArray = []
-
-image = Image.open(FILENAME).convert("RGB")
+image = Image.open(FILENAME).convert("RGBA")
+if image.size != (OUT_WIDTH, OUT_HEIGHT):
+  print(f"FATAL ERROR: Input image dimensions ({image.size[0]}x{image.size[1]}) do not match expected output dimensions ({OUT_WIDTH}x{OUT_HEIGHT}).")
+  sys.exit(1)
 pixels = image.load()
 
 if USE_PALETTE > 0:
@@ -111,16 +113,15 @@ for y in range(OUT_HEIGHT):
     x2 = y if TRANSPOSE else x
     y2 = x if TRANSPOSE else y
 
-    coord = (
-      int(x2 / float(OUT_WIDTH) * image.size[0]),
-      int(y2 / float(OUT_HEIGHT) * image.size[1]))
-
-    pixel = pixels[coord]
+    pixel = pixels[x2,y2]
 
     if USE_PALETTE:
-      closestIndex = findClosestColor(pixel,paletteColors)     
+      if pixel[3] < 128:
+        closestIndex = 175
+      else:
+        closestIndex = findClosestColor(pixel[:3],paletteColors)     
       imageArray.append(closestIndex)
-      pixels2[x,y] = paletteColors[closestIndex]
+      pixels2[x,y] = paletteColors[closestIndex] if closestIndex < len(paletteColors) else (255, 4, 5)
     else:
       if USE_565:
         imageArray.append(rgbTo565(pixel))
@@ -129,7 +130,7 @@ for y in range(OUT_HEIGHT):
         imageArray.append(pixel[1])
         imageArray.append(pixel[2])
 
-      pixels2[x,y] = pixel
+      pixels2[x,y] = pixel[:3]
 
 #-----------------------
 
@@ -143,8 +144,12 @@ def compressImageArray(a):
   for c in a:
     histogram[c] += 1
 
-  for i in range(16):
-    maxValue = 0
+  if histogram[175] > 0:
+    reducedPalette.append(175)
+    histogram[175] = 0
+
+  while len(reducedPalette) < 16:
+    maxValue = -1
     maxIndex = 0
 
     for j in range(256):
@@ -155,7 +160,12 @@ def compressImageArray(a):
     reducedPalette.append(maxIndex)
     histogram[maxIndex] = 0
 
-  paletteMap = [findClosestColor(paletteColors[i],[paletteColors[j] for j in reducedPalette]) for i in range(256)]
+  paletteMap = [0 for i in range(256)]
+  for i in range(256):
+    if i == 175 and 175 in reducedPalette:
+      paletteMap[i] = reducedPalette.index(175)
+    else:
+      paletteMap[i] = findClosestColor(paletteColors[i], [paletteColors[j] for j in reducedPalette])
 
   oneByte = 0
   byteCount = 0
