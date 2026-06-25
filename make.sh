@@ -14,7 +14,7 @@ fi
 
 clear; clear; 
 
-C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o anarch"
+C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o anarch_$1"
 
 COMPILER='g++'
 
@@ -112,7 +112,7 @@ elif [ $1 = "emscripten" ]; then
   # emscripten (browser Javascript) build, requires:
   # - emscripten
 
-  ../emsdk/upstream/emscripten/emcc ./main_sdl.c -s USE_SDL=2 -O3 -lopenal --shell-file HTMLshell.html -o anarch.html -s EXPORTED_FUNCTIONS='["_main","_webButton"]' -s EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]'
+  ../emsdk/upstream/emscripten/emcc ./main_sdl.c -s USE_SDL=2 -O3 -lopenal --shell-file HTMLshell.html -o anarch_$1.html -s EXPORTED_FUNCTIONS='["_main","_webButton"]' -s EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]'
 elif [ $1 = "sdl1" ]; then
   # PC SDL 1.2 build, requires:
   # - g++
@@ -150,7 +150,7 @@ elif [ $1 = "retrofw" ]; then
   echo ${COMMAND}
 
   ${COMMAND}
-  mksquashfs anarch icon.png LICENSE README.md anarch.retrofw.desktop anarch.opk -noappend -no-xattrs
+  mv anarch_retrofw anarch && mksquashfs anarch icon.png LICENSE README.md anarch.retrofw.desktop anarch.opk -noappend -no-xattrs
 else
   echo "unknown parameter: $1"
 fi
