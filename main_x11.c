@@ -311,6 +311,8 @@ int main(int argc, char *argv[])
         }
       }
     }
+    
+    XFlush(display);
   }
 
   puts("X11: ending");
