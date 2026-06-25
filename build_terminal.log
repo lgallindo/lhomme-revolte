@@ -1,0 +1,18 @@
+[H[2J[3J[H[2J[3Jcompiling
+g++ -std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o anarch main_terminal.c
+cc1plus: warning: command-line option ‘-std=c99’ is valid for C/ObjC but not for C++
+In file included from main_terminal.c:39:
+smallinput.h: In function ‘uint32_t input_hash()’:
+smallinput.h:408:15: warning: suggest parentheses around ‘+’ inside ‘<<’ [-Wparentheses]
+  408 |   result += x + y << 16;
+      |             ~~^~~
+In file included from game.h:230,
+                 from main_terminal.c:60:
+raycastlib.h: In function ‘void RCL_castRaysMultiHit(RCL_Camera, RCL_ArrayFunction, RCL_ArrayFunction, RCL_ColumnFunction, RCL_RayConstraints)’:
+raycastlib.h:985:17: warning: ISO C++ forbids variable length array ‘hits’ [-Wvla]
+  985 |   RCL_HitResult hits[constraints.maxHits];
+      |                 ^~~~
+raycastlib.h: In function ‘RCL_Unit RCL_castRay3D(RCL_Vector2D, RCL_Unit, RCL_Vector2D, RCL_Unit, RCL_ArrayFunction, RCL_ArrayFunction, RCL_RayConstraints)’:
+raycastlib.h:1775:17: warning: ISO C++ forbids variable length array ‘hits’ [-Wvla]
+ 1775 |   RCL_HitResult hits[constraints.maxHits];
+      |                 ^~~~

@@ -1,0 +1,7 @@
+[H[2J[3J[H[2J[3Jcompiling
+g++ -std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o anarch main_saf.c -I/usr/local/include -I/usr/include/SDL2 -D_REENTRANT -lSDL2 /usr/lib/x86_64-linux-gnu/libSDL2.a -lm -lasound -lm -ldl -lpthread -lpulse -pthread -lsamplerate -lX11 -lXext -lXcursor -lXi -lXfixes -lXrandr -lXss -ldrm -lgbm -lwayland-egl -lwayland-client -lm -lwayland-cursor -lxkbcommon -ldecor-0 -lpthread
+cc1plus: warning: command-line option ‘-std=c99’ is valid for C/ObjC but not for C++
+main_saf.c:17:10: fatal error: saf.h: No such file or directory
+   17 | #include "saf.h"
+      |          ^~~~~~~
+compilation terminated.

@@ -1,0 +1,32 @@
+[H[2J[3J[H[2J[3Jcompiling
+g++ -std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o anarch -lncurses main_ncurses.c
+cc1plus: warning: command-line option ‘-std=c99’ is valid for C/ObjC but not for C++
+In file included from game.h:230,
+                 from main_ncurses.c:26:
+raycastlib.h: In function ‘void RCL_castRaysMultiHit(RCL_Camera, RCL_ArrayFunction, RCL_ArrayFunction, RCL_ColumnFunction, RCL_RayConstraints)’:
+raycastlib.h:985:17: warning: ISO C++ forbids variable length array ‘hits’ [-Wvla]
+  985 |   RCL_HitResult hits[constraints.maxHits];
+      |                 ^~~~
+raycastlib.h: In function ‘RCL_Unit RCL_castRay3D(RCL_Vector2D, RCL_Unit, RCL_Vector2D, RCL_Unit, RCL_ArrayFunction, RCL_ArrayFunction, RCL_RayConstraints)’:
+raycastlib.h:1775:17: warning: ISO C++ forbids variable length array ‘hits’ [-Wvla]
+ 1775 |   RCL_HitResult hits[constraints.maxHits];
+      |                 ^~~~
+/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/cckrMURB.o: warning: relocation against `stdscr' in read-only section `.text.startup'
+/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/cckrMURB.o: in function `main':
+main_ncurses.c:(.text.startup+0x69): undefined reference to `initscr'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0x73): undefined reference to `halfdelay'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0x7a): undefined reference to `stdscr'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0x84): undefined reference to `keypad'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0x89): undefined reference to `noecho'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0x90): undefined reference to `curs_set'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0x9a): undefined reference to `erase'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0xa6): undefined reference to `move'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0xb7): undefined reference to `move'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0xc6): undefined reference to `stdscr'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0xcf): undefined reference to `waddch'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0xe7): undefined reference to `refresh'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0x103): undefined reference to `stdscr'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0x108): undefined reference to `wgetch'
+/usr/bin/x86_64-linux-gnu-ld.bfd: main_ncurses.c:(.text.startup+0x20b): undefined reference to `endwin'
+/usr/bin/x86_64-linux-gnu-ld.bfd: warning: creating DT_TEXTREL in a PIE
+collect2: error: ld returned 1 exit status

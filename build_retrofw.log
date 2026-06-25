@@ -1,0 +1,33 @@
+[H[2J[3J[H[2J[3Jcompiling
+./make.sh: 1: mipsel-linux-g++: not found
+mipsel-linux-g++ -std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o anarch main_sdl1.c -lSDL -DRETROFW
+./make.sh: 143: mipsel-linux-g++: not found
+Parallel mksquashfs: Using 4 processors
+Creating 4.0 filesystem on anarch.opk, block size 131072.
+[===================================================================|] 6/6 100%
+
+Exportable Squashfs 4.0 filesystem, gzip compressed, data block size 131072
+	compressed data, compressed metadata, compressed fragments,
+	no xattrs, compressed ids
+	duplicates are removed
+Filesystem size 122.99 Kbytes (0.12 Mbytes)
+	47.47% of uncompressed filesystem size (259.08 Kbytes)
+Inode table size 114 bytes (0.11 Kbytes)
+	56.44% of uncompressed inode table size (202 bytes)
+Directory table size 94 bytes (0.09 Kbytes)
+	88.68% of uncompressed directory table size (106 bytes)
+Number of duplicate files found 0
+Number of inodes 6
+Number of files 5
+Number of fragments 1
+Number of symbolic links 0
+Number of device nodes 0
+Number of fifo nodes 0
+Number of socket nodes 0
+Number of directories 1
+Number of hard-links 0
+Number of ids (unique uids + gids) 1
+Number of uids 1
+	lgms (1000)
+Number of gids 1
+	lgms (1000)

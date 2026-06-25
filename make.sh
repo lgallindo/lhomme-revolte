@@ -45,7 +45,7 @@ elif [ $1 = "ncurses" ]; then
   # ncurses build, requires:
   # - libncurses-dev
 
-  COMMAND="${COMPILER} ${C_FLAGS} -lncurses main_ncurses.c"
+  COMMAND="${COMPILER} ${C_FLAGS} main_ncurses.c -lncurses"
 
   echo ${COMMAND}
 
