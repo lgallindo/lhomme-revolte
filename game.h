@@ -4042,7 +4042,7 @@ void SFG_gameStep(void)
         for (uint8_t i = 6; i < SFG_SAVE_SIZE; ++i)
           SFG_game.save[i] = 0;
 
-        SFG_setAndInitLevel(SFG_currentLevel.levelNumber);
+        SFG_setGameState(SFG_GAME_STATE_MENU);
       }
 
       break;

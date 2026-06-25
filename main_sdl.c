@@ -324,7 +324,7 @@ void mainLoopIteration(void)
     running = 0;
 
   if ( (stateBefore == SFG_GAME_STATE_MENU && SFG_game.state != SFG_GAME_STATE_MENU) ||
-       (stateBefore == SFG_GAME_STATE_WIN && SFG_game.state == SFG_GAME_STATE_MENU) ||
+       (stateBefore == SFG_GAME_STATE_WIN && SFG_game.state != SFG_GAME_STATE_WIN) ||
        (stateBefore == SFG_GAME_STATE_LOSE && SFG_game.state == SFG_GAME_STATE_MENU) ) {
        
        memcpy(wipe_scr_end, sdlScreen, sizeof(sdlScreen));
