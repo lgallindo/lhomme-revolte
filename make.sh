@@ -5,9 +5,19 @@
 #
 # usage:
 #
-# ./make.sh [frontend [compiler]]
+# usage:
+#
+# ./make.sh [frontend [compiler [linkage]]]
+#
+# linkage can be 'static' (default) or 'dynamic'.
+#
+# Note on alternative C libraries (musl, dietlibc):
+# To compile with musl, install musl-tools and pass 'musl-gcc' as the compiler.
+# To compile with dietlibc, install dietlibc-dev and pass 'diet gcc' as the compiler.
+# Beware that compiling X11 or SDL natively against musl/dietlibc often requires
+# manually compiling those entire graphical stacks against the alternative libc first.
 
-C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -D _DEFAULT_SOURCE -o anarch"
+C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -D_DEFAULT_SOURCE"
 # note: _DEFAULT_SOURCE shuts up the warning about undeclared usleep
 
 if [ $# -lt 1 ]; then
@@ -18,7 +28,7 @@ fi
 
 clear; clear; 
 
-C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -D_DEFAULT_SOURCE -static -o revolte_$1"
+clear; clear; 
 
 COMPILER='g++'
 
@@ -34,6 +44,23 @@ else
   COMPILER="cc"
 fi
 
+LINKAGE="static"
+if [ $# -ge 3 ]; then
+  LINKAGE="$3"
+fi
+
+if [ "$LINKAGE" = "dynamic" ]; then
+  LINK_FLAG=""
+  SDL_CONFIG_ARGS="--libs"
+  PKG_CONFIG_ARGS="--libs"
+else
+  LINK_FLAG="-static"
+  SDL_CONFIG_ARGS="--static-libs"
+  PKG_CONFIG_ARGS="--static --libs"
+fi
+
+C_FLAGS="${C_FLAGS} ${LINK_FLAG} -o revolte_$1"
+
 echo "compiling"
 
 if [ "$FRONTEND" = "sdl" ]; then
@@ -41,16 +68,16 @@ if [ "$FRONTEND" = "sdl" ]; then
   # - g++
   # - SDL2 (dev) package
 
-  SDL_FLAGS=`sdl2-config --cflags --static-libs`
+  SDL_FLAGS=`sdl2-config --cflags ${SDL_CONFIG_ARGS}`
   COMMAND="${COMPILER} ${C_FLAGS} main_sdl.c -I/usr/local/include ${SDL_FLAGS}"
 elif [ "$FRONTEND" = "sdl_lq" ]; then
   # PC SDL build (Low Quality / scaled down), restores classic GAME_LQ
-  SDL_FLAGS=`sdl2-config --cflags --static-libs`
+  SDL_FLAGS=`sdl2-config --cflags ${SDL_CONFIG_ARGS}`
   COMMAND="${COMPILER} ${C_FLAGS} -DGAME_LQ main_sdl.c -I/usr/local/include ${SDL_FLAGS}"
 elif [ "$FRONTEND" = "x11" ]; then
   # X11 build
 
-  X11_FLAGS=`pkg-config --cflags --static --libs x11`
+  X11_FLAGS=`pkg-config --cflags ${PKG_CONFIG_ARGS} x11`
   COMMAND="${COMPILER} ${C_FLAGS} main_x11.c ${X11_FLAGS}"
 elif [ "$FRONTEND" = "ncurses" ]; then
   # ncurses build, requires:
@@ -67,7 +94,7 @@ elif [ "$FRONTEND" = "saf" ]; then
   # - saf.h
   # - SDL2 (dev) package
 
-  SDL_FLAGS=`sdl2-config --cflags --libs --static-libs`
+  SDL_FLAGS=`sdl2-config --cflags ${SDL_CONFIG_ARGS}`
   COMMAND="${COMPILER} ${C_FLAGS} main_saf.c -I/usr/local/include ${SDL_FLAGS}"
 elif [ "$FRONTEND" = "terminal" ]; then
   # PC terminal build, requires:
