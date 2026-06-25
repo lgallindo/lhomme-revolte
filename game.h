@@ -4097,7 +4097,7 @@ void SFG_gameStep(void)
     }
 
     case SFG_GAME_STATE_MAP:
-      if (SFG_keyIsDown(SFG_KEY_B))
+      if (SFG_keyIsDown(SFG_KEY_B) || SFG_keyJustPressed(SFG_KEY_MENU))
         SFG_setGameState(SFG_GAME_STATE_MENU);
 
       break;
