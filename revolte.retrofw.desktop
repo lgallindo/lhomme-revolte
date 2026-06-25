@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=Anarch
-Comment=The FPS game
-Exec=anarch
+Name=L'Homme Révolté
+Comment=A very special FPS
+Exec=revolte
 Terminal=false
 Type=Game
 StartupNotify=true

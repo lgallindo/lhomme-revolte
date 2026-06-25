@@ -23,7 +23,7 @@
   depending on your system.
 */
 #ifndef SFG_SAVE_FILE_PATH
-  #define SFG_SAVE_FILE_PATH "anarch.sav"
+  #define SFG_SAVE_FILE_PATH "revolte.sav"
 #endif
 
 /**
