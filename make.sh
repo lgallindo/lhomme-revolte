@@ -37,7 +37,7 @@ if [ $# -eq 2 ]; then
   # Note: To use musl or dietlibc, pass 'musl-gcc' or 'diet gcc' as the second arg.
   # Example: LINK_MODE=static ./make.sh x11 musl-gcc
 
-  if [ $2 = "tcc" ]; then # you'll probably want to modify this
+  if [ "$2" = "tcc" ]; then # you'll probably want to modify this
     C_FLAGS="${C_FLAGS} -L/usr/lib/x86_64-linux-gnu/pulseaudio/ 
       -I/home//git/tcc/tcc-0.9.27/include
       -I/usr/lib/gcc/x86_64-linux-gnu/8/include/"
