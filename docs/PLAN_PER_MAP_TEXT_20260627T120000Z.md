@@ -31,7 +31,8 @@ typedef struct
 {
   const char *introText;  /* shown before the level starts; NULL = no text */
   const char *outroText;  /* shown after level completion; NULL = no text */
-  uint8_t     showIntro;  /* 1 = trigger intro on level entry (non-final levels too) */
+  uint8_t introMusicTrack; /* 0 = none, otherwise frontend-defined track id */
+  uint8_t outroMusicTrack; /* 0 = none, otherwise frontend-defined track id */
 } SFG_LevelMeta;
 
 static const SFG_LevelMeta SFG_levelMeta[SFG_NUMBER_OF_LEVELS];
@@ -54,11 +55,15 @@ When `introText` or `outroText` is `NULL` for a given level:
 - This means legacy maps that do not define per-map text behave exactly as they
   do now: no extra story screens.
 
+When `introMusicTrack` or `outroMusicTrack` is `0`:
+- No per-map story music override is played.
+- Existing gameplay/menu music behavior remains unchanged.
+
 ### Trigger points
 
 | Trigger | When | Condition |
 |---|---|---|
-| Per-map intro | Level load (any level) | `SFG_levelMeta[n].introText != NULL && SFG_levelMeta[n].showIntro` |
+| Per-map intro | Level load (any level) | `SFG_levelMeta[n].introText != NULL` |
 | Game-start global intro | Level 0 selected from menu | Existing behaviour, unchanged |
 | Per-map outro | Level win animation complete, before advancing | `SFG_levelMeta[n].outroText != NULL` |
 | Game-end global outro | Final level completed | Existing behaviour, unchanged |
@@ -72,6 +77,24 @@ simpler option (preferred) is reuse with a flag:
 // in game state struct:
 uint8_t storyTextIsPerMap;  /* 1 = reading from levelMeta, 0 = reading global */
 ```
+
+### Global strings location
+
+The global strings are moved from `core/texts.h` into locale data:
+- `SFG_activeLocale->globalIntroText`
+- `SFG_activeLocale->globalOutroText`
+
+These global strings are used only for:
+- game-start intro (new game from menu at level 0)
+- final-game ending screen (after final level)
+
+Per-map strings are read from:
+- `SFG_activeLocale->levelMeta[levelNumber].introText`
+- `SFG_activeLocale->levelMeta[levelNumber].outroText`
+
+Per-map optional music is read from:
+- `SFG_activeLocale->levelMeta[levelNumber].introMusicTrack`
+- `SFG_activeLocale->levelMeta[levelNumber].outroMusicTrack`
 
 ### Localization
 
@@ -89,23 +112,45 @@ static const char *SFG_outroText = "...";
 
 TO-BE (addition to `core/texts.h`, migrating to `core/locale.h`):
 ```c
-typedef struct { const char *introText; const char *outroText; uint8_t showIntro; }
+typedef struct {
+  const char *introText;
+  const char *outroText;
+  uint8_t introMusicTrack;
+  uint8_t outroMusicTrack;
+}
   SFG_LevelMeta;
 
 /* NULL entries = no per-map text for that level */
 static const SFG_LevelMeta SFG_levelMeta[SFG_NUMBER_OF_LEVELS] = {
-  { NULL, NULL, 0 }, /* level 0 */
-  { NULL, NULL, 0 }, /* level 1 */
+  { NULL, NULL, 0, 0 }, /* level 0 */
+  { NULL, NULL, 0, 0 }, /* level 1 */
   /* ... */
 };
 ```
 
 `SFG_drawStoryText()` change (AS-IS → TO-BE):
 - AS-IS: directly reads `SFG_outroText` / `SFG_introText` based on `levelNumber`.
-- TO-BE: if `SFG_game.storyTextIsPerMap`, reads from `SFG_levelMeta[n]`; otherwise reads global strings.
+- TO-BE: if `SFG_game.storyTextIsPerMap`, reads from `SFG_activeLocale->levelMeta[n]`; otherwise reads `SFG_activeLocale->globalIntroText` / `SFG_activeLocale->globalOutroText`.
+
+### Flow decisions (resolved)
+
+- Per-map story screens wait for key press (same as global ending behavior), they do not auto-advance.
+- In demo mode, all story text screens are skipped (global and per-map) to keep autoplay uninterrupted.
+
+### Current sprite display logic (clarification)
+
+Current `SFG_drawStoryText()` behavior:
+- Intro-like screens use `sprite = SFG_game.blink * 2` with text color 7 on clear color 0.
+- Outro-like screens use fixed `sprite = 18` with text color 23 on clear color 9.
+- The sprite is rendered near bottom-center only when vertical resolution allows it (`SFG_GAME_RESOLUTION_Y > 50`).
+
+Alternatives for per-map screens:
+- Reuse current logic exactly (recommended for consistency and zero new assets).
+- Add per-map sprite index in `SFG_LevelMeta` for bespoke screens.
+- Disable sprites on per-map screens for text-only style.
+
+Recommended default: reuse current logic exactly.
 
 ## Open Questions
 
-- Should per-map outro always advance automatically after `SFG_STORYTEXT_DURATION`,
-  or require a key press like the current global outro?
-- Should per-map text inherit the same sprite display logic as the global screen?
+- Should per-map music track IDs map to existing bytebeat tracks only, or should the API permit frontend-specific audio resources?

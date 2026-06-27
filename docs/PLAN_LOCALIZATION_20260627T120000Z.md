@@ -24,6 +24,12 @@ core/locale.h         ← master: defines SFG_Locale struct + includes locale fi
 `SFG_activeLocale` pointer. It conditionally includes the per-language headers
 based on compile-time defines.
 
+### Locale identifiers
+
+- `en_US` remains the locale id for English.
+- `pt_BR` remains the locale id for Brazilian Portuguese.
+- Toki Pona does not commonly use a country variant like `pt_BR`; use `tok` as the primary locale id (ISO 639-3 language code), with optional aliases `tok_001` or `tok-Latn` if needed by tooling.
+
 ## SFG_Locale Struct
 
 ```c
@@ -68,20 +74,32 @@ e.g. `SFG_LOCALE_EN_US`.
 | Toki Pona | ASCII (7-bit) | Uses ASCII romanization only (e.g. "toki pona li pona"). No special glyphs needed. |
 | pt_BR | **Latin-1 / UTF-8** | Requires characters beyond ASCII: ã ç ê ó õ etc. |
 
-### pt_BR encoding strategy (decision required)
+### pt_BR encoding strategy (resolved)
 
-The current text renderer uses a custom bitmap font. Whether it can render
-Latin-1/UTF-8 characters depends on the font bitmap coverage. Three options:
+The current text renderer uses a custom bitmap font. Final strategy:
+
+- Desktop targets (SDL, SDL1, X11, terminal/ncurses with UTF-8 capable output):
+  use UTF-8 multi-byte renderer path.
+- Non-desktop/embedded targets:
+  use bitmap-font fallback path with explicit glyph atlas support.
+
+Potential font source for non-desktop glyph coverage:
+- GNU Unifont provides broad glyph coverage, including needed Latin diacritics.
+- Practical approach is to subset only required glyphs (`ã`, `á`, `à`, `â`, `é`,
+  `ê`, `í`, `ó`, `ô`, `õ`, `ú`, `ç`, uppercase variants) into project font
+  assets to avoid Unifont's full memory footprint.
+
+Comparative options:
 
 | Option | Effort | Quality |
 |---|---|---|
 | **A. ASCII transliteration** | None | Low (e.g. "sao" for "são") |
-| **B. Extend font bitmap** | Medium | High (add ~20 glyphs for pt_BR) |
-| **C. UTF-8 multi-byte renderer** | High | Full fidelity |
+| **B. Extend font bitmap (possibly from GNU Unifont subsets)** | Medium | High |
+| **C. UTF-8 multi-byte renderer** | High | Full fidelity on desktop |
 
-**Recommended starting point: Option B** (extend font bitmap for the ~20 most
-common pt_BR diacritics: ã, ç, ê, é, ó, ô, õ, ú, â, í, à). Option A can be
-used as a temporary fallback while the font is extended.
+Implementation choice:
+- Desktop: Option C.
+- Embedded: Option B using project-owned bitmap subsets (GNU Unifont-derived or manually authored), with Option A only as temporary fallback.
 
 ## Compile-Time Single-Locale Build
 
