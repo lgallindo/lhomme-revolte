@@ -34,10 +34,15 @@ pokitto:
 
 emscripten:
     ./tools/make.sh emscripten
+    cp -f revolte.html index.html
+
+emscripten_pt_br:
+    ./tools/make.sh emscripten_pt_br
+    cp -f revolte_pt_br.html index-pt_br.html
 
 serve: emscripten
     python3 -m http.server 8000 & \
     PID=$! ; \
     sleep 1 ; \
-    python3 -m webbrowser http://localhost:8000/revolte.html ; \
+    python3 -m webbrowser http://localhost:8000/index.html ; \
     wait $PID

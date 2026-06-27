@@ -2,6 +2,10 @@
 
 **L'Homme Révolté** is a FPS game engine designed to run on absolutely anything (from modern PCs to tiny microcontrollers). It features 10 levels, raycasted graphics, and a minimalist design.
 
+### Play Online
+* [English / Multi-locale version](https://lgallindo.github.io/lhomme-revolte/index.html)
+* [Portuguese-only version](https://lgallindo.github.io/lhomme-revolte/index-pt_br.html)
+
 ## Philosophy
 
 Inspired by Albert Camus' *L'Homme Révolté* (The Rebel), this project rebels against the bloated, corporate-dominated software industry. We reject DRM, telemetry, hardware lock-in, and unnecessary complexity. The engine proves that rich experiences can be built without heavy dependencies or modern engine bloat.
