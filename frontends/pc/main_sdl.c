@@ -104,6 +104,11 @@
 
 const uint8_t *sdlKeyboardState;
 uint8_t webKeyboardState[SFG_KEY_COUNT];
+#ifdef __EMSCRIPTEN__
+int16_t webMouseX = 0;
+int16_t webMouseY = 0;
+#endif
+
 uint8_t sdlMouseButtonState = 0;
 int8_t sdlMouseWheelState = 0;
 SDL_GameController *sdlController;
@@ -189,7 +194,12 @@ int8_t mouseMoved = 0; /* Whether the mouse has moved since program started,
 
 void SFG_getMouseOffset(int16_t *x, int16_t *y)
 {
-#ifndef __EMSCRIPTEN__
+#ifdef __EMSCRIPTEN__
+  *x = webMouseX;
+  *y = webMouseY;
+  webMouseX = 0;
+  webMouseY = 0;
+#else
   if (mouseMoved)
   {
     int mX, mY;
@@ -318,7 +328,20 @@ void mainLoopIteration(void)
     else if (event.type == SDL_QUIT)
       running = 0;
     else if (event.type == SDL_MOUSEMOTION)
-      mouseMoved = 1; 
+    {
+      mouseMoved = 1;
+#ifdef __EMSCRIPTEN__
+      webMouseX += event.motion.xrel;
+      webMouseY += event.motion.yrel;
+#endif
+    }
+    else if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_FINGERDOWN)
+    {
+#ifdef __EMSCRIPTEN__
+      SDL_SetRelativeMouseMode(SDL_TRUE);
+#endif
+    }
+ 
     else if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
     {
       SDL_Keycode sym = event.key.keysym.sym;

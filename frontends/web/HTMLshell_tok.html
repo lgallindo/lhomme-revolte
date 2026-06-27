@@ -43,6 +43,35 @@
       align-items: center;
     }
 
+    .main-layout {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 30px;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+
+    .sidebar {
+      flex: 1;
+      max-width: 380px;
+      position: sticky;
+      top: 20px;
+      box-sizing: border-box;
+    }
+
+    .content-area {
+      flex: 1.5;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
     header {
       text-align: center;
       margin: 20px auto 10px;
@@ -97,19 +126,19 @@
     }
 
     td {
-      width: 14.28%;
+      width: 20%;
       padding: 0;
       margin: 0;
     }
 
     button.keycap {
       width: 100%;
-      aspect-ratio: 1;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: 'Outfit', sans-serif;
-      font-size: 1.2rem;
+      font-size: 0.95rem;
       font-weight: 600;
       color: #ffffff;
       border-radius: 12px;
@@ -120,6 +149,11 @@
       position: relative;
       transition: all 0.07s cubic-bezier(0.16, 1, 0.3, 1);
       box-sizing: border-box;
+    }
+
+    button.keycap.direction {
+      aspect-ratio: 1;
+      font-size: 1.3rem;
     }
 
     /* Keycap 3D styling */
@@ -185,8 +219,8 @@
 
     .docs-panel {
       width: 100%;
-      max-width: 600px;
-      margin: 30px auto;
+      max-width: 100%;
+      margin: 0;
       padding: 30px;
       background: var(--glass-bg);
       backdrop-filter: blur(16px);
@@ -245,113 +279,127 @@
       color: #7dd3fc;
       border-bottom-color: #7dd3fc;
     }
+
+    @media (max-width: 1023px) {
+      .main-layout {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+      .sidebar {
+        max-width: 600px;
+        width: 100%;
+        position: static;
+      }
+      .content-area {
+        width: 100%;
+        max-width: 600px;
+      }
+    }
   </style>
 </head>
 
 <body ontouchstart="">
 
-  <header>
-    <h1>L'Homme Révolté</h1>
-    <p>ilo musi pona lon ilo lipu sina</p>
-  </header>
+  <div class="main-layout">
+    <div class="sidebar">
+      <div class="docs-panel">
+        <h2>musi kepeken ilo (Controls)</h2>
+        <ul>
+          <li><strong>tawa (Move):</strong> setas tawa, WASD, keyboard nanpa, or Q/E (tawa poka)</li>
+          <li><strong>lukin (Look/Aim):</strong> ilo mouse, setas pi poka L/R</li>
+          <li><strong>utala / pona (Shoot/Confirm):</strong> mouse left click, [J], [ENTER], [CTRL]</li>
+          <li><strong>tawa poka / pini (Strafe/Cancel):</strong> mouse right click, [LSHIFT], [K]</li>
+          <li><strong>sewi (Jump):</strong> [SPACE]</li>
+          <li><strong>sitelen ma (Map):</strong> [TAB] or [BACKSPACE]</li>
+          <li><strong>lipu open (Menu):</strong> [ESC]</li>
+          <li><strong>ante ilo (Change weapon):</strong> [F], [O], [P], [X], [Y], [Z], or mouse wheel</li>
+        </ul>
 
-  <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
-  
-  <script type='text/javascript'>
-    Module = {
-      print:
-        function(what) 
+        <h2>lipu open pi nasin musi (Menus)</h2>
+        <ul>
+          <li><strong>open (Play):</strong> o open e musi sin.</li>
+          <li><strong>ante (Settings):</strong> o ante e kalama e sitelen musi.</li>
+          <li><strong>lukin (Look):</strong> o ante e nasin lukin pi sinpin sewi anpa. 0 li pini lukin, 1 li lukin pi ante sewi (pona), 2 li lukin pi ante sewi (pini lukin la ilo li tawa insa).</li>
+          <li><strong>lipu pona (Credits):</strong> o lukin e jan pi musi ni.</li>
+          <li><strong>pini (Exit):</strong> o pini e musi.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <header>
+        <h1>L'Homme Révolté</h1>
+        <p>ilo musi pona lon ilo lipu sina</p>
+      </header>
+
+      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+      
+      <script type='text/javascript'>
+        Module = {
+          print:
+            function(what) 
+            {
+              console.log(what);
+            },
+          printErr:
+            function(what)
+            {
+              console.error(what);
+            },
+          canvas:
+            (
+              function()
+              {
+                return document.getElementById('canvas');
+              }
+            )(),
+          onRuntimeInitialized: function()
+            {
+              pressFunc = Module.cwrap('webButton', '', ['number','number']);
+            }
+        };
+
+        function down(button)
         {
-          console.log(what);
-        },
-      printErr:
-        function(what)
-        {
-          console.error(what);
-        },
-      canvas:
-        (
-          function()
-          {
-            return document.getElementById('canvas');
-          }
-        )(),
-      onRuntimeInitialized: function()
-        {
-          pressFunc = Module.cwrap('webButton', '', ['number','number']);
+          pressFunc(button,1);
         }
-    };
 
-    function down(button)
-    {
-      pressFunc(button,1);
-    }
+        function up(button)
+        {
+          pressFunc(button,0);
+        }
+      </script>
 
-    function up(button)
-    {
-      pressFunc(button,0);
-    }
-  </script>
+      {{{ SCRIPT }}}
 
-  {{{ SCRIPT }}}
+      <div class="controller-container">
+        <table style="user-select:none; -moz-user-select: none; -ms-user-select:none; -webkit-user-select: none; -o-user-select:none;" onselectstart="return false;" unselectable="on">
+          <tr>
+            <td></td>
+            <td><button class="keycap direction" onmousedown="down(0)" ontouchstart="down(0)" onmouseup="up(0)" ontouchend="up(0)" onmouseout="up(0)" ontouchleave="(0)">▲</button></td>
+            <td></td>
+            <td colspan="2"><button class="keycap action-a" onmousedown="down(4)" ontouchstart="down(4)" onmouseup="up(4)" ontouchend="up(4)" onmouseout="up(4)" ontouchleave="(4)">UTALA</button></td>
+          </tr>
+          <tr>
+            <td><button class="keycap direction" onmousedown="down(3)" ontouchstart="down(3)" onmouseup="up(3)" ontouchend="up(3)" onmouseout="up(3)" ontouchleave="(3)">◀</button></td>
+            <td></td>
+            <td><button class="keycap direction" onmousedown="down(1)" ontouchstart="down(1)" onmouseup="up(1)" ontouchend="up(1)" onmouseout="up(1)" ontouchleave="(1)">▶</button></td>
+            <td colspan="2"><button class="keycap action-b" onmousedown="down(5)" ontouchstart="down(5)" onmouseup="up(5)" ontouchend="up(5)" onmouseout="up(5)" ontouchleave="(5)">POKA</button></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td><button class="keycap direction" onmousedown="down(2)" ontouchstart="down(2)" onmouseup="up(2)" ontouchend="up(2)" onmouseout="up(2)" ontouchleave="(2)">▼</button></td>
+            <td></td>
+            <td colspan="2"><button class="keycap action-c" onmousedown="down(6)" ontouchstart="down(6)" onmouseup="up(6)" ontouchend="up(6)" onmouseout="up(6)" ontouchleave="(6)">LIPU</button></td>
+          </tr>
+        </table>
+      </div>
 
-  <div class="controller-container">
-    <table style="user-select:none; -moz-user-select: none; -ms-user-select:none; -webkit-user-select: none; -o-user-select:none;" onselectstart="return false;" unselectable="on">
-      <tr>
-        <td></td>
-        <td><button class="keycap direction" onmousedown="down(0)" ontouchstart="down(0)" onmouseup="up(0)" ontouchend="up(0)" onmouseout="up(0)" ontouchleave="(0)">U</button></td>
-        <td></td>
-        <td></td>
-        <td><button class="keycap action-a" onmousedown="down(4)" ontouchstart="down(4)" onmouseup="up(4)" ontouchend="up(4)" onmouseout="up(4)" ontouchleave="(4)">A</button></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><button class="keycap direction" onmousedown="down(3)" ontouchstart="down(3)" onmouseup="up(3)" ontouchend="up(3)" onmouseout="up(3)" ontouchleave="(3)">L</button></td>
-        <td></td>
-        <td><button class="keycap direction" onmousedown="down(1)" ontouchstart="down(1)" onmouseup="up(1)" ontouchend="up(1)" onmouseout="up(1)" ontouchleave="(1)">R</button></td>
-        <td></td>
-        <td></td>
-        <td><button class="keycap action-b" onmousedown="down(5)" ontouchstart="down(5)" onmouseup="up(5)" ontouchend="up(5)" onmouseout="up(5)" ontouchleave="(5)">B</button></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td><button class="keycap direction" onmousedown="down(2)" ontouchstart="down(2)" onmouseup="up(2)" ontouchend="up(2)" onmouseout="up(2)" ontouchleave="(2)">D</button></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><button class="keycap action-c" onmousedown="down(6)" ontouchstart="down(6)" onmouseup="up(6)" ontouchend="up(6)" onmouseout="up(6)" ontouchleave="(6)">C</button></td>
-      </tr>
-    </table>
-  </div>
-
-  <div class="docs-panel">
-    <h2>nasin musi (Controls)</h2>
-    <ul>
-      <li><strong>tawa:</strong> setas, WASD, Q/E</li>
-      <li><strong>lukin:</strong> ilo mouse, setas pi poka L/R</li>
-      <li><strong>utala / pona:</strong> mouse left click, J, Enter, Ctrl</li>
-      <li><strong>tawa poka / pini:</strong> mouse right click, LShift, K</li>
-      <li><strong>sewi:</strong> Space</li>
-      <li><strong>sitelen ma:</strong> Tab, Backspace</li>
-      <li><strong>lipu open:</strong> Escape</li>
-      <li><strong>ante ilo:</strong> F, O, P, X, Y, Z, mouse wheel</li>
-    </ul>
-
-    <h2>lipu open (Menu)</h2>
-    <ul>
-      <li><strong>open:</strong> o open e musi sin.</li>
-      <li><strong>ante:</strong> o ante e kalama e sitelen musi.</li>
-      <li><strong>lukin:</strong> o ante e nasin lukin pi sinpin sewi anpa. 0 li pini lukin, 1 li lukin pi ante sewi (pona), 2 li lukin pi ante sewi (pini lukin la ilo li tawa insa).</li>
-      <li><strong>lipu pona:</strong> o lukin e jan pi musi ni.</li>
-      <li><strong>pini:</strong> o pini e musi.</li>
-    </ul>
-  </div>
-
-  <div class="footer-link">
-    <a href="https://github.com/lgallindo/lhomme-revolte/blob/main/README.md" target="_blank">o lukin e lipu README lon lipu GitHub</a>
+      <div class="footer-link">
+        <a href="https://github.com/lgallindo/lhomme-revolte/blob/main/README.md" target="_blank">o lukin e lipu README lon lipu GitHub</a>
+      </div>
+    </div>
   </div>
 
 </body>
