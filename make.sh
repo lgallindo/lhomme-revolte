@@ -19,7 +19,15 @@ fi
 clear; clear; 
 
 LINK_MODE="${LINK_MODE:-static}"
-C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -D_DEFAULT_SOURCE -o revolte_$1"
+mkdir -p build
+
+if [ $# -lt 1 ]; then
+  OUTPUT_NAME="revolte_sdl"
+else
+  OUTPUT_NAME="revolte_$FRONTEND"
+fi
+
+C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -D_DEFAULT_SOURCE -o build/${OUTPUT_NAME}"
 
 if [ "$LINK_MODE" = "static" ]; then
   C_FLAGS="${C_FLAGS} -static"
@@ -35,6 +43,7 @@ COMPILER='g++'
 if [ $# -eq 2 ]; then
   COMPILER="$2"
   # Note: To use musl or dietlibc, pass 'musl-gcc' or 'diet gcc' as the second arg.
+  # (Requires: sudo apt install musl-tools dietlibc-dev)
   # Example: LINK_MODE=static ./make.sh x11 musl-gcc
 
   if [ "$2" = "tcc" ]; then # you'll probably want to modify this
@@ -105,5 +114,9 @@ fi
   
 echo ${COMMAND}
 ${COMMAND}
+
+if [ "$FRONTEND" = "sdl" ] && [ -f "build/${OUTPUT_NAME}" ]; then
+  cp -f "build/${OUTPUT_NAME}" revolte
+fi
 
 exit $?

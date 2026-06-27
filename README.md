@@ -24,7 +24,7 @@ You can compile the game for your platform using the included `make.sh` script:
 ./make.sh terminal # Compiles for ANSI terminal
 ```
 
-Run the resulting binary (e.g., `./revolte_sdl`).
+Run the resulting SDL binary with `./revolte`; other build outputs are written under `build/`.
 
 ## Controls
 
