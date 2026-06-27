@@ -15,35 +15,249 @@
 
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>L'Homme Révolté</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+
   <style>
-    table
-    {
-      width: 100%;
+    :root {
+      --bg-gradient: radial-gradient(circle at center, #1e1b4b 0%, #030712 100%);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --glass-bg: rgba(17, 24, 39, 0.6);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
     }
 
-    td
-    {
-      width: 11%;
+    body {
+      margin: 0;
+      padding: 20px;
+      background: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      margin: 20px auto 10px;
+      max-width: 600px;
+    }
+
+    header h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff 0%, #9ca3af 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0 0 6px;
+    }
+
+    header p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    canvas {
+      display: block;
+      margin: 20px auto;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      max-width: 100%;
+      height: auto;
+      background-color: #000;
+    }
+
+    .controller-container {
+      width: 100%;
+      max-width: 480px;
+      margin: 20px auto;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      box-sizing: border-box;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 8px;
+    }
+
+    td {
+      width: 14.28%;
       padding: 0;
       margin: 0;
     }
 
-    button
-    {
+    button.keycap {
       width: 100%;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #ffffff;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      position: relative;
+      transition: all 0.07s cubic-bezier(0.16, 1, 0.3, 1);
+      box-sizing: border-box;
     }
 
-    canvas
-    {
-      display: block;
-      margin: 10px auto 30px;
+    /* Keycap 3D styling */
+    button.keycap.direction {
+      background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+      box-shadow: 
+        0 0 0 1px #4b5563,
+        0 5px 0 0 #111827,
+        0 8px 16px 0 rgba(0, 0, 0, 0.5);
+    }
+    button.keycap.direction:active {
+      transform: translateY(4px);
+      box-shadow: 
+        0 0 0 1px #4b5563,
+        0 1px 0 0 #111827,
+        0 3px 8px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    button.keycap.action-a {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      box-shadow: 
+        0 0 0 1px #10b981,
+        0 5px 0 0 #064e3b,
+        0 8px 16px 0 rgba(0, 0, 0, 0.5);
+    }
+    button.keycap.action-a:active {
+      transform: translateY(4px);
+      box-shadow: 
+        0 0 0 1px #10b981,
+        0 1px 0 0 #064e3b,
+        0 3px 8px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    button.keycap.action-b {
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      box-shadow: 
+        0 0 0 1px #ef4444,
+        0 5px 0 0 #7f1d1d,
+        0 8px 16px 0 rgba(0, 0, 0, 0.5);
+    }
+    button.keycap.action-b:active {
+      transform: translateY(4px);
+      box-shadow: 
+        0 0 0 1px #ef4444,
+        0 1px 0 0 #7f1d1d,
+        0 3px 8px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    button.keycap.action-c {
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+      box-shadow: 
+        0 0 0 1px #8b5cf6,
+        0 5px 0 0 #4c1d95,
+        0 8px 16px 0 rgba(0, 0, 0, 0.5);
+    }
+    button.keycap.action-c:active {
+      transform: translateY(4px);
+      box-shadow: 
+        0 0 0 1px #8b5cf6,
+        0 1px 0 0 #4c1d95,
+        0 3px 8px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    .docs-panel {
+      width: 100%;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 30px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      box-sizing: border-box;
+    }
+
+    .docs-panel h2 {
+      font-family: 'Outfit', sans-serif;
+      color: #ffffff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 8px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    .docs-panel h2:not(:first-of-type) {
+      margin-top: 30px;
+    }
+
+    .docs-panel ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+
+    .docs-panel li {
+      margin-bottom: 10px;
+      line-height: 1.6;
+      color: #d1d5db;
+    }
+
+    .docs-panel strong {
+      color: #f3f4f6;
+    }
+
+    .footer-link {
+      text-align: center;
+      margin: 20px auto 40px;
+      font-size: 0.9rem;
+    }
+
+    .footer-link a {
+      color: #38bdf8;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(56, 189, 248, 0.4);
+      padding-bottom: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .footer-link a:hover {
+      color: #7dd3fc;
+      border-bottom-color: #7dd3fc;
     }
   </style>
 </head>
 
-<body>
+<body ontouchstart="">
+
+  <header>
+    <h1>L'Homme Révolté</h1>
+    <p>A retro game engine in your browser</p>
+  </header>
+
   <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
   
   <script type='text/javascript'>
@@ -84,14 +298,63 @@
 
   {{{ SCRIPT }}}
 
-  <table style="user-select:none; -moz-user-select: none; -ms-user-select:none; -webkit-user-select: none; -o-user-select:none;" onselectstart="return false;" unselectable="on">
-    <tr> <td></td> <td><button onmousedown="down(0)" ontouchstart="down(0)" onmouseup="up(0)" ontouchend="up(0)" onmouseout="up(0)" ontouchleave="(0)">U</button></td> <td></td> <td></td> <td><button onmousedown="down(4)" ontouchstart="down(4)" onmouseup="up(4)" ontouchend="up(4)" onmouseout="up(4)" ontouchleave="(4)">A</button></td> <td></td> <td></td> </tr>
-    <tr> <td><button onmousedown="down(3)" ontouchstart="down(3)" onmouseup="up(3)" ontouchend="up(3)" onmouseout="up(3)" ontouchleave="(3)">L</button></td> <td></td> <td><button onmousedown="down(1)" ontouchstart="down(1)" onmouseup="up(1)" ontouchend="up(1)" onmouseout="up(1)" ontouchleave="(1)">R</button></td> <td></td> <td></td> <td><button onmousedown="down(5)" ontouchstart="down(5)" onmouseup="up(5)" ontouchend="up(5)" onmouseout="up(5)" ontouchleave="(5)">B</button></td> <td></td> </tr>
-    <tr> <td></td> <td><button onmousedown="down(2)" ontouchstart="down(2)" onmouseup="up(2)" ontouchend="up(2)" onmouseout="up(2)" ontouchleave="(2)">D</button></td> <td></td> <td></td> <td></td> <td></td> <td><button onmousedown="down(6)" ontouchstart="down(6)" onmouseup="up(6)" ontouchend="up(6)" onmouseout="up(6)" ontouchleave="(6)">C</button></td> </tr>
-  </table>
+  <div class="controller-container">
+    <table style="user-select:none; -moz-user-select: none; -ms-user-select:none; -webkit-user-select: none; -o-user-select:none;" onselectstart="return false;" unselectable="on">
+      <tr>
+        <td></td>
+        <td><button class="keycap direction" onmousedown="down(0)" ontouchstart="down(0)" onmouseup="up(0)" ontouchend="up(0)" onmouseout="up(0)" ontouchleave="(0)">U</button></td>
+        <td></td>
+        <td></td>
+        <td><button class="keycap action-a" onmousedown="down(4)" ontouchstart="down(4)" onmouseup="up(4)" ontouchend="up(4)" onmouseout="up(4)" ontouchleave="(4)">A</button></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><button class="keycap direction" onmousedown="down(3)" ontouchstart="down(3)" onmouseup="up(3)" ontouchend="up(3)" onmouseout="up(3)" ontouchleave="(3)">L</button></td>
+        <td></td>
+        <td><button class="keycap direction" onmousedown="down(1)" ontouchstart="down(1)" onmouseup="up(1)" ontouchend="up(1)" onmouseout="up(1)" ontouchleave="(1)">R</button></td>
+        <td></td>
+        <td></td>
+        <td><button class="keycap action-b" onmousedown="down(5)" ontouchstart="down(5)" onmouseup="up(5)" ontouchend="up(5)" onmouseout="up(5)" ontouchleave="(5)">B</button></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><button class="keycap direction" onmousedown="down(2)" ontouchstart="down(2)" onmouseup="up(2)" ontouchend="up(2)" onmouseout="up(2)" ontouchleave="(2)">D</button></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><button class="keycap action-c" onmousedown="down(6)" ontouchstart="down(6)" onmouseup="up(6)" ontouchend="up(6)" onmouseout="up(6)" ontouchleave="(6)">C</button></td>
+      </tr>
+    </table>
+  </div>
 
-  <div style="text-align: center; margin: 20px auto 40px; font-family: sans-serif; font-size: 14px;">
-    <a href="https://github.com/lgallindo/lhomme-revolte/blob/main/README.md" target="_blank" style="color: #66afef; text-decoration: none; border-bottom: 1px dotted #66afef;">View Project README on GitHub</a>
+  <div class="docs-panel">
+    <h2>Controls & Keybindings</h2>
+    <ul>
+      <li><strong>Move:</strong> Arrow keys, WASD, numpad, or Q/E (strafe keys)</li>
+      <li><strong>Look / Rotate Camera:</strong> Move the mouse or use Left/Right Arrow keys</li>
+      <li><strong>Shoot / Confirm:</strong> Mouse Left Click, [J], [ENTER], or [CTRL]</li>
+      <li><strong>Strafe / Cancel:</strong> Mouse Right Click or [LSHIFT] / [K]</li>
+      <li><strong>Jump:</strong> [SPACE]</li>
+      <li><strong>Map:</strong> [TAB] or [BACKSPACE]</li>
+      <li><strong>Menu:</strong> [ESC]</li>
+      <li><strong>Change Weapon:</strong> [F], [O], [P], [X], [Y], [Z], or mouse wheel</li>
+    </ul>
+
+    <h2>Menu Descriptions</h2>
+    <ul>
+      <li><strong>Play:</strong> Starts a new campaign or resumes the active game.</li>
+      <li><strong>Settings:</strong> Adjust sound volume, graphics quality, and dither/minify sprites settings.</li>
+      <li><strong>Look:</strong> Adjusts vertical camera look mode: 0 for disabled, 1 for auto-centering look, or 2 for manual look.</li>
+      <li><strong>Credits:</strong> Displays information about the original creators and our fork's code.</li>
+      <li><strong>Exit:</strong> Exits the game session.</li>
+    </ul>
+  </div>
+
+  <div class="footer-link">
+    <a href="https://github.com/lgallindo/lhomme-revolte/blob/main/README.md" target="_blank">View the project README on GitHub</a>
   </div>
 
 </body>
