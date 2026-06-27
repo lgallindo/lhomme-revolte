@@ -3,7 +3,8 @@
 **L'Homme Révolté** is a FPS game engine designed to run on absolutely anything (from modern PCs to tiny microcontrollers). It features 10 levels, raycasted graphics, and a minimalist design.
 
 ### Play Online
-* [English / Multi-locale version](https://lgallindo.github.io/lhomme-revolte/index.html)
+* [Trilingual Landing Page](https://lgallindo.github.io/lhomme-revolte/index.html)
+* [English / Multi-locale version](https://lgallindo.github.io/lhomme-revolte/index-en_us.html)
 * [Portuguese-only version](https://lgallindo.github.io/lhomme-revolte/index-pt_br.html)
 * [Toki Pona-only version](https://lgallindo.github.io/lhomme-revolte/index-tok.html)
 

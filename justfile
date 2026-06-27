@@ -34,7 +34,7 @@ pokitto:
 
 emscripten:
     ./tools/make.sh emscripten
-    cp -f revolte.html index.html
+    cp -f revolte.html index-en_us.html
 
 emscripten_pt_br:
     ./tools/make.sh emscripten_pt_br
