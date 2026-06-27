@@ -22,6 +22,8 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
+#include <string.h>
+#include <stdlib.h>
 
 #define SFG_FPS 30
 #define SFG_SCREEN_RESOLUTION_X 320
@@ -135,10 +137,29 @@ void SFG_playSound(uint8_t soundIndex, uint8_t volume)
 
 int main(int argc, char *argv[])
 {
+  int targetStartLevel = -1;
+  int forceMapReveal = 0;
+  for (int i = 1; i < argc; ++i) {
+    if (strcmp(argv[i], "--lhrwarp") == 0 && i + 1 < argc) {
+      targetStartLevel = atoi(argv[i+1]);
+      i++;
+    }
+    else if (strcmp(argv[i], "--lhrmap") == 0) {
+      forceMapReveal = 1;
+    }
+  }
+
   puts(
     "L'Homme Révolté v" SFG_VERSION_STRING "X11 frontend (no sound)\n");
 
   SFG_init();
+
+  if (targetStartLevel >= 0 && targetStartLevel < SFG_NUMBER_OF_LEVELS)
+  {
+    SFG_game.save[0] = (SFG_game.save[0] & 0xF0) | (SFG_NUMBER_OF_LEVELS - 1);
+    SFG_game.selectedLevel = targetStartLevel;
+    SFG_setAndInitLevel(targetStartLevel);
+  }
 
   Display *display = XOpenDisplay(0);
   
@@ -309,8 +330,51 @@ int main(int argc, char *argv[])
       else
       {
         uint8_t state = event.xkey.type == KeyPress;
+        KeySym keysym = XKeycodeToKeysym(display,event.xkey.keycode,0);
 
-        switch (XKeycodeToKeysym(display,event.xkey.keycode,0))
+        if (state && keysym != XK_Shift_L && keysym != XK_Shift_R && keysym != XK_Caps_Lock)
+        {
+          if (SFG_game.state == SFG_GAME_STATE_MENU)
+          {
+            static const KeySym lhrwarp_seq[] = {
+              XK_l, XK_h, XK_r, XK_w, XK_a, XK_r, XK_p
+            };
+            static uint8_t lhrwarp_idx = 0;
+            
+            if (keysym == lhrwarp_seq[lhrwarp_idx])
+            {
+              lhrwarp_idx++;
+              if (lhrwarp_idx == 7)
+              {
+                SFG_game.save[0] = (SFG_game.save[0] & 0xF0) | (SFG_NUMBER_OF_LEVELS - 1);
+                puts("LHRWARP cheat activated: All levels unlocked!");
+                lhrwarp_idx = 0;
+              }
+            }
+            else
+              lhrwarp_idx = 0;
+          }
+
+          static const KeySym lhrmap_seq[] = {
+            XK_l, XK_h, XK_r, XK_m, XK_a, XK_p
+          };
+          static uint8_t lhrmap_idx = 0;
+
+          if (keysym == lhrmap_seq[lhrmap_idx])
+          {
+            lhrmap_idx++;
+            if (lhrmap_idx == 6)
+            {
+              forceMapReveal = 1;
+              puts("LHRMAP cheat activated: Map revealed!");
+              lhrmap_idx = 0;
+            }
+          }
+          else
+            lhrmap_idx = 0;
+        }
+
+        switch (keysym)
         {
           case XK_Escape: running = 0; break;
           case XK_Up: // fallthrough

@@ -3863,13 +3863,13 @@ void SFG_gameStepMenu(void)
 
   uint8_t item = SFG_getMenuItem(SFG_game.selectedMenuItem);
 
-  if (SFG_keyRegisters(SFG_KEY_DOWN) && 
+  if ((SFG_keyRegisters(SFG_KEY_DOWN) || SFG_keyRegisters(SFG_KEY_PREVIOUS_WEAPON)) && 
     (SFG_game.selectedMenuItem < menuItems - 1))
   {
     SFG_game.selectedMenuItem++;
     SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
   }
-  else if (SFG_keyRegisters(SFG_KEY_UP) && (SFG_game.selectedMenuItem > 0))
+  else if ((SFG_keyRegisters(SFG_KEY_UP) || SFG_keyRegisters(SFG_KEY_NEXT_WEAPON)) && (SFG_game.selectedMenuItem > 0))
   {
     SFG_game.selectedMenuItem--;
     SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);

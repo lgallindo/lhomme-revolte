@@ -94,12 +94,13 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
 #include <SDL2/SDL.h>
 
 #include "game.h"
 #include "sounds.h"
 #include "wipe_effect.h"
-#include <string.h>
 
 const uint8_t *sdlKeyboardState;
 uint8_t webKeyboardState[SFG_KEY_COUNT];
@@ -282,6 +283,7 @@ int8_t SFG_keyPressed(uint8_t key)
 }
   
 int running;
+int forceMapReveal = 0;
 
 static uint16_t wipe_scr_start[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
 static uint16_t wipe_scr_end[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
@@ -316,12 +318,64 @@ void mainLoopIteration(void)
       running = 0;
     else if (event.type == SDL_MOUSEMOTION)
       mouseMoved = 1; 
+    else if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
+    {
+      SDL_Keycode sym = event.key.keysym.sym;
+      if (sym != SDLK_LSHIFT && sym != SDLK_RSHIFT && sym != SDLK_CAPSLOCK)
+      {
+        // LHRWARP logic
+        if (SFG_game.state == SFG_GAME_STATE_MENU)
+        {
+          static const SDL_Keycode lhrwarp_seq[] = {
+            SDLK_l, SDLK_h, SDLK_r, SDLK_w, SDLK_a, SDLK_r, SDLK_p
+          };
+          static uint8_t lhrwarp_idx = 0;
+          
+          if (sym == lhrwarp_seq[lhrwarp_idx])
+          {
+            lhrwarp_idx++;
+            if (lhrwarp_idx == 7)
+            {
+              SFG_game.save[0] = (SFG_game.save[0] & 0xF0) | (SFG_NUMBER_OF_LEVELS - 1);
+              SFG_playGameSound(4, 255);
+              puts("LHRWARP cheat activated: All levels unlocked!");
+              lhrwarp_idx = 0;
+            }
+          }
+          else
+            lhrwarp_idx = 0;
+        }
+
+        // LHRMAP logic
+        static const SDL_Keycode lhrmap_seq[] = {
+          SDLK_l, SDLK_h, SDLK_r, SDLK_m, SDLK_a, SDLK_p
+        };
+        static uint8_t lhrmap_idx = 0;
+
+        if (sym == lhrmap_seq[lhrmap_idx])
+        {
+          lhrmap_idx++;
+          if (lhrmap_idx == 6)
+          {
+            forceMapReveal = 1;
+            SFG_playGameSound(4, 255);
+            puts("LHRMAP cheat activated: Map revealed!");
+            lhrmap_idx = 0;
+          }
+        }
+        else
+          lhrmap_idx = 0;
+      }
+    }
   }
 
   sdlMouseButtonState = SDL_GetMouseState(NULL,NULL);
 
   if (!SFG_mainLoopBody())
     running = 0;
+
+  if (forceMapReveal)
+    SFG_currentLevel.mapRevealMask = 0xffff;
 
   if ( (stateBefore == SFG_GAME_STATE_MENU && SFG_game.state != SFG_GAME_STATE_MENU) ||
        (stateBefore == SFG_GAME_STATE_WIN && SFG_game.state != SFG_GAME_STATE_WIN) ||
@@ -426,6 +480,7 @@ int main(int argc, char *argv[])
   uint8_t argHelp = 0;
   uint8_t argForceWindow = 0;
   uint8_t argForceFullscreen = 0;
+  int targetStartLevel = -1;
 
 #ifndef __EMSCRIPTEN__
   argForceFullscreen = 1;
@@ -442,6 +497,15 @@ int main(int argc, char *argv[])
       argForceWindow = 1;
     else if (argv[i][0] == '-' && argv[i][1] == 'f' && argv[i][2] == 0)       
       argForceFullscreen = 1;
+    else if (strcmp(argv[i], "--lhrwarp") == 0 && i + 1 < argc)
+    {
+      targetStartLevel = atoi(argv[i+1]);
+      i++;
+    }
+    else if (strcmp(argv[i], "--lhrmap") == 0)
+    {
+      forceMapReveal = 1;
+    }
     else
       puts("SDL: unknown argument"); 
   }
@@ -472,6 +536,13 @@ int main(int argc, char *argv[])
   }
 
   SFG_init();
+
+  if (targetStartLevel >= 0 && targetStartLevel < SFG_NUMBER_OF_LEVELS)
+  {
+    SFG_game.save[0] = (SFG_game.save[0] & 0xF0) | (SFG_NUMBER_OF_LEVELS - 1);
+    SFG_game.selectedLevel = targetStartLevel;
+    SFG_setAndInitLevel(targetStartLevel);
+  }
 
   puts("SDL: initializing SDL");
 
