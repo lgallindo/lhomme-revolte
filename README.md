@@ -30,6 +30,34 @@ You can compile the game for your platform using the included `tools/make.sh` sc
 
 Run the resulting SDL binary with `./revolte`; other build outputs are written under `build/`.
 
+### Technologies & Frontends
+The frontends make use of the following technologies:
+* **[SDL (Simple DirectMedia Layer)](https://www.libsdl.org/)**: A cross-platform library providing low-level access to audio, input, and graphics hardware.
+* **[Emscripten](https://emscripten.org/)**: A compiler toolchain that targets WebAssembly, allowing C/C++ applications to run in the web browser.
+* **[X11](https://www.x.org/)**: The classic window system and display protocol used on Unix-like operating systems.
+* **[ncurses](https://invisible-island.net/ncurses/)**: A programming library for rendering text-based user interfaces inside a terminal.
+* **[CSFML](https://www.sfml-dev.org/)**: A C binding for SFML (Simple and Fast Multimedia Library), providing low-level system access.
+* **[Pokitto](https://www.pokitto.com/)**: An open-source DIY handheld gaming console powered by an ARM Cortex-M0+.
+
+### Linking Modes (Static vs. Dynamic)
+By default, the compilation script statically links the binary:
+* **Static Linking (Default)**: Combines all code and libraries (like SDL2 or X11) directly into the compiled executable. Set explicitly via `LINK_MODE=static`.
+* **Dynamic Linking**: Configures the binary to look up shared libraries at runtime. Run using:
+  ```sh
+  LINK_MODE=dynamic ./tools/make.sh sdl
+  ```
+
+### Alternative C Standard Libraries (musl / dietlibc)
+You can target alternative C libraries for minimalist and space-efficient builds. This requires installing `musl-tools` or `dietlibc-dev`:
+* **[musl](https://musl.libc.org/)**: A standards-compliant C library optimized for static linking. Pass `musl-gcc` as the compiler:
+  ```sh
+  LINK_MODE=static ./tools/make.sh x11 musl-gcc
+  ```
+* **[dietlibc](https://www.fefe.de/dietlibc/)**: A C library specifically optimized for smallest executable size. Pass `diet gcc` as the compiler:
+  ```sh
+  LINK_MODE=static ./tools/make.sh x11 "diet gcc"
+  ```
+
 ## Map Conversion Tooling
 
 `tools/gif2map` is the canonical map converter.
