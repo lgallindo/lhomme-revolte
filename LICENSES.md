@@ -4,7 +4,7 @@ This matrix defines licensing policy for this fork.
 
 ## Principles
 
-- Legacy upstream code keeps original in-file notices and provenance as-is.
+- Legacy code keeps original in-file notices and provenance as-is.
 - New code added in this fork is GPL-3.0-or-later.
 - Legacy assets remain CC0 / Public Domain.
 - New assets added in this fork are CC BY-NC-SA 4.0.
@@ -13,11 +13,10 @@ This matrix defines licensing policy for this fork.
 
 | ID | Scope | License Classification | Notes |
 | --- | --- | --- | --- |
-| LM-001 | Legacy upstream code portions | CC0 / Public Domain (upstream); legal determination for the fork rests with the distributor | Keep historical notices untouched. |
+| LM-001 | Legacy code portions | CC0 / Public Domain | Keep historical notices untouched. |
 | LM-002 | New fork code (all code added or substantially modified in this fork) | GPL-3.0-or-later | |
-| LM-003 | `core/raycastlib.h` (Miloslav Číž) | CC0 / Public Domain unless major rewrite occurs | Retain upstream notice; track any major rewrite in commit messages. |
-| LM-004 | Legacy upstream assets | CC0 / Public Domain | Existing upstream asset licensing retained. |
-| LM-005 | New fork assets | CC BY-NC-SA 4.0 | Applies to newly added fork-era media/assets. |
+| LM-003 | Legacy assets | CC0 / Public Domain | Existing asset licensing retained. |
+| LM-004 | New fork assets | CC BY-NC-SA 4.0 | Applies to newly added fork-era media/assets. |
 
 ## GPL Code Files (Fork Contributions)
 
@@ -37,7 +36,6 @@ The following tracked code/script/build files have been authored or substantiall
 - core/mbed_config.h
 - core/new_logo.h
 - core/palette.h
-- core/raycastlib.h
 - core/saf.h
 - core/settings.h
 - core/smallinput.h
@@ -78,10 +76,5 @@ The following tracked code/script/build files have been authored or substantiall
 
 ## Asset Classification Notes
 
-- Legacy assets (upstream-era) remain CC0 / Public Domain.
-- New fork-era assets are CC BY-NC-SA 4.0.
-
-
-## Raycastlib Note
-
-`core/raycastlib.h` is the original work of Miloslav Číž and was released by the upstream author under CC0 / Public Domain.
+- Legacy assets remain CC0 / Public Domain.
+- New fork assets are CC BY-NC-SA 4.0.
