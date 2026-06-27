@@ -1,3 +1,11 @@
+/**
+  @file locale_toki_pona.h
+
+  Toki Pona locale payload for menu, HUD and story text.
+
+  SPDX-License-Identifier: GPL-3.0-or-later
+*/
+
 #ifndef _SFG_LOCALE_TOKI_PONA_H
 #define _SFG_LOCALE_TOKI_PONA_H
 

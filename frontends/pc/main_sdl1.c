@@ -1,5 +1,5 @@
 /**
-  @file main_sdl.c
+  @file main_sdl1.c
 
   This is an SDL implementation of the game front end. It can be used to
   compile a native executable or a transpiled JS browser version with

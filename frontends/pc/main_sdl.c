@@ -284,6 +284,7 @@ int8_t SFG_keyPressed(uint8_t key)
   
 int running;
 int forceMapReveal = 0;
+int autoScreenshot = 0;
 
 static uint16_t wipe_scr_start[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
 static uint16_t wipe_scr_end[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
@@ -321,6 +322,20 @@ void mainLoopIteration(void)
     else if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
     {
       SDL_Keycode sym = event.key.keysym.sym;
+      if (sym == SDLK_F12)
+      {
+        int w, h;
+        SDL_GetRendererOutputSize(renderer, &w, &h);
+        SDL_Surface *sshot = SDL_CreateRGBSurface(0, w, h, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+        if (sshot) {
+          SDL_RenderReadPixels(renderer, NULL, sshot->format->format, sshot->pixels, sshot->pitch);
+          char filename[64];
+          snprintf(filename, sizeof(filename), "screenshot_%u.bmp", (unsigned int)SDL_GetTicks());
+          SDL_SaveBMP(sshot, filename);
+          SDL_FreeSurface(sshot);
+          printf("Screenshot saved to %s\n", filename);
+        }
+      }
       if (sym != SDLK_LSHIFT && sym != SDLK_RSHIFT && sym != SDLK_CAPSLOCK)
       {
         // LHRWARP logic
@@ -404,6 +419,25 @@ void mainLoopIteration(void)
   SDL_RenderClear(renderer);
   SDL_RenderCopy(renderer,texture,NULL,NULL);
   SDL_RenderPresent(renderer);
+
+  if (autoScreenshot)
+  {
+    static int screenshotFrameCount = 0;
+    screenshotFrameCount++;
+    if (screenshotFrameCount >= 60)
+    {
+      int w, h;
+      SDL_GetRendererOutputSize(renderer, &w, &h);
+      SDL_Surface *sshot = SDL_CreateRGBSurface(0, w, h, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+      if (sshot) {
+        SDL_RenderReadPixels(renderer, NULL, sshot->format->format, sshot->pixels, sshot->pitch);
+        SDL_SaveBMP(sshot, "screenshot.bmp");
+        SDL_FreeSurface(sshot);
+        puts("Headless screenshot saved to screenshot.bmp!");
+      }
+      running = 0;
+    }
+  }
 }
 
 uint16_t audioBuff[SFG_SFX_SAMPLE_COUNT];
@@ -512,6 +546,11 @@ int main(int argc, char *argv[])
     {
       forceMapReveal = 1;
     }
+    else if (strcmp(argv[i], "--screenshot") == 0 || strcmp(argv[i], "-s") == 0)
+    {
+      autoScreenshot = 1;
+      argForceWindow = 1;
+    }
     else
       puts("SDL: unknown argument"); 
   }
@@ -526,6 +565,7 @@ int main(int argc, char *argv[])
     puts("-h   print this help and exit");
     puts("-w   force window");
     puts("-f   force fullscreen\n");
+    puts("-s / --screenshot  take screenshot after 60 frames and exit");
     puts("-l <locale> set locale id (en_US, pt_BR, tok)");
     puts("--lhrlocale <locale> same as -l\n");
     puts("controls:\n");

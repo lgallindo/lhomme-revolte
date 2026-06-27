@@ -31,11 +31,11 @@ C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-paramete
 
 if [ "$LINK_MODE" = "static" ]; then
   C_FLAGS="${C_FLAGS} -static"
-  SDL_FLAGS=$(sdl2-config --cflags --static-libs)
-  X11_FLAGS=$(pkg-config --cflags --static --libs x11)
+  SDL_FLAGS=$(sdl2-config --cflags --static-libs | tr '\n' ' ')
+  X11_FLAGS=$(pkg-config --cflags --static --libs x11 | tr '\n' ' ')
 else
-  SDL_FLAGS=$(sdl2-config --cflags --libs)
-  X11_FLAGS=$(pkg-config --cflags --libs x11)
+  SDL_FLAGS=$(sdl2-config --cflags --libs | tr '\n' ' ')
+  X11_FLAGS=$(pkg-config --cflags --libs x11 | tr '\n' ' ')
 fi
 
 COMPILER='g++'
@@ -109,7 +109,10 @@ elif [ "$FRONTEND" = "emscripten" ]; then
   COMMAND="../emsdk/upstream/emscripten/emcc frontends/pc/main_sdl.c -Icore -s USE_SDL=2 -O3 -lopenal --shell-file frontends/web/HTMLshell.html -o revolte.html -s EXPORTED_FUNCTIONS='[\"_main\",\"_webButton\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'"
 elif [ "$FRONTEND" = "emscripten_pt_br" ]; then
   # emscripten (browser Javascript) Portuguese-only build
-  COMMAND="../emsdk/upstream/emscripten/emcc frontends/pc/main_sdl.c -Icore -DSFG_LOCALE_ONLY_PT_BR -s USE_SDL=2 -O3 -lopenal --shell-file frontends/web/HTMLshell.html -o revolte_pt_br.html -s EXPORTED_FUNCTIONS='[\"_main\",\"_webButton\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'"
+  COMMAND="../emsdk/upstream/emscripten/emcc frontends/pc/main_sdl.c -Icore -DSFG_LOCALE_ONLY_PT_BR -s USE_SDL=2 -O3 -lopenal --shell-file frontends/web/HTMLshell_pt_br.html -o revolte_pt_br.html -s EXPORTED_FUNCTIONS='[\"_main\",\"_webButton\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'"
+elif [ "$FRONTEND" = "emscripten_tok" ]; then
+  # emscripten (browser Javascript) Toki Pona-only build
+  COMMAND="../emsdk/upstream/emscripten/emcc frontends/pc/main_sdl.c -Icore -DSFG_LOCALE_ONLY_TOK -s USE_SDL=2 -O3 -lopenal --shell-file frontends/web/HTMLshell.html -o revolte_tok.html -s EXPORTED_FUNCTIONS='[\"_main\",\"_webButton\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'"
 else
   echo "unknown parameter: $1"
   return 1

@@ -1,3 +1,11 @@
+/**
+  @file locale_pt_br.h
+
+  Brazilian Portuguese locale payload for menu, HUD and story text.
+
+  SPDX-License-Identifier: GPL-3.0-or-later
+*/
+
 #ifndef _SFG_LOCALE_PT_BR_H
 #define _SFG_LOCALE_PT_BR_H
 

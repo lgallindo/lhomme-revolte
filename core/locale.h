@@ -1,3 +1,11 @@
+/**
+  @file locale.h
+
+  Locale registry and runtime locale-selection helpers for fork-localized text.
+
+  SPDX-License-Identifier: GPL-3.0-or-later
+*/
+
 #ifndef _SFG_LOCALE_H
 #define _SFG_LOCALE_H
 

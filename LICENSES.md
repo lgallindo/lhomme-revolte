@@ -22,6 +22,7 @@ This matrix defines licensing policy for this fork.
 
 The following tracked code/script/build files have been authored or substantially modified in this fork and are therefore classified as GPL-3.0-or-later:
 
+- .github/workflows/img2map-parity.yml
 - Doxyfile
 - Makefile
 - assets/font2array.py
@@ -33,6 +34,10 @@ The following tracked code/script/build files have been authored or substantiall
 - core/game.h
 - core/images.h
 - core/levels.h
+- core/locale.h
+- core/locale_en_us.h
+- core/locale_pt_br.h
+- core/locale_toki_pona.h
 - core/mbed_config.h
 - core/new_logo.h
 - core/palette.h
@@ -58,6 +63,7 @@ The following tracked code/script/build files have been authored or substantiall
 - mods/makeMapImages.c
 - mods/makeMapModel.c
 - tests/main_test.c
+- tests/test_img2map_parity.sh
 - tests/test_warp_cli.sh
 - tests/test_wipe.c
 - tools/check_color.py

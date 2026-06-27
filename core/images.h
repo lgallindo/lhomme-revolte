@@ -1,5 +1,5 @@
 /**
-  @file assets.h
+  @file images.h
 
   This file containts assets to be used in the game. Textures are stored by
   columns for cache friendliness (as rendering also happens by columns),

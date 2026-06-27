@@ -1,3 +1,11 @@
+/**
+  @file locale_en_us.h
+
+  English (US) locale payload for menu, HUD and story text.
+
+  SPDX-License-Identifier: GPL-3.0-or-later
+*/
+
 #ifndef _SFG_LOCALE_EN_US_H
 #define _SFG_LOCALE_EN_US_H
 

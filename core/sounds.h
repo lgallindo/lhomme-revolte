@@ -1,5 +1,5 @@
 /**
-  @file assets.h
+  @file sounds.h
 
   This file containts sounds and music that can optionally be used by the game
   frontend. Every sound effect has 2048 samples, is stored as 8kHz mono format

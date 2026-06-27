@@ -40,6 +40,10 @@ emscripten_pt_br:
     ./tools/make.sh emscripten_pt_br
     cp -f revolte_pt_br.html index-pt_br.html
 
+emscripten_tok:
+    ./tools/make.sh emscripten_tok
+    cp -f revolte_tok.html index-tok.html
+
 serve port="8000": emscripten
     @python3 -c "import socket; s = socket.socket(); s.bind(('127.0.0.1', {{port}}))" 2>/dev/null || { echo "Error: Port {{port}} is already in use. Try specifying a different port (e.g. 'just serve 8001')."; exit 1; }
     python3 -m http.server {{port}} & \
@@ -54,4 +58,12 @@ serve-pt-br port="8000": emscripten_pt_br
     PID=$! ; \
     sleep 1 ; \
     python3 -m webbrowser http://localhost:{{port}}/index-pt_br.html ; \
+    wait $PID
+
+serve-tok port="8000": emscripten_tok
+    @python3 -c "import socket; s = socket.socket(); s.bind(('127.0.0.1', {{port}}))" 2>/dev/null || { echo "Error: Port {{port}} is already in use. Try specifying a different port (e.g. 'just serve-tok 8001')."; exit 1; }
+    python3 -m http.server {{port}} & \
+    PID=$! ; \
+    sleep 1 ; \
+    python3 -m webbrowser http://localhost:{{port}}/index-tok.html ; \
     wait $PID

@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+# test_img2map_parity.sh
+# Enforces parity and deterministic behavior between legacy Python img2map
+# output and tools/gif2map JSON output.
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -39,4 +44,4 @@ PY
   cmp -s "$TMP_DIR/${base}.c.json" "$TMP_DIR/${base}.c2.json"
 done
 
-echo "img2map retirement gate passed (${#LEVEL_GIFS[@]} level GIF files)."
+echo "img2map parity check passed (${#LEVEL_GIFS[@]} level GIF files)."

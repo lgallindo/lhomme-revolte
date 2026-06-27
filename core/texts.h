@@ -1,5 +1,5 @@
 /**
-  @file assets.h
+  @file texts.h
 
   This file contains texts to be used in the game.
 

@@ -5,6 +5,7 @@
 ### Play Online
 * [English / Multi-locale version](https://lgallindo.github.io/lhomme-revolte/index.html)
 * [Portuguese-only version](https://lgallindo.github.io/lhomme-revolte/index-pt_br.html)
+* [Toki Pona-only version](https://lgallindo.github.io/lhomme-revolte/index-tok.html)
 
 ## Philosophy
 
@@ -31,6 +32,8 @@ You can compile the game for your platform using the included `tools/make.sh` sc
 * `./tools/make.sh test`: Compiles the unit test binary to `build/revolte_test`.
 * `./tools/make.sh pokitto`: Compiles the Pokitto target to `BUILD/firmware.bin` (requires embedded toolchain).
 * `./tools/make.sh emscripten`: Compiles the web build via `emcc` to `revolte.html`, `revolte.js`, and `revolte.wasm` in the root directory.
+* `./tools/make.sh emscripten_pt_br`: Compiles the Portuguese-only web build to `revolte_pt_br.html`, `revolte_pt_br.js`, and `revolte_pt_br.wasm`.
+* `./tools/make.sh emscripten_tok`: Compiles the Toki Pona-only web build to `revolte_tok.html`, `revolte_tok.js`, and `revolte_tok.wasm`.
 
 Run the resulting SDL binary with `./revolte`; other build outputs are written under `build/`.
 
