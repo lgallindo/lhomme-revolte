@@ -481,6 +481,7 @@ int main(int argc, char *argv[])
   uint8_t argForceWindow = 0;
   uint8_t argForceFullscreen = 0;
   int targetStartLevel = -1;
+  const char *targetLocale = 0;
 
 #ifndef __EMSCRIPTEN__
   argForceFullscreen = 1;
@@ -502,6 +503,17 @@ int main(int argc, char *argv[])
       targetStartLevel = atoi(argv[i+1]);
       i++;
     }
+    else if (argv[i][0] == '-' && argv[i][1] == 'l' && argv[i][2] == 0 &&
+             i + 1 < argc)
+    {
+      targetLocale = argv[i + 1];
+      i++;
+    }
+    else if (strcmp(argv[i], "--lhrlocale") == 0 && i + 1 < argc)
+    {
+      targetLocale = argv[i + 1];
+      i++;
+    }
     else if (strcmp(argv[i], "--lhrmap") == 0)
     {
       forceMapReveal = 1;
@@ -520,6 +532,8 @@ int main(int argc, char *argv[])
     puts("-h   print this help and exit");
     puts("-w   force window");
     puts("-f   force fullscreen\n");
+    puts("-l <locale> set locale id (en-US, pt-BR, tok)");
+    puts("--lhrlocale <locale> same as -l\n");
     puts("controls:\n");
     puts("- arrows, numpad, [W] [S] [A] [D] [Q] [E]: movement");
     puts("- mouse: rotation, [LMB] shoot, [RMB] toggle free look");
@@ -536,6 +550,15 @@ int main(int argc, char *argv[])
   }
 
   SFG_init();
+
+  if (targetLocale != 0 && !SFG_setLocaleByName(targetLocale))
+  {
+    puts("SDL: unknown locale, keeping default");
+    puts("SDL: available locales:");
+
+    for (uint8_t i = 0; i < SFG_LOCALE_COUNT; ++i)
+      puts(SFG_availableLocales[i]->localeId);
+  }
 
   if (targetStartLevel >= 0 && targetStartLevel < SFG_NUMBER_OF_LEVELS)
   {

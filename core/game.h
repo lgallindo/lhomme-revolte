@@ -328,13 +328,23 @@ typedef struct
 #define SFG_GAME_STATE_LEVEL_START 7
 #define SFG_GAME_STATE_MENU 8  
 
+#ifndef SFG_DEMO_MODE
+  #define SFG_DEMO_MODE 0
+#endif
+
+#define SFG_STORY_GLOBAL_INTRO 0
+#define SFG_STORY_GLOBAL_OUTRO 1
+#define SFG_STORY_MAP_INTRO 2
+#define SFG_STORY_MAP_OUTRO 3
+
 #define SFG_MENU_ITEM_CONTINUE 0
 #define SFG_MENU_ITEM_MAP 1
 #define SFG_MENU_ITEM_PLAY 2
 #define SFG_MENU_ITEM_LOAD 3
 #define SFG_MENU_ITEM_SOUND 4
 #define SFG_MENU_ITEM_SHEAR 5
-#define SFG_MENU_ITEM_EXIT 6
+#define SFG_MENU_ITEM_LANGUAGE 6
+#define SFG_MENU_ITEM_EXIT 7
 
 #define SFG_MENU_ITEM_NONE 255
 
@@ -374,6 +384,9 @@ struct
   uint32_t frame;          ///< frame number
   uint8_t selectedMenuItem;
   uint8_t selectedLevel;   ///< level to play selected in the main menu
+  uint8_t storyType;       ///< SFG_STORY_* selector for text/music source
+  uint8_t introTargetLevel;
+  uint8_t outroTargetLevel;
   uint8_t antiSpam;        ///< Prevents log message spamming.
   uint8_t settings;   /**< dynamic game settings (can be changed at runtime),
                            bit meaning:
@@ -1754,6 +1767,9 @@ void SFG_init(void)
   SFG_game.backgroundScroll = 0;
   SFG_game.selectedMenuItem = 0;
   SFG_game.selectedLevel = 0;
+  SFG_game.storyType = SFG_STORY_GLOBAL_INTRO;
+  SFG_game.introTargetLevel = 0;
+  SFG_game.outroTargetLevel = 255;
   SFG_game.settings = SFG_DEFAULT_SETTINGS;
   SFG_game.saved = 0;
 
@@ -3783,7 +3799,8 @@ uint8_t SFG_getMenuItem(uint8_t index)
   {
     if ( // skip non-legitimate items
       ((current <= SFG_MENU_ITEM_MAP) && (SFG_currentLevel.levelPointer == 0))
-      || ((current == SFG_MENU_ITEM_LOAD) && ((SFG_game.save[0] >> 4) == 0)))
+      || ((current == SFG_MENU_ITEM_LOAD) && ((SFG_game.save[0] >> 4) == 0))
+      || ((current == SFG_MENU_ITEM_LANGUAGE) && !SFG_LOCALE_RUNTIME_SWITCH))
     {
       current++;
       continue;
@@ -3884,11 +3901,36 @@ void SFG_gameStepMenu(void)
 
         if (SFG_game.selectedLevel == 0)
         {
-          SFG_currentLevel.levelNumber = 0; // to draw intro, not outro
-          SFG_setGameState(SFG_GAME_STATE_INTRO);
+          if (SFG_DEMO_MODE)
+            SFG_setAndInitLevel(0);
+          else
+          {
+            SFG_game.storyType = SFG_STORY_GLOBAL_INTRO;
+            SFG_game.introTargetLevel = 0;
+            SFG_setGameState(SFG_GAME_STATE_INTRO);
+          }
         }
         else
-          SFG_setAndInitLevel(SFG_game.selectedLevel);
+        {
+          const SFG_LevelMeta *meta =
+            SFG_activeLocale->levelMeta + SFG_game.selectedLevel;
+
+          if (!SFG_DEMO_MODE && meta->introText != 0)
+          {
+            SFG_game.storyType = SFG_STORY_MAP_INTRO;
+            SFG_game.introTargetLevel = SFG_game.selectedLevel;
+
+            if (meta->introMusicTrack > 0)
+            {
+              SFG_setMusic(SFG_MUSIC_NEXT);
+              SFG_setMusic(SFG_MUSIC_TURN_ON);
+            }
+
+            SFG_setGameState(SFG_GAME_STATE_INTRO);
+          }
+          else
+            SFG_setAndInitLevel(SFG_game.selectedLevel);
+        }
 
         break;
 
@@ -3956,6 +3998,13 @@ void SFG_gameStepMenu(void)
         SFG_game.save[1] = SFG_game.settings;
         SFG_gameSave();
 
+        break;
+      }
+
+      case SFG_MENU_ITEM_LANGUAGE:
+      {
+        SFG_setLocaleByIndex(SFG_activeLocaleIndex + 1);
+        SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
         break;
       }
 
@@ -4062,8 +4111,20 @@ void SFG_gameStep(void)
         {
           if (SFG_keyIsDown(SFG_KEY_A))
           {
-            SFG_setGameState(SFG_GAME_STATE_OUTRO);
-            SFG_setMusic(SFG_MUSIC_TURN_OFF);
+            if (SFG_DEMO_MODE)
+            {
+              SFG_currentLevel.levelPointer = 0;
+              SFG_currentLevel.levelNumber = 0;
+              SFG_setGameState(SFG_GAME_STATE_MENU);
+              SFG_setMusic(SFG_MUSIC_TURN_ON);
+            }
+            else
+            {
+              SFG_game.storyType = SFG_STORY_GLOBAL_OUTRO;
+              SFG_game.outroTargetLevel = 255;
+              SFG_setGameState(SFG_GAME_STATE_OUTRO);
+              SFG_setMusic(SFG_MUSIC_TURN_OFF);
+            }
           }
         }
         else if (SFG_keyIsDown(SFG_KEY_RIGHT) ||
@@ -4071,7 +4132,46 @@ void SFG_gameStep(void)
             SFG_keyIsDown(SFG_KEY_STRAFE_LEFT) ||
             SFG_keyIsDown(SFG_KEY_STRAFE_RIGHT))
         {
-          SFG_setAndInitLevel(SFG_currentLevel.levelNumber + 1);
+          uint8_t nextLevel = SFG_currentLevel.levelNumber + 1;
+          const SFG_LevelMeta *meta =
+            SFG_activeLocale->levelMeta + SFG_currentLevel.levelNumber;
+
+          if (!SFG_DEMO_MODE && meta->outroText != 0)
+          {
+            SFG_game.storyType = SFG_STORY_MAP_OUTRO;
+            SFG_game.outroTargetLevel = nextLevel;
+
+            if (meta->outroMusicTrack > 0)
+            {
+              SFG_setMusic(SFG_MUSIC_NEXT);
+              SFG_setMusic(SFG_MUSIC_TURN_ON);
+            }
+
+            SFG_setGameState(SFG_GAME_STATE_OUTRO);
+            break;
+          }
+
+          if (!SFG_DEMO_MODE)
+          {
+            const SFG_LevelMeta *nextMeta = SFG_activeLocale->levelMeta + nextLevel;
+
+            if (nextMeta->introText != 0)
+            {
+              SFG_game.storyType = SFG_STORY_MAP_INTRO;
+              SFG_game.introTargetLevel = nextLevel;
+
+              if (nextMeta->introMusicTrack > 0)
+              {
+                SFG_setMusic(SFG_MUSIC_NEXT);
+                SFG_setMusic(SFG_MUSIC_TURN_ON);
+              }
+
+              SFG_setGameState(SFG_GAME_STATE_INTRO);
+              break;
+            }
+          }
+
+          SFG_setAndInitLevel(nextLevel);
           
           SFG_player.health = SFG_game.save[2];
           SFG_player.ammo[0] = SFG_game.save[3];
@@ -4103,7 +4203,7 @@ void SFG_gameStep(void)
 
     case SFG_GAME_STATE_INTRO:
       if (SFG_keyJustPressed(SFG_KEY_A) || SFG_keyJustPressed(SFG_KEY_B))
-        SFG_setAndInitLevel(0);
+        SFG_setAndInitLevel(SFG_game.introTargetLevel);
 
       break;
 
@@ -4112,11 +4212,36 @@ void SFG_gameStep(void)
            (SFG_keyIsDown(SFG_KEY_A) ||
            SFG_keyIsDown(SFG_KEY_B)))
       {
-        SFG_currentLevel.levelPointer = 0;
-        SFG_currentLevel.levelNumber = 0;
-        SFG_setGameState(SFG_GAME_STATE_MENU);
-        SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
-        SFG_setMusic(SFG_MUSIC_TURN_ON);
+        if (SFG_game.storyType == SFG_STORY_MAP_OUTRO &&
+            SFG_game.outroTargetLevel != 255)
+        {
+          uint8_t level = SFG_game.outroTargetLevel;
+          const SFG_LevelMeta *nextMeta = SFG_activeLocale->levelMeta + level;
+
+          if (!SFG_DEMO_MODE && nextMeta->introText != 0)
+          {
+            SFG_game.storyType = SFG_STORY_MAP_INTRO;
+            SFG_game.introTargetLevel = level;
+
+            if (nextMeta->introMusicTrack > 0)
+            {
+              SFG_setMusic(SFG_MUSIC_NEXT);
+              SFG_setMusic(SFG_MUSIC_TURN_ON);
+            }
+
+            SFG_setGameState(SFG_GAME_STATE_INTRO);
+          }
+          else
+            SFG_setAndInitLevel(level);
+        }
+        else
+        {
+          SFG_currentLevel.levelPointer = 0;
+          SFG_currentLevel.levelNumber = 0;
+          SFG_setGameState(SFG_GAME_STATE_MENU);
+          SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
+          SFG_setMusic(SFG_MUSIC_TURN_ON);
+        }
       }
 
       break;
@@ -4247,13 +4372,32 @@ void SFG_drawStoryText(void)
   uint8_t clearColor = 9;
   uint8_t sprite = 18;
 
-  if (SFG_currentLevel.levelNumber != (SFG_NUMBER_OF_LEVELS - 1)) // intro?  
+  if (SFG_game.state == SFG_GAME_STATE_INTRO)
   {
-    text = SFG_introText;
-    textColor = 7; 
+    if (SFG_game.storyType == SFG_STORY_MAP_INTRO)
+    {
+      uint8_t idx = SFG_game.introTargetLevel;
+
+      if (idx >= SFG_NUMBER_OF_LEVELS)
+        idx = 0;
+
+      text = SFG_activeLocale->levelMeta[idx].introText;
+    }
+    else
+      text = SFG_introText;
+
+    textColor = 7;
     clearColor = 0;
     sprite = SFG_game.blink * 2;
   }
+  else if (SFG_game.storyType == SFG_STORY_MAP_OUTRO)
+  {
+    if (SFG_currentLevel.levelNumber < SFG_NUMBER_OF_LEVELS)
+      text = SFG_activeLocale->levelMeta[SFG_currentLevel.levelNumber].outroText;
+  }
+
+  if (text == 0)
+    text = "";
     
   SFG_clearScreen(clearColor);
 
@@ -4515,8 +4659,8 @@ void SFG_drawMenu(void)
   
     SFG_drawText(text,drawX,y,SFG_FONT_SIZE_MEDIUM,textColor,0,0);
 
-    if ((item == SFG_MENU_ITEM_PLAY || item == SFG_MENU_ITEM_SOUND
-         || item == SFG_MENU_ITEM_SHEAR) &&
+        if ((item == SFG_MENU_ITEM_PLAY || item == SFG_MENU_ITEM_SOUND
+          || item == SFG_MENU_ITEM_SHEAR || item == SFG_MENU_ITEM_LANGUAGE) &&
         ((i != SFG_game.selectedMenuItem) || SFG_game.blink))
     {
       uint32_t x =
@@ -4532,7 +4676,7 @@ void SFG_drawMenu(void)
 
         SFG_drawNumber(n == 3 ? 2 : n,x,y,SFG_FONT_SIZE_MEDIUM,c);
       }
-      else
+      else if (item == SFG_MENU_ITEM_SOUND)
       {
         char settingText[3] = "  ";
 
@@ -4541,6 +4685,8 @@ void SFG_drawMenu(void)
 
         SFG_drawText(settingText,x,y,SFG_FONT_SIZE_MEDIUM,c,0,0);
       }
+      else
+        SFG_drawText(SFG_activeLocale->localeId,x,y,SFG_FONT_SIZE_MEDIUM,c,0,0);
     }
 
     y += SFG_characterSize(SFG_FONT_SIZE_MEDIUM) + SFG_FONT_SIZE_MEDIUM;
@@ -4580,7 +4726,7 @@ void SFG_drawWinOverlay(void)
         RCL_abs(y - (SFG_GAME_RESOLUTION_Y / 2)) <= (INNER_STRIP_HEIGHT / 2) ?
           0 : 172);
 
-  char textLine[] = SFG_TEXT_LEVEL_COMPLETE;
+  const char *textLine = SFG_TEXT_LEVEL_COMPLETE;
 
   uint16_t y = SFG_GAME_RESOLUTION_Y / 2 - 
     ((STRIP_HEIGHT + INNER_STRIP_HEIGHT) / 2) / 2;

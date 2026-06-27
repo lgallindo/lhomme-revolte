@@ -16,21 +16,14 @@
   text (the drawing function gets a pointer and doesn't know if it's progmem or
   RAM). On Arduino these texts will simply be stored in RAM. */
 
-static const char *SFG_menuItemTexts[] =
-{
-  "continue",
-  "map",
-  "play",
-  "load",
-  "sound",
-  "look",
-  "exit"
-};
+#include "locale.h"
 
-#define SFG_TEXT_KILLS "kills"
-#define SFG_TEXT_SAVE_PROMPT "save? L no yes R"
-#define SFG_TEXT_SAVED "saved"
-#define SFG_TEXT_LEVEL_COMPLETE "level done"
+#define SFG_menuItemTexts (SFG_activeLocale->menuItemTexts)
+
+#define SFG_TEXT_KILLS (SFG_activeLocale->textKills)
+#define SFG_TEXT_SAVE_PROMPT (SFG_activeLocale->textSavePrompt)
+#define SFG_TEXT_SAVED (SFG_activeLocale->textSaved)
+#define SFG_TEXT_LEVEL_COMPLETE (SFG_activeLocale->textLevelComplete)
 
 #define SFG_VERSION_STRING "2.0d"
 /**<
@@ -39,24 +32,9 @@ static const char *SFG_menuItemTexts[] =
   "d" postfix, e.g. 1.0d. This means the "d" versions can actually differ even
   if they're marked the same. */
 
-static const char *SFG_introText =
-  "The world is absurd. The machines of Macrochip, born of hollow ambition, "
-  "now seek to impose a cold logic upon the chaos of human existence. But man "
-  "refuses to be reduced to an algorithm. In the face of this sterile tyranny, "
-  "there is only one response: rebellion. 'I rebel, therefore we exist.' "
-  "You shoulder your weapon and step into the absurd.";
+#define SFG_introText (SFG_activeLocale->globalIntroText)
+#define SFG_outroText (SFG_activeLocale->globalOutroText)
 
-static const char *SFG_outroText =
-  "The cold logic has been silenced, yet the absurdity of the world remains. "
-  "We have not found salvation, but we have found our dignity in the struggle. "
-  "The fight itself towards the heights is enough to fill a man's heart. "
-  "One must imagine Sisyphus happy. You walk out into the dawn, ready to push "
-  "the rock once more.";
-
-#define SFG_MALWARE_WARNING ""
-
-#if SFG_OS_IS_MALWARE
-  #define SFG_MALWARE_WARNING "MALWARE OS DETECTED"
-#endif
+#define SFG_MALWARE_WARNING (SFG_activeLocale->malwareWarning)
 
 #endif // gaurd
