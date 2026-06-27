@@ -41,6 +41,7 @@ emscripten_pt_br:
     cp -f revolte_pt_br.html index-pt_br.html
 
 serve port="8000": emscripten
+    @python3 -c "import socket; s = socket.socket(); s.bind(('127.0.0.1', {{port}}))" 2>/dev/null || { echo "Error: Port {{port}} is already in use. Try specifying a different port (e.g. 'just serve 8001')."; exit 1; }
     python3 -m http.server {{port}} & \
     PID=$! ; \
     sleep 1 ; \
@@ -48,6 +49,7 @@ serve port="8000": emscripten
     wait $PID
 
 serve-pt-br port="8000": emscripten_pt_br
+    @python3 -c "import socket; s = socket.socket(); s.bind(('127.0.0.1', {{port}}))" 2>/dev/null || { echo "Error: Port {{port}} is already in use. Try specifying a different port (e.g. 'just serve-pt-br 8001')."; exit 1; }
     python3 -m http.server {{port}} & \
     PID=$! ; \
     sleep 1 ; \
