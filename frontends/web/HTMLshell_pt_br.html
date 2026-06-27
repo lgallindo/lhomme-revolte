@@ -49,15 +49,16 @@
       justify-content: center;
       align-items: flex-start;
       gap: 30px;
-      max-width: 1100px;
+      max-width: 1400px;
       width: 100%;
       margin: 0 auto;
       box-sizing: border-box;
     }
 
-    .sidebar {
+    .sidebar-left,
+    .sidebar-right {
       flex: 1;
-      max-width: 380px;
+      max-width: 340px;
       position: sticky;
       top: 20px;
       box-sizing: border-box;
@@ -286,7 +287,8 @@
         align-items: center;
         gap: 20px;
       }
-      .sidebar {
+      .sidebar-left,
+      .sidebar-right {
         max-width: 600px;
         width: 100%;
         position: static;
@@ -294,6 +296,7 @@
       .content-area {
         width: 100%;
         max-width: 600px;
+        order: -1;
       }
     }
   </style>
@@ -302,27 +305,18 @@
 <body ontouchstart="">
 
   <div class="main-layout">
-    <div class="sidebar">
+    <div class="sidebar-left">
       <div class="docs-panel">
-        <h2>Controles & Teclas (Keybindings)</h2>
-        <ul>
-          <li><strong>Mover:</strong> Setas direcionais, WASD, teclado numérico ou teclas Q/E (passos laterais)</li>
-          <li><strong>Olhar / Girar Câmera:</strong> Mover o mouse ou usar Setas Esquerda/Direita</li>
-          <li><strong>Atirar / Confirmar:</strong> Clique Esquerdo do Mouse, [J], [ENTER] ou [CTRL]</li>
-          <li><strong>Mover Lateralmente (Strafe) / Cancelar:</strong> Clique Direito do Mouse ou [LSHIFT] / [K]</li>
-          <li><strong>Pular:</strong> [ESPAÇO]</li>
-          <li><strong>Mapa:</strong> [TAB] ou [BACKSPACE]</li>
-          <li><strong>Menu:</strong> [ESC]</li>
-          <li><strong>Mudar de Arma:</strong> [F], [O], [P], [X], [Y], [Z] ou roda do mouse</li>
-        </ul>
-
         <h2>Descrição dos Menus</h2>
         <ul>
-          <li><strong>Jogar (Play):</strong> Inicia uma nova campanha ou retoma o jogo ativo.</li>
-          <li><strong>Configurações (Settings):</strong> Ajusta o volume do som, a qualidade gráfica e as opções de dither/diminuir sprites.</li>
-          <li><strong>Olhar (Look):</strong> Ajusta o modo de visão vertical da câmera (shearing): 0 para desativado, 1 para centralização automática, ou 2 para olhar manual (sem centralização).</li>
-          <li><strong>Créditos (Credits):</strong> Exibe informações sobre os criadores originais e o código da nossa bifurcação.</li>
-          <li><strong>Sair (Exit):</strong> Encerra a sessão e retorna ao menu/ambiente principal.</li>
+          <li><strong>continuar:</strong> Retoma o jogo ativo (exibido apenas durante a partida).</li>
+          <li><strong>mapa:</strong> Visualiza o mapa 2D da fase atual (exibido apenas durante a partida).</li>
+          <li><strong>jogar:</strong> Inicia um novo jogo ou seleciona a fase de partida.</li>
+          <li><strong>carregar:</strong> Carrega o jogo salvo (exibido apenas se houver progresso salvo).</li>
+          <li><strong>som:</strong> Alterna entre Efeitos Sonoros (S), Música (M), ambos (SM) ou mudo.</li>
+          <li><strong>camera:</strong> Alterna o modo de visão vertical da câmera: 0 (desativado), 1 (centralização automática) ou 2 (olhar manual).</li>
+          <li><strong>idioma:</strong> Altera dinamicamente o idioma do jogo (exibido apenas em compilações multi-idioma).</li>
+          <li><strong>sair:</strong> Encerra a sessão de jogo (indisponível na versão web/navegador).</li>
         </ul>
       </div>
     </div>
@@ -398,6 +392,22 @@
 
       <div class="footer-link">
         <a href="https://github.com/lgallindo/lhomme-revolte/blob/main/README.md" target="_blank">Ver o README do projeto no GitHub</a>
+      </div>
+    </div>
+
+    <div class="sidebar-right">
+      <div class="docs-panel">
+        <h2>Controles & Teclas (Keybindings)</h2>
+        <ul>
+          <li><strong>Mover:</strong> Setas direcionais, WASD, teclado numérico ou teclas Q/E (passos laterais)</li>
+          <li><strong>Olhar / Girar Câmera:</strong> Mover o mouse ou usar Setas Esquerda/Direita</li>
+          <li><strong>Atirar / Confirmar:</strong> Clique Esquerdo do Mouse, [J], [ENTER] ou [CTRL]</li>
+          <li><strong>Mover Lateralmente (Strafe) / Cancelar:</strong> Clique Direito do Mouse ou [LSHIFT] / [K]</li>
+          <li><strong>Pular:</strong> [ESPAÇO]</li>
+          <li><strong>Mapa:</strong> [TAB] ou [BACKSPACE]</li>
+          <li><strong>Menu:</strong> [ESC]</li>
+          <li><strong>Mudar de Arma:</strong> [F], [O], [P], [X], [Y], [Z] ou roda do mouse</li>
+        </ul>
       </div>
     </div>
   </div>

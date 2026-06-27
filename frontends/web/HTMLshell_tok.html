@@ -49,15 +49,16 @@
       justify-content: center;
       align-items: flex-start;
       gap: 30px;
-      max-width: 1100px;
+      max-width: 1400px;
       width: 100%;
       margin: 0 auto;
       box-sizing: border-box;
     }
 
-    .sidebar {
+    .sidebar-left,
+    .sidebar-right {
       flex: 1;
-      max-width: 380px;
+      max-width: 340px;
       position: sticky;
       top: 20px;
       box-sizing: border-box;
@@ -286,7 +287,8 @@
         align-items: center;
         gap: 20px;
       }
-      .sidebar {
+      .sidebar-left,
+      .sidebar-right {
         max-width: 600px;
         width: 100%;
         position: static;
@@ -294,6 +296,7 @@
       .content-area {
         width: 100%;
         max-width: 600px;
+        order: -1;
       }
     }
   </style>
@@ -302,27 +305,18 @@
 <body ontouchstart="">
 
   <div class="main-layout">
-    <div class="sidebar">
+    <div class="sidebar-left">
       <div class="docs-panel">
-        <h2>musi kepeken ilo (Controls)</h2>
-        <ul>
-          <li><strong>tawa (Move):</strong> setas tawa, WASD, keyboard nanpa, or Q/E (tawa poka)</li>
-          <li><strong>lukin (Look/Aim):</strong> ilo mouse, setas pi poka L/R</li>
-          <li><strong>utala / pona (Shoot/Confirm):</strong> mouse left click, [J], [ENTER], [CTRL]</li>
-          <li><strong>tawa poka / pini (Strafe/Cancel):</strong> mouse right click, [LSHIFT], [K]</li>
-          <li><strong>sewi (Jump):</strong> [SPACE]</li>
-          <li><strong>sitelen ma (Map):</strong> [TAB] or [BACKSPACE]</li>
-          <li><strong>lipu open (Menu):</strong> [ESC]</li>
-          <li><strong>ante ilo (Change weapon):</strong> [F], [O], [P], [X], [Y], [Z], or mouse wheel</li>
-        </ul>
-
         <h2>lipu open pi nasin musi (Menus)</h2>
         <ul>
-          <li><strong>open (Play):</strong> o open e musi sin.</li>
-          <li><strong>ante (Settings):</strong> o ante e kalama e sitelen musi.</li>
-          <li><strong>lukin (Look):</strong> o ante e nasin lukin pi sinpin sewi anpa. 0 li pini lukin, 1 li lukin pi ante sewi (pona), 2 li lukin pi ante sewi (pini lukin la ilo li tawa insa).</li>
-          <li><strong>lipu pona (Credits):</strong> o lukin e jan pi musi ni.</li>
-          <li><strong>pini (Exit):</strong> o pini e musi.</li>
+          <li><strong>awen:</strong> o musi lon poka pini sina (tenpo musi taso la ni li lon).</li>
+          <li><strong>sitelen:</strong> o lukin e sitelen ma pi tenpo ni (tenpo musi taso la ni li lon).</li>
+          <li><strong>open:</strong> o open e musi sin anu o wile e ma open.</li>
+          <li><strong>kama jo:</strong> o open e musi pi tenpo pini (musi awen lon la ni li lon).</li>
+          <li><strong>kalama:</strong> o pona e kalama pi ilo musi: kalama utala (S), kalama musi (M), wan (SM), mute.</li>
+          <li><strong>lukin:</strong> o ante e nasin lukin pi sinpin sewi anpa. 0 li pini, 1 li lukin pi ante sewi (pona), 2 li lukin pi ante sewi (pini lukin la ilo li tawa insa).</li>
+          <li><strong>toki:</strong> o ante e toki musi (toki mute li lon la ni li lon).</li>
+          <li><strong>pini:</strong> o pini e tenpo musi (ilo lipu la ni li ala).</li>
         </ul>
       </div>
     </div>
@@ -398,6 +392,22 @@
 
       <div class="footer-link">
         <a href="https://github.com/lgallindo/lhomme-revolte/blob/main/README.md" target="_blank">o lukin e lipu README lon lipu GitHub</a>
+      </div>
+    </div>
+
+    <div class="sidebar-right">
+      <div class="docs-panel">
+        <h2>musi kepeken ilo (Controls)</h2>
+        <ul>
+          <li><strong>tawa (Move):</strong> setas tawa, WASD, keyboard nanpa, or Q/E (tawa poka)</li>
+          <li><strong>lukin (Look/Aim):</strong> ilo mouse, setas pi poka L/R</li>
+          <li><strong>utala / pona (Shoot/Confirm):</strong> mouse left click, [J], [ENTER], [CTRL]</li>
+          <li><strong>tawa poka / pini (Strafe/Cancel):</strong> mouse right click, [LSHIFT], [K]</li>
+          <li><strong>sewi (Jump):</strong> [SPACE]</li>
+          <li><strong>sitelen ma (Map):</strong> [TAB] or [BACKSPACE]</li>
+          <li><strong>lipu open (Menu):</strong> [ESC]</li>
+          <li><strong>ante ilo (Change weapon):</strong> [F], [O], [P], [X], [Y], [Z], or mouse wheel</li>
+        </ul>
       </div>
     </div>
   </div>
