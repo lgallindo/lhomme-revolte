@@ -111,9 +111,8 @@ else
   echo "unknown parameter: $1"
   return 1
 fi
-  
-echo ${COMMAND}
-${COMMAND}
+  echo "${COMMAND}"
+eval "${COMMAND}"
 
 if [ "$FRONTEND" = "sdl" ] && [ -f "build/${OUTPUT_NAME}" ]; then
   cp -f "build/${OUTPUT_NAME}" revolte

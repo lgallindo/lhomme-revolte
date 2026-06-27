@@ -15,14 +15,18 @@ Inspired by Albert Camus' *L'Homme Révolté* (The Rebel), this project rebels a
 
 ## Compiling
 
-You can compile the game for your platform using the included `tools/make.sh` script:
+You can compile the game for your platform using the included `tools/make.sh` script. The expected output files are as follows:
 
-```sh
-./tools/make.sh sdl    # Compiles for SDL2 (Hardware accelerated, sound)
-./tools/make.sh sdl1   # Compiles for SDL 1.2 (Legacy hardware)
-./tools/make.sh x11    # Compiles for X11 (Fallback, no sound)
-./tools/make.sh terminal # Compiles for ANSI terminal
-```
+* `./tools/make.sh sdl`: Compiles the SDL2 build (default) to `build/revolte_sdl` and copies it to the root directory as `./revolte`.
+* `./tools/make.sh sdl_lq`: Compiles the SDL2 low-quality profile to `build/revolte_sdl_lq`.
+* `./tools/make.sh x11`: Compiles the X11 build to `build/revolte_x11`.
+* `./tools/make.sh ncurses`: Compiles the ncurses build to `build/revolte_ncurses`.
+* `./tools/make.sh saf`: Compiles the SAF frontend build to `build/revolte_saf`.
+* `./tools/make.sh terminal`: Compiles the ANSI terminal build to `build/revolte_terminal`.
+* `./tools/make.sh csfml`: Compiles the CSFML build to `build/revolte_csfml`.
+* `./tools/make.sh test`: Compiles the unit test binary to `build/revolte_test`.
+* `./tools/make.sh pokitto`: Compiles the Pokitto target to `BUILD/firmware.bin` (requires embedded toolchain).
+* `./tools/make.sh emscripten`: Compiles the web build via `emcc` to `revolte.html`, `revolte.js`, and `revolte.wasm` in the root directory.
 
 Run the resulting SDL binary with `./revolte`; other build outputs are written under `build/`.
 
@@ -31,7 +35,7 @@ Run the resulting SDL binary with `./revolte`; other build outputs are written u
 `tools/gif2map` is the canonical map converter.
 
 `assets/img2map.py` is now deprecated and kept for one transition release only.
-Its retirement gate is enforced by `tests/test_img2map_retirement_gate.sh`,
+Its parity check is enforced by `tests/test_img2map_parity.sh`,
 which verifies parity against `tools/gif2map` across all `assets/level*.gif`
 files and checks deterministic output stability.
 
