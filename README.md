@@ -11,7 +11,7 @@ Inspired by Albert Camus' *L'Homme Révolté* (The Rebel), this project rebels a
 - **Extreme Portability:** Runs on X11, SDL, SDL 1.2, terminal, ncurses, CSFML, web browsers (Emscripten), Pokitto, and more.
 - **Zero Dependencies:** Written in pure C99, requiring only a standard C library.
 - **Tiny Footprint:** The entire game logic, assets, and engine fit into less than 200KB of compiled binary.
-- **Public Domain / GPL:** The original engine is released under CC0 1.0. All new code added in this fork is licensed under the GPL.
+- **Licensing:** See LICENSES.md for the full fork licensing matrix (legacy code ambiguity, GPL-3.0-or-later fork code, CC0 legacy assets, CC BY-NC-SA 4.0 new assets).
 
 ## Compiling
 
