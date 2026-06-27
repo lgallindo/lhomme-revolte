@@ -80,8 +80,8 @@ The following tracked code/script/build files have been authored or substantiall
 
 - Legacy assets (upstream-era) remain CC0 / Public Domain.
 - New fork-era assets are CC BY-NC-SA 4.0.
-- If a legacy asset is modified in this fork, retain provenance notes and document the fork contribution explicitly in commit messages and release notes.
+
 
 ## Raycastlib Note
 
-`core/raycastlib.h` is the original work of Miloslav Číž and was released by the upstream author under CC0 / Public Domain. It must remain under CC0 / Public Domain in this repository unless a major rewrite of its logic is performed in this fork. In that event, the rewritten portions are GPL-3.0-or-later and must be clearly delineated in the file and noted in commit history.
+`core/raycastlib.h` is the original work of Miloslav Číž and was released by the upstream author under CC0 / Public Domain.
