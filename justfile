@@ -40,9 +40,16 @@ emscripten_pt_br:
     ./tools/make.sh emscripten_pt_br
     cp -f revolte_pt_br.html index-pt_br.html
 
-serve: emscripten
-    python3 -m http.server 8000 & \
+serve port="8000": emscripten
+    python3 -m http.server {{port}} & \
     PID=$! ; \
     sleep 1 ; \
-    python3 -m webbrowser http://localhost:8000/index.html ; \
+    python3 -m webbrowser http://localhost:{{port}}/index.html ; \
+    wait $PID
+
+serve-pt-br port="8000": emscripten_pt_br
+    python3 -m http.server {{port}} & \
+    PID=$! ; \
+    sleep 1 ; \
+    python3 -m webbrowser http://localhost:{{port}}/index-pt_br.html ; \
     wait $PID
