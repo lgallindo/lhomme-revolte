@@ -1,4 +1,4 @@
-This is a mod for game Anarch that adds simple movement inertia, made by
+This is a mod for game L'Homme Révolté that adds simple movement inertia, made by
 drummerfish, released under CC0 1.0, diff made against version 1.02d.
 
 diff --git a/constants.h b/constants.h

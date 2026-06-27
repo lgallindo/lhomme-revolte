@@ -1,4 +1,4 @@
-/** Simple program to export Anarch maps as isometric images in PPM format.
+/** Simple program to export L'Homme Révolté maps as isometric images in PPM format.
   The code is not very nice, the goal is just to get the images :)
 
 

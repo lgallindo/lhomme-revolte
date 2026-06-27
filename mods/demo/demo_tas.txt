@@ -1,7 +1,7 @@
 # WORK IN PROGRESS
-# Tools assisted speedrun demo for Anarch.
+# Tools assisted speedrun demo for L'Homme Révolté.
 # by drummyfish, released under CC0 1.0, public domain
-# Anarch demo, 700 x 512, 60 FPS, v. 1.1d
+# L'Homme Révolté demo, 700 x 512, 60 FPS, v. 1.1d
 # level 1:
 #   CMPNLMRLjcbaldru 
 0   0000000000010000 0 0

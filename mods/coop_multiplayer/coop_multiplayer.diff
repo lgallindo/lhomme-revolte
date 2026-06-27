@@ -1,4 +1,4 @@
-Anarch cooperative multiplayer mod. More info in README_multiplayer.txt.
+L'Homme Révolté cooperative multiplayer mod. More info in README_multiplayer.txt.
 
 by drummerfish, released under CC0 1.0, public domain
 
@@ -2354,9 +2354,9 @@ index b2b28ae..61abbc5 100644
  
    if (argHelp)
    {
--    puts("Anarch (SDL), version " SFG_VERSION_STRING "\n");
-+    puts("Anarch (SDL): cooperative multiplayer, version " SFG_VERSION_STRING "\n");
-     puts("Anarch is a unique FPS game. Collect weapons and items and destroy");
+-    puts("L'Homme Révolté (SDL), version " SFG_VERSION_STRING "\n");
++    puts("L'Homme Révolté (SDL): cooperative multiplayer, version " SFG_VERSION_STRING "\n");
+     puts("L'Homme Révolté is a unique FPS game. Collect weapons and items and destroy");
      puts("robot enemies in your way in order to get to the level finish. Some door are");
      puts("locked and require access cards. Good luck!\n");
 @@ -423,7 +553,10 @@ int main(int argc, char *argv[])

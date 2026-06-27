@@ -1,4 +1,4 @@
-This is a mod for Anarch that adds a simple CRT screen effect (scanlines plus
+This is a mod for L'Homme Révolté that adds a simple CRT screen effect (scanlines plus
 screen warp). By drummerfish.
 
 diff --git a/game.h b/game.h

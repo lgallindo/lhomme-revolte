@@ -30,7 +30,7 @@
 #define SFG_CAN_EXIT 0
 #define SFG_DITHERED_SHADOW 1
 
-#define SAVE_FILE_NAME "/Anarch/anarch.sav"
+#define SAVE_FILE_NAME "/L'Homme Révolté/revolte.sav"
 
 #include "game.h"
 

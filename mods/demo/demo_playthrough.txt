@@ -1,6 +1,6 @@
-# Complete playthrough demo of Anarch by drummyfish, with keyboard only so as
+# Complete playthrough demo of L'Homme Révolté by drummyfish, with keyboard only so as
 # to keep it small. Released under CC0 1.0, public domain.
-# Anarch demo, 700 x 512, 60 FPS, v. 1.1d, commit 1fca497d9b
+# L'Homme Révolté demo, 700 x 512, 60 FPS, v. 1.1d, commit 1fca497d9b
 # level 1:
 60 0000000000000100 0 0
 64 0000000000000000 0 0

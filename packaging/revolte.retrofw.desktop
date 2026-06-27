@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=L'Homme Révolté
-Comment=A very special FPS
+Name=Revolte
+Comment=Ultra-small GPL Wolfenstein 3D clone
 Exec=revolte
 Terminal=false
 Type=Game

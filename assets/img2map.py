@@ -1,4 +1,4 @@
-# Python tool to convert an image to map for the Anarch game. The input image
+# Python tool to convert an image to map for the L'Homme Révolté game. The input image
 # has to be in gif format.
 #
 # by drummerfish

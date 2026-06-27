@@ -1,16 +1,12 @@
 /**
   @file main_sdl.c
 
-  This is an SDL2 implementation of the game front end. It can be used to
+  This is an SDL implementation of the game front end. It can be used to
   compile a native executable or a transpiled JS browser version with
   emscripten.
 
   This frontend is not strictly minimal, it could be reduced a lot. If you want
   a learning example of frontend, look at another, simpler one, e.g. terminal.
-
-  To compile with emscripten run:
-
-  emcc ./main_sdl.c -s USE_SDL=2 -O3 --shell-file HTMLshell.html -o game.html
 
 
   Released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
@@ -35,6 +31,16 @@
 // #define GAME_LQ
 
 #ifndef __EMSCRIPTEN__
+  #if defined(MIYOO) || defined(RETROFW)
+    #define SFG_FPS 60
+    #define SFG_LOG(str) puts(str);
+    #define SFG_SCREEN_RESOLUTION_X 320
+    #define SFG_SCREEN_RESOLUTION_Y 240
+    #define SFG_DITHERED_SHADOW 1
+    #define SFG_DIMINISH_SPRITES 1
+    #define SFG_HEADBOB_SHEAR (-1 * SFG_SCREEN_RESOLUTION_Y / 80)
+    #define SFG_BACKGROUND_BLUR 1
+  #else
   #ifndef GAME_LQ
     // higher quality
     #define SFG_FPS 60
@@ -58,6 +64,7 @@
     #define SFG_BACKGROUND_BLUR 0
     #define SFG_RAYCASTING_MAX_STEPS 18
     #define SFG_RAYCASTING_MAX_HITS 8
+  #endif
   #endif
 #else
   // emscripten
@@ -94,41 +101,42 @@
 
 #include <stdio.h>
 #include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
-#include <SDL2/SDL.h>
+#include <SDL/SDL.h>
 
 #include "game.h"
 #include "sounds.h"
-#include "wipe_effect.h"
 
 const uint8_t *sdlKeyboardState;
 uint8_t webKeyboardState[SFG_KEY_COUNT];
 uint8_t sdlMouseButtonState = 0;
 int8_t sdlMouseWheelState = 0;
-SDL_GameController *sdlController;
 
 uint16_t sdlScreen[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y]; // RGB565
 
-SDL_Window *window;
-SDL_Renderer *renderer;
-SDL_Texture *texture;
+SDL_Surface *screenSurface;
 
-// now implement the Anarch API functions (SFG_*)
+// now implement the L'Homme Révolté API functions (SFG_*)
 
 void SFG_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
 {
   sdlScreen[y * SFG_SCREEN_RESOLUTION_X + x] = paletteRGB565[colorIndex];
 }
 
-uint32_t SFG_getTimeMs(void)
+uint32_t SFG_getTimeMs()
 {
   return SDL_GetTicks();
 }
 
 void SFG_save(uint8_t data[SFG_SAVE_SIZE])
 {
-  FILE *f = fopen(SFG_SAVE_FILE_PATH,"wb");
+#ifdef RETROFW
+  const char *home = getenv("HOME");
+  char path[256];
+  sprintf(path, "%s/revolte.sav", home);
+  FILE *f = fopen(path, "wb");
+#else
+  FILE *f = fopen("revolte.sav","wb");
+#endif
 
   puts("SDL: opening and writing save file");
 
@@ -146,7 +154,14 @@ void SFG_save(uint8_t data[SFG_SAVE_SIZE])
 uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
 {
 #ifndef __EMSCRIPTEN__
-  FILE *f = fopen(SFG_SAVE_FILE_PATH,"rb");
+#ifdef RETROFW
+  const char *home = getenv("HOME");
+  char path[256];
+  sprintf(path, "%s/revolte.sav", home);
+  FILE *f = fopen(path, "rb");
+#else
+  FILE *f = fopen("revolte.sav","rb");
+#endif
 
   puts("SDL: opening and reading save file");
 
@@ -156,10 +171,7 @@ uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
   }
   else
   {
-    if (fread(data, 1, SFG_SAVE_SIZE, f) != SFG_SAVE_SIZE)
-    {
-      puts("SDL: warning: save file size mismatch or read error");
-    }
+    fread(data,1,SFG_SAVE_SIZE,f);
     fclose(f);
   }
 
@@ -173,7 +185,7 @@ uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
 void SFG_sleepMs(uint16_t timeMs)
 {
 #ifndef __EMSCRIPTEN__
-  usleep(timeMs * 1000);
+  SDL_Delay(timeMs);
 #endif
 }
 
@@ -199,21 +211,7 @@ void SFG_getMouseOffset(int16_t *x, int16_t *y)
     *x = mX - SFG_SCREEN_RESOLUTION_X / 2;
     *y = mY - SFG_SCREEN_RESOLUTION_Y / 2;
 
-    SDL_WarpMouseInWindow(window,
-      SFG_SCREEN_RESOLUTION_X / 2, SFG_SCREEN_RESOLUTION_Y / 2);
-  }
-
-  if (sdlController != NULL)
-  {
-    *x +=
-      (SDL_GameControllerGetAxis(sdlController,SDL_CONTROLLER_AXIS_RIGHTX) + 
-      SDL_GameControllerGetAxis(sdlController,SDL_CONTROLLER_AXIS_LEFTX)) /
-      SDL_ANALOG_DIVIDER;
-
-    *y +=
-      (SDL_GameControllerGetAxis(sdlController,SDL_CONTROLLER_AXIS_RIGHTY) + 
-      SDL_GameControllerGetAxis(sdlController,SDL_CONTROLLER_AXIS_LEFTY)) /
-      SDL_ANALOG_DIVIDER;
+    SDL_WarpMouse(SFG_SCREEN_RESOLUTION_X / 2, SFG_SCREEN_RESOLUTION_Y / 2);
   }
 #endif
 }
@@ -222,38 +220,84 @@ void SFG_processEvent(uint8_t event, uint8_t data)
 {
 }
 
+#if defined(MIYOO)
+int8_t SFG_keyPressed(uint8_t key)
+{
+  #define k(x) sdlKeyboardState[SDLK_ ## x]
+
+  switch (key)
+  {
+    case SFG_KEY_UP: return k(UP); break;
+    case SFG_KEY_RIGHT: return k(RIGHT); break;
+    case SFG_KEY_DOWN: return k(DOWN); break;
+    case SFG_KEY_LEFT: return k(LEFT); break;
+    case SFG_KEY_A: return k(LALT); break;
+    case SFG_KEY_B: return k(LCTRL); break;
+    case SFG_KEY_C: return k(LSHIFT); break;
+    case SFG_KEY_JUMP: return k(SPACE); break;
+    case SFG_KEY_STRAFE_LEFT: return k(TAB); break;
+    case SFG_KEY_STRAFE_RIGHT: return k(BACKSPACE); break;
+    case SFG_KEY_MAP: return k(ESCAPE); break;
+    case SFG_KEY_MENU: return k(RCTRL) || k(RETURN); break;
+    default: return 0; break;
+  }
+
+  #undef k
+}
+#elif defined(RETROFW)
+int8_t SFG_keyPressed(uint8_t key)
+{
+  #define k(x) sdlKeyboardState[SDLK_ ## x]
+
+  switch (key)
+  {
+    case SFG_KEY_UP: return k(UP); break;
+    case SFG_KEY_RIGHT: return k(RIGHT); break;
+    case SFG_KEY_DOWN: return k(DOWN); break;
+    case SFG_KEY_LEFT: return k(LEFT); break;
+    case SFG_KEY_A: return k(LCTRL); break;
+    case SFG_KEY_B: return k(LALT); break;
+    case SFG_KEY_C: return k(SPACE); break;
+    case SFG_KEY_JUMP: return k(LSHIFT); break;
+    case SFG_KEY_STRAFE_LEFT: return k(TAB); break;
+    case SFG_KEY_STRAFE_RIGHT: return k(BACKSPACE); break;
+    case SFG_KEY_MAP: return k(ESCAPE); break;
+    case SFG_KEY_MENU: return k(RCTRL) || k(RETURN); break;
+    default: return 0; break;
+  }
+
+  #undef k
+}
+#else
 int8_t SFG_keyPressed(uint8_t key)
 {
   if (webKeyboardState[key]) // this only takes effect in the web version 
     return 1;
 
-  #define k(x) sdlKeyboardState[SDL_SCANCODE_ ## x]
-  #define b(x) ((sdlController != NULL) && \
-    SDL_GameControllerGetButton(sdlController,SDL_CONTROLLER_BUTTON_ ## x))
+  #define k(x) sdlKeyboardState[SDLK_ ## x]
 
   switch (key)
   {
-    case SFG_KEY_UP: return k(UP) || k(W) || k(KP_8) || b(DPAD_UP); break;
+    case SFG_KEY_UP: return k(UP) || k(w) || k(KP8); break;
     case SFG_KEY_RIGHT: 
-      return k(RIGHT) || k(E) || k(KP_6) || b(DPAD_RIGHT); break;
+      return k(RIGHT) || k(e) || k(KP6); break;
     case SFG_KEY_DOWN: 
-      return k(DOWN) || k(S) || k(KP_5) || k(KP_2) || b(DPAD_DOWN); break;
-    case SFG_KEY_LEFT: return k(LEFT) || k(Q) || k(KP_4) || b(DPAD_LEFT); break;
-    case SFG_KEY_A: return k(J) || k(RETURN) || k(LCTRL) || k(RCTRL) || b(X) ||
-      b(RIGHTSTICK) || (sdlMouseButtonState & SDL_BUTTON_LMASK); break;
-    case SFG_KEY_B: return k(K) || k(LSHIFT) || b(B); break;
-    case SFG_KEY_C: return k(L) || b(Y); break;
-    case SFG_KEY_JUMP: return k(SPACE) || b(A); break;
-    case SFG_KEY_STRAFE_LEFT: return k(A) || k(KP_7); break;
-    case SFG_KEY_STRAFE_RIGHT: return k(D) || k(KP_9); break;
-    case SFG_KEY_MAP: return k(TAB) || b(BACK); break;
-    case SFG_KEY_CYCLE_WEAPON: return k(F) ||
+      return k(DOWN) || k(s) || k(KP5) || k(KP2); break;
+    case SFG_KEY_LEFT: return k(LEFT) || k(q) || k(KP4); break;
+    case SFG_KEY_A: return k(j) || k(RETURN) || k(LCTRL) || k(RCTRL) ||
+      (sdlMouseButtonState & SDL_BUTTON_LMASK); break;
+    case SFG_KEY_B: return k(k) || k(LSHIFT); break;
+    case SFG_KEY_C: return k(l); break;
+    case SFG_KEY_JUMP: return k(SPACE); break;
+    case SFG_KEY_STRAFE_LEFT: return k(a) || k(KP7); break;
+    case SFG_KEY_STRAFE_RIGHT: return k(d) || k(KP9); break;
+    case SFG_KEY_MAP: return k(TAB); break;
+    case SFG_KEY_CYCLE_WEAPON: return k(f) ||
       (sdlMouseButtonState & SDL_BUTTON_MMASK); break;
-    case SFG_KEY_TOGGLE_FREELOOK: return b(LEFTSTICK) ||
-      (sdlMouseButtonState & SDL_BUTTON_RMASK); break;
-    case SFG_KEY_MENU: return k(ESCAPE) || b(START); break;
+    case SFG_KEY_TOGGLE_FREELOOK: return (sdlMouseButtonState & SDL_BUTTON_RMASK); break;
+    case SFG_KEY_MENU: return k(ESCAPE); break;
     case SFG_KEY_NEXT_WEAPON:
-      if (k(P) || k(X) || b(RIGHTSHOULDER))
+      if (k(p) || k(x))
         return 1;
 
 #define checkMouse(cmp)\
@@ -265,7 +309,7 @@ int8_t SFG_keyPressed(uint8_t key)
       break;
 
     case SFG_KEY_PREVIOUS_WEAPON:
-      if (k(O) || k(Y) || k(Z) || b(LEFTSHOULDER))
+      if (k(o) || k(y) || k(z))
         return 1;
 
       checkMouse(<)
@@ -279,24 +323,14 @@ int8_t SFG_keyPressed(uint8_t key)
   }
 
   #undef k
-  #undef b
 }
+#endif
   
 int running;
-int forceMapReveal = 0;
 
-static uint16_t wipe_scr_start[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
-static uint16_t wipe_scr_end[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
-static int wipe_y[SFG_SCREEN_RESOLUTION_X];
-
-void mainLoopIteration(void)
+void mainLoopIteration()
 {
   SDL_Event event;
-
-  uint8_t stateBefore = SFG_game.state;
-  if (stateBefore == SFG_GAME_STATE_MENU || stateBefore == SFG_GAME_STATE_WIN || stateBefore == SFG_GAME_STATE_LOSE) {
-      memcpy(wipe_scr_start, sdlScreen, sizeof(sdlScreen));
-  }
 
 #ifdef __EMSCRIPTEN__
   // hack, without it sound won't work because of shitty browser audio policies
@@ -307,66 +341,10 @@ void mainLoopIteration(void)
 
   while (SDL_PollEvent(&event)) // also automatically updates sdlKeyboardState
   {
-    if (event.type == SDL_MOUSEWHEEL)
-    {
-      if (event.wheel.y > 0)      // scroll up
-        sdlMouseWheelState = 1;
-      else if (event.wheel.y < 0) // scroll down
-        sdlMouseWheelState = -1;
-    }
-    else if (event.type == SDL_QUIT)
+    if (event.type == SDL_QUIT)
       running = 0;
     else if (event.type == SDL_MOUSEMOTION)
       mouseMoved = 1; 
-    else if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
-    {
-      SDL_Keycode sym = event.key.keysym.sym;
-      if (sym != SDLK_LSHIFT && sym != SDLK_RSHIFT && sym != SDLK_CAPSLOCK)
-      {
-        // LHRWARP logic
-        if (SFG_game.state == SFG_GAME_STATE_MENU)
-        {
-          static const SDL_Keycode lhrwarp_seq[] = {
-            SDLK_l, SDLK_h, SDLK_r, SDLK_w, SDLK_a, SDLK_r, SDLK_p
-          };
-          static uint8_t lhrwarp_idx = 0;
-          
-          if (sym == lhrwarp_seq[lhrwarp_idx])
-          {
-            lhrwarp_idx++;
-            if (lhrwarp_idx == 7)
-            {
-              SFG_game.save[0] = (SFG_game.save[0] & 0xF0) | (SFG_NUMBER_OF_LEVELS - 1);
-              SFG_playGameSound(4, 255);
-              puts("LHRWARP cheat activated: All levels unlocked!");
-              lhrwarp_idx = 0;
-            }
-          }
-          else
-            lhrwarp_idx = 0;
-        }
-
-        // LHRMAP logic
-        static const SDL_Keycode lhrmap_seq[] = {
-          SDLK_l, SDLK_h, SDLK_r, SDLK_m, SDLK_a, SDLK_p
-        };
-        static uint8_t lhrmap_idx = 0;
-
-        if (sym == lhrmap_seq[lhrmap_idx])
-        {
-          lhrmap_idx++;
-          if (lhrmap_idx == 6)
-          {
-            forceMapReveal = 1;
-            SFG_playGameSound(4, 255);
-            puts("LHRMAP cheat activated: Map revealed!");
-            lhrmap_idx = 0;
-          }
-        }
-        else
-          lhrmap_idx = 0;
-      }
-    }
   }
 
   sdlMouseButtonState = SDL_GetMouseState(NULL,NULL);
@@ -374,36 +352,10 @@ void mainLoopIteration(void)
   if (!SFG_mainLoopBody())
     running = 0;
 
-  if (forceMapReveal)
-    SFG_currentLevel.mapRevealMask = 0xffff;
-
-  if ( (stateBefore == SFG_GAME_STATE_MENU && SFG_game.state != SFG_GAME_STATE_MENU) ||
-       (stateBefore == SFG_GAME_STATE_WIN && SFG_game.state != SFG_GAME_STATE_WIN) ||
-       (stateBefore == SFG_GAME_STATE_LOSE && SFG_game.state == SFG_GAME_STATE_MENU) ) {
-       
-       memcpy(wipe_scr_end, sdlScreen, sizeof(sdlScreen));
-       wipe_initMelt(wipe_y, SFG_SCREEN_RESOLUTION_X);
-       
-       int done = 0;
-       while (!done && running) {
-          done = wipe_doMelt(sdlScreen, wipe_scr_start, wipe_scr_end, wipe_y, SFG_SCREEN_RESOLUTION_X, SFG_SCREEN_RESOLUTION_Y);
-          while (SDL_PollEvent(&event)) {
-             if (event.type == SDL_QUIT) { running = 0; done = 1; }
-          }
-          SDL_UpdateTexture(texture,NULL,sdlScreen, SFG_SCREEN_RESOLUTION_X * sizeof(uint16_t));
-          SDL_RenderClear(renderer);
-          SDL_RenderCopy(renderer,texture,NULL,NULL);
-          SDL_RenderPresent(renderer);
-          SDL_Delay(10);
-       }
-  }
-
-  SDL_UpdateTexture(texture,NULL,sdlScreen,
-    SFG_SCREEN_RESOLUTION_X * sizeof(uint16_t));
-
-  SDL_RenderClear(renderer);
-  SDL_RenderCopy(renderer,texture,NULL,NULL);
-  SDL_RenderPresent(renderer);
+  SDL_LockSurface(screenSurface);
+  memcpy(screenSurface->pixels, sdlScreen, sizeof(sdlScreen));
+  SDL_UnlockSurface(screenSurface);
+  SDL_Flip(screenSurface);
 }
 
 #ifdef __EMSCRIPTEN__
@@ -478,13 +430,6 @@ void handleSignal(int signal)
 int main(int argc, char *argv[])
 {
   uint8_t argHelp = 0;
-  uint8_t argForceWindow = 0;
-  uint8_t argForceFullscreen = 0;
-  int targetStartLevel = -1;
-
-#ifndef __EMSCRIPTEN__
-  argForceFullscreen = 1;
-#endif
 
   for (uint8_t i = 0; i < SFG_KEY_COUNT; ++i)
     webKeyboardState[i] = 0;
@@ -493,26 +438,13 @@ int main(int argc, char *argv[])
   {
     if (argv[i][0] == '-' && argv[i][1] == 'h' && argv[i][2] == 0)
       argHelp = 1;
-    else if (argv[i][0] == '-' && argv[i][1] == 'w' && argv[i][2] == 0)       
-      argForceWindow = 1;
-    else if (argv[i][0] == '-' && argv[i][1] == 'f' && argv[i][2] == 0)       
-      argForceFullscreen = 1;
-    else if (strcmp(argv[i], "--lhrwarp") == 0 && i + 1 < argc)
-    {
-      targetStartLevel = atoi(argv[i+1]);
-      i++;
-    }
-    else if (strcmp(argv[i], "--lhrmap") == 0)
-    {
-      forceMapReveal = 1;
-    }
     else
       puts("SDL: unknown argument"); 
   }
 
   if (argHelp)
   {
-    puts("L'Homme Révolté (SDL), version " SFG_VERSION_STRING "\n");
+    puts("L'Homme Révolté (SDL 1.2), version " SFG_VERSION_STRING "\n");
     puts("L'Homme Révolté is a unique FPS game. Collect weapons and items and destroy");
     puts("robot enemies in your way in order to get to the level finish. Some door are");
     puts("locked and require access cards. Good luck!\n");
@@ -537,41 +469,14 @@ int main(int argc, char *argv[])
 
   SFG_init();
 
-  if (targetStartLevel >= 0 && targetStartLevel < SFG_NUMBER_OF_LEVELS)
-  {
-    SFG_game.save[0] = (SFG_game.save[0] & 0xF0) | (SFG_NUMBER_OF_LEVELS - 1);
-    SFG_game.selectedLevel = targetStartLevel;
-    SFG_setAndInitLevel(targetStartLevel);
-  }
-
   puts("SDL: initializing SDL");
 
   SDL_Init(SDL_INIT_AUDIO | SDL_INIT_JOYSTICK);
 
-  window =
-    SDL_CreateWindow("L'Homme Révolté", SDL_WINDOWPOS_UNDEFINED,
-    SDL_WINDOWPOS_UNDEFINED, SFG_SCREEN_RESOLUTION_X, SFG_SCREEN_RESOLUTION_Y,
-    SDL_WINDOW_SHOWN); 
+  screenSurface = SDL_SetVideoMode(SFG_SCREEN_RESOLUTION_X, SFG_SCREEN_RESOLUTION_Y, 16,
+	SDL_SWSURFACE | SDL_DOUBLEBUF);
 
-  renderer = SDL_CreateRenderer(window,-1,0);
-
-  texture =
-    SDL_CreateTexture(renderer,SDL_PIXELFORMAT_RGB565,SDL_TEXTUREACCESS_STATIC,
-    SFG_SCREEN_RESOLUTION_X,SFG_SCREEN_RESOLUTION_Y);
-
-#if SFG_FULLSCREEN
-  argForceFullscreen = 1;
-#endif
-
-  if (!argForceWindow && argForceFullscreen)
-  {
-    puts("SDL: setting fullscreen");
-    SDL_SetWindowFullscreen(window,SDL_WINDOW_FULLSCREEN_DESKTOP);
-  }
-
-  sdlKeyboardState = SDL_GetKeyboardState(NULL);
-
-  sdlController = SDL_GameControllerOpen(0);
+  sdlKeyboardState = SDL_GetKeyState(NULL);
 
 #if !SFG_OS_IS_MALWARE
   signal(SIGINT,handleSignal);
@@ -605,10 +510,8 @@ int main(int argc, char *argv[])
   SDL_ShowCursor(0);
 
   SDL_PumpEvents();
-  SDL_GameControllerUpdate();
 
-  SDL_WarpMouseInWindow(window,
-    SFG_SCREEN_RESOLUTION_X / 2, SFG_SCREEN_RESOLUTION_Y / 2);
+  SDL_WarpMouse(SFG_SCREEN_RESOLUTION_X / 2, SFG_SCREEN_RESOLUTION_Y / 2);
 
 #ifdef __EMSCRIPTEN__
   emscripten_set_main_loop(mainLoopIteration,0,1);
@@ -619,12 +522,8 @@ int main(int argc, char *argv[])
 
   puts("SDL: freeing SDL");
 
-  SDL_GameControllerClose(sdlController);
   SDL_PauseAudio(1);
   SDL_CloseAudio();
-  SDL_DestroyTexture(texture);
-  SDL_DestroyRenderer(renderer); 
-  SDL_DestroyWindow(window); 
 
   puts("SDL: ending");
 

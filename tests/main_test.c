@@ -104,7 +104,7 @@ void printScreen()
 
 int main(void)
 {
-  puts("===== TESTING ANARCH =====\n");
+  puts("===== TESTING REVOLTE =====\n");
 
   puts("initializing");
 

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Applies mods to Anarch to create a consoomer edition more suitable for a
+# Applies mods to L'Homme Révolté to create a consoomer edition more suitable for a
 # mainstream gaymer. Run from the root directory of the repository (NOT the
 # mod directory).
 

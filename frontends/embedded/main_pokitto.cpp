@@ -251,7 +251,7 @@ void SFG_playSound(uint8_t soundIndex, uint8_t volume)
 
 int main()
 {
-  save.begin("ANARCH",sizeof(save),(char*) &save);
+  save.begin("REVOLTE",sizeof(save),(char*) &save);
 
   pokitto.begin(); 
 

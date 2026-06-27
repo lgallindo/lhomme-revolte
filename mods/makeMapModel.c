@@ -1,5 +1,5 @@
 /**
-  Program to export maps from Anarch as a 3D model in OBJ format. The code isn't
+  Program to export maps from L'Homme Révolté as a 3D model in OBJ format. The code isn't
   nicest, it serves just to dig out the data. Usage is this: define which map
   you want to export (plus other things) down below, compile the program, run it
   and it will write out the 3D model in OBJ format, so just redirect it to some

@@ -1,7 +1,7 @@
 /**
   @file game.h
  
-  Main source file of Anarch the game that puts together all the pieces. main
+  Main source file of L'Homme Révolté the game that puts together all the pieces. main
   game logic is implemented here.
 
   physics notes (you can break this when messing around with game constants):

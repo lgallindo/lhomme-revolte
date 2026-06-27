@@ -17,7 +17,7 @@ index 0000000..94898be
 +/**
 +  @file demo.h
 +
-+  Implementation of demo recording/playback for Anarch, can be used to record
++  Implementation of demo recording/playback for L'Homme Révolté, can be used to record
 +  gameplay or even make tool assisted runs.
 +
 +  Demo file format: demo is a text file with one record per line. If line
@@ -271,7 +271,7 @@ index 0000000..94898be
 +      return;
 +    }
 +
-+    fprintf(file,"# Anarch demo, %d x %d, %d FPS, v. " SFG_VERSION_STRING "\n",
++    fprintf(file,"# L'Homme Révolté demo, %d x %d, %d FPS, v. " SFG_VERSION_STRING "\n",
 +      SFG_SCREEN_RESOLUTION_X,SFG_SCREEN_RESOLUTION_Y,SFG_FPS);
 +
 +    for (int i = 0; i < demo.recordCount; ++i)
@@ -316,7 +316,7 @@ index b2b28ae..9dd2649 100644
 +  demoFrameStart();
 +}
 +
- // now implement the Anarch API functions (SFG_*)
+ // now implement the L'Homme Révolté API functions (SFG_*)
  
  void SFG_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
 @@ -122,7 +132,7 @@ void SFG_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)

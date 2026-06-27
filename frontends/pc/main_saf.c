@@ -10,7 +10,7 @@
   whatsoever.
 */
 
-#define SAF_PROGRAM_NAME "Anarch"
+#define SAF_PROGRAM_NAME "L'Homme Révolté"
 #define SAF_PLATFORM_SDL2
 
 #include "saf.h"

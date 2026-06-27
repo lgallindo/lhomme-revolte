@@ -15,16 +15,23 @@ Inspired by Albert Camus' *L'Homme Révolté* (The Rebel), this project rebels a
 
 ## Compiling
 
-You can compile the game for your platform using the included `make.sh` script:
+You can compile the game for your platform using the included `tools/make.sh` script:
 
 ```sh
-./make.sh sdl    # Compiles for SDL2 (Hardware accelerated, sound)
-./make.sh sdl1   # Compiles for SDL 1.2 (Legacy hardware)
-./make.sh x11    # Compiles for X11 (Fallback, no sound)
-./make.sh terminal # Compiles for ANSI terminal
+./tools/make.sh sdl    # Compiles for SDL2 (Hardware accelerated, sound)
+./tools/make.sh sdl1   # Compiles for SDL 1.2 (Legacy hardware)
+./tools/make.sh x11    # Compiles for X11 (Fallback, no sound)
+./tools/make.sh terminal # Compiles for ANSI terminal
 ```
 
 Run the resulting SDL binary with `./revolte`; other build outputs are written under `build/`.
+
+## Testing Status
+
+Only the Linux SDL frontend is currently tested.
+All other variants are released AS-IS.
+Some device-specific frontends were confirmed working in the past, but are
+currently untested because the required devices are no longer available.
 
 ## Controls
 

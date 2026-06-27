@@ -1,13 +1,13 @@
 #!/bin/sh
 
-# Optional helper build script for Anarch.
+# Optional helper build script for Revolte.
 # by drummyfish, released under CC0 1.0, public domain
 #
 # usage:
 #
-# ./make.sh [frontend [compiler]]
+# ./tools/make.sh [frontend [compiler]]
 
-C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -D _DEFAULT_SOURCE -o anarch"
+C_FLAGS="-std=c99 -Wall -Wextra -pedantic -O3 -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -D _DEFAULT_SOURCE -o revolte"
 # note: _DEFAULT_SOURCE shuts up the warning about undeclared usleep
 
 if [ $# -lt 1 ]; then
@@ -44,7 +44,7 @@ if [ $# -eq 2 ]; then
   COMPILER="$2"
   # Note: To use musl or dietlibc, pass 'musl-gcc' or 'diet gcc' as the second arg.
   # (Requires: sudo apt install musl-tools dietlibc-dev)
-  # Example: LINK_MODE=static ./make.sh x11 musl-gcc
+  # Example: LINK_MODE=static ./tools/make.sh x11 musl-gcc
 
   if [ "$2" = "tcc" ]; then # you'll probably want to modify this
     C_FLAGS="${C_FLAGS} -L/usr/lib/x86_64-linux-gnu/pulseaudio/ 
@@ -59,39 +59,39 @@ echo "compiling"
 
 if [ "$FRONTEND" = "sdl" ]; then
   # PC SDL build
-  COMMAND="${COMPILER} ${C_FLAGS} main_sdl.c -I/usr/local/include ${SDL_FLAGS}"
+  COMMAND="${COMPILER} ${C_FLAGS} -Icore -Ifrontends/pc frontends/pc/main_sdl.c -I/usr/local/include ${SDL_FLAGS}"
 elif [ "$FRONTEND" = "sdl_lq" ]; then
   # PC SDL build (Low Quality)
-  COMMAND="${COMPILER} ${C_FLAGS} -DGAME_LQ main_sdl.c -I/usr/local/include ${SDL_FLAGS}"
+  COMMAND="${COMPILER} ${C_FLAGS} -Icore -Ifrontends/pc -DGAME_LQ frontends/pc/main_sdl.c -I/usr/local/include ${SDL_FLAGS}"
 elif [ "$FRONTEND" = "x11" ]; then
   # X11 build
-  COMMAND="${COMPILER} ${C_FLAGS} main_x11.c ${X11_FLAGS}"
+  COMMAND="${COMPILER} ${C_FLAGS} -Icore -Ifrontends/pc frontends/pc/main_x11.c ${X11_FLAGS}"
 elif [ "$FRONTEND" = "ncurses" ]; then
   # ncurses build, requires libncurses-dev
   NCURSES_FLAGS=$(ncurses-config --cflags --libs 2>/dev/null || ncurses6-config --cflags --libs)
-  COMMAND="${COMPILER} ${C_FLAGS} main_ncurses.c ${NCURSES_FLAGS}"
+  COMMAND="${COMPILER} ${C_FLAGS} -Icore -Ifrontends/pc frontends/pc/main_ncurses.c ${NCURSES_FLAGS}"
 elif [ "$FRONTEND" = "saf" ]; then
   # SAF build using SDL, requires:
   # - saf.h
   # - SDL2 (dev) package
 
   SDL_FLAGS=`sdl2-config --cflags --libs --static-libs`
-  COMMAND="${COMPILER} ${C_FLAGS} main_saf.c -I/usr/local/include ${SDL_FLAGS}"
+  COMMAND="${COMPILER} ${C_FLAGS} -Icore -Ifrontends/pc frontends/pc/main_saf.c -I/usr/local/include ${SDL_FLAGS}"
 elif [ "$FRONTEND" = "terminal" ]; then
   # PC terminal build, requires:
   # - g++
 
-  COMMAND="${COMPILER} ${C_FLAGS} main_terminal.c"
+  COMMAND="${COMPILER} ${C_FLAGS} -Icore -Ifrontends/pc frontends/pc/main_terminal.c"
 elif [ "$FRONTEND" = "csfml" ]; then
   # csfml build, requires:
   # - csfml
 
-  COMMAND="${COMPILER} ${C_FLAGS} main_csfml.c -lcsfml-graphics -lcsfml-window -lcsfml-system -lcsfml-audio"
+  COMMAND="${COMPILER} ${C_FLAGS} -Icore -Ifrontends/pc frontends/pc/main_csfml.c -lcsfml-graphics -lcsfml-window -lcsfml-system -lcsfml-audio"
 elif [ "$FRONTEND" = "test" ]; then
   # test build, requires:
   # - g++
 
-  COMMAND="${COMPILER} ${C_FLAGS} main_test.c"
+  COMMAND="${COMPILER} ${C_FLAGS} -Icore tests/main_test.c"
 elif [ "$FRONTEND" = "pokitto" ]; then
   # Pokitto build, requires:
   # - PokittoLib, in this folder create a symlink named "PokittoLib" to the 
@@ -106,7 +106,7 @@ elif [ "$FRONTEND" = "emscripten" ]; then
   # emscripten (browser Javascript) build, requires:
   # - emscripten
 
-  COMMAND="../emsdk/upstream/emscripten/emcc ./main_sdl.c -s USE_SDL=2 -O3 -lopenal --shell-file HTMLshell.html -o anarch.html -s EXPORTED_FUNCTIONS='[\"_main\",\"_webButton\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'"
+  COMMAND="../emsdk/upstream/emscripten/emcc frontends/pc/main_sdl.c -Icore -s USE_SDL=2 -O3 -lopenal --shell-file frontends/web/HTMLshell.html -o revolte.html -s EXPORTED_FUNCTIONS='[\"_main\",\"_webButton\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'"
 else
   echo "unknown parameter: $1"
   return 1

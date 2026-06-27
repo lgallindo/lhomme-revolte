@@ -1,4 +1,4 @@
-Anarch mod that adds jetpack: instead of jumping the player will simply fly.
+L'Homme Révolté mod that adds jetpack: instead of jumping the player will simply fly.
 
 diff --git a/game.h b/game.h
 index 1efd83d..f8228e4 100755

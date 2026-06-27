@@ -119,7 +119,7 @@ index b1a51eb..39f22a5 100644
  {
 -  RCL_Unit camHeightScreenSize =
 -    (camera.height * camera.resolution.y) / RCL_UNITS_PER_SQUARE;
-+  RCL_Unit camHeightScreenSize = // fixed a bug here for Anarch
++  RCL_Unit camHeightScreenSize = // fixed a bug here for L'Homme Révolté
 +    ((camera.height - RCL_floorTexcoordsHeight) * camera.resolution.y)
 +    / RCL_UNITS_PER_SQUARE;
  
