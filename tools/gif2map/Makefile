@@ -43,7 +43,10 @@ $(CLI_BIN): $(BUILD_DIR)/gif2map_cli.o $(LIB)
 $(BUILD_DIR)/gif2map_mcp.o: gif2map_mcp.c gif2map.h | $(BUILD_DIR)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c gif2map_mcp.c -o $@
 
-$(MCP_BIN): $(BUILD_DIR)/gif2map_mcp.o $(LIB)
+$(BUILD_DIR)/jsonp.o: jsonp.c jsonp.h third_party/jsmn.h | $(BUILD_DIR)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c jsonp.c -o $@
+
+$(MCP_BIN): $(BUILD_DIR)/gif2map_mcp.o $(BUILD_DIR)/jsonp.o $(LIB)
 	$(CC) $(CFLAGS) $^ -o $@
 
 $(BUILD_DIR)/test_gif2map.o: test_gif2map.c gif2map.h | $(BUILD_DIR)

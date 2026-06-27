@@ -1,97 +1,58 @@
 #include "gif2map.h"
+#include "jsonp.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define LINE_CAP 65536
+#define TOK_CAP 256
 
-static int json_get_raw_id(const char *json, char *out, size_t out_cap)
+static int json_get_raw_id(const char *json, const jsmntok_t *tokens,
+  int root, char *out, size_t out_cap)
 {
-  const char *p = strstr(json, "\"id\"");
-  size_t len = 0;
+  int idToken = jsonp_child(tokens, root, json, "id");
+  size_t len;
 
-  if (p == NULL || out_cap == 0)
+  if (idToken < 0 || out_cap == 0)
     return 0;
 
-  p = strchr(p, ':');
+  len = (size_t)(tokens[idToken].end - tokens[idToken].start);
 
-  if (p == NULL)
+  if (len + 1 > out_cap)
     return 0;
 
-  p++;
+  memcpy(out, json + tokens[idToken].start, len);
+  out[len] = '\0';
 
-  while (*p == ' ' || *p == '\t')
-    p++;
-
-  if (*p == '"')
+  if (tokens[idToken].type == JSMN_STRING)
   {
-    out[len++] = *p++;
-
-    while (*p != '\0' && len + 1 < out_cap)
-    {
-      out[len++] = *p;
-
-      if (*p == '"' && p[-1] != '\\')
-      {
-        out[len] = '\0';
-        return 1;
-      }
-
-      p++;
-    }
-
-    return 0;
+    memmove(out + 1, out, len);
+    out[0] = '"';
+    out[len + 1] = '"';
+    out[len + 2] = '\0';
   }
 
-  while (*p != '\0' && *p != ',' && *p != '}' && len + 1 < out_cap)
-    out[len++] = *p++;
-
-  out[len] = '\0';
-  return len > 0;
+  return 1;
 }
 
-static int json_get_string(const char *json, const char *key, char *out,
-  size_t out_cap)
+static int json_get_string(const char *json, const jsmntok_t *tokens,
+  int objToken, const char *key, char *out, size_t out_cap)
 {
-  char pattern[128];
-  const char *p;
-  size_t len = 0;
+  int valueToken;
 
-  if (snprintf(pattern, sizeof(pattern), "\"%s\"", key) >=
-    (int)sizeof(pattern))
+  if (objToken < 0 || out_cap == 0)
     return 0;
 
-  p = strstr(json, pattern);
+  valueToken = jsonp_child(tokens, objToken, json, key);
 
-  if (p == NULL || out_cap == 0)
+  if (valueToken < 0)
     return 0;
 
-  p = strchr(p, ':');
-
-  if (p == NULL)
+  if (jsonp_unescape(json, &tokens[valueToken], out, (int)out_cap) < 0)
     return 0;
 
-  p++;
-
-  while (*p == ' ' || *p == '\t')
-    p++;
-
-  if (*p != '"')
-    return 0;
-
-  p++;
-
-  while (*p != '\0' && *p != '"' && len + 1 < out_cap)
-  {
-    if (*p == '\\' && p[1] != '\0')
-      p++;
-
-    out[len++] = *p++;
-  }
-
-  out[len] = '\0';
-  return *p == '"';
+  return 1;
 }
 
 static void json_write_escaped(FILE *out, const char *s)
@@ -238,8 +199,11 @@ static void respond_tools_list(const char *id)
   fflush(stdout);
 }
 
-static void respond_tools_call(const char *id, const char *line)
+static void respond_tools_call(const char *id, const char *line,
+  const jsmntok_t *tokens, int root)
 {
+  int paramsToken = jsonp_child(tokens, root, line, "params");
+  int argsToken;
   char name[128];
   char input_path[1024];
   char format[32];
@@ -247,23 +211,31 @@ static void respond_tools_call(const char *id, const char *line)
   Gif2MapResult result;
   char *text;
 
-  if (!json_get_string(line, "name", name, sizeof(name)) ||
+  argsToken = jsonp_child(tokens, paramsToken, line, "arguments");
+
+  if (argsToken < 0)
+    argsToken = paramsToken;
+
+  if (!json_get_string(line, tokens, paramsToken, "name", name, sizeof(name)) ||
     strcmp(name, "gif2map_convert") != 0)
   {
     respond_error(id, -32602, "unknown tool name");
     return;
   }
 
-  if (!json_get_string(line, "input_path", input_path, sizeof(input_path)))
+  if (!json_get_string(line, tokens, argsToken, "input_path", input_path,
+    sizeof(input_path)))
   {
     respond_error(id, -32602, "input_path is required");
     return;
   }
 
-  if (!json_get_string(line, "format", format, sizeof(format)))
+  if (!json_get_string(line, tokens, argsToken, "format", format,
+    sizeof(format)))
     strcpy(format, "c");
 
-  if (!json_get_string(line, "symbol_name", symbol_name, sizeof(symbol_name)))
+  if (!json_get_string(line, tokens, argsToken, "symbol_name", symbol_name,
+    sizeof(symbol_name)))
     symbol_name[0] = '\0';
 
   text = convert_to_string(input_path, format,
@@ -285,13 +257,24 @@ static void respond_tools_call(const char *id, const char *line)
 
 static void handle_line(const char *line)
 {
+  jsmn_parser parser;
+  jsmntok_t tokens[TOK_CAP];
+  int tokenCount;
+  int root = 0;
   char id[128];
   char method[128];
 
-  if (!json_get_raw_id(line, id, sizeof(id)))
+  jsmn_init(&parser);
+
+  tokenCount = jsmn_parse(&parser, line, strlen(line), tokens, TOK_CAP);
+
+  if (tokenCount < 1 || tokens[root].type != JSMN_OBJECT)
     return;
 
-  if (!json_get_string(line, "method", method, sizeof(method)))
+  if (!json_get_raw_id(line, tokens, root, id, sizeof(id)))
+    return;
+
+  if (!json_get_string(line, tokens, root, "method", method, sizeof(method)))
   {
     respond_error(id, -32600, "method is required");
     return;
@@ -307,7 +290,7 @@ static void handle_line(const char *line)
   else if (strcmp(method, "tools/list") == 0)
     respond_tools_list(id);
   else if (strcmp(method, "tools/call") == 0)
-    respond_tools_call(id, line);
+    respond_tools_call(id, line, tokens, root);
   else
     respond_error(id, -32601, "method not found");
 }

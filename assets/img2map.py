@@ -5,7 +5,24 @@
 # released under CC0 1.0.
 
 import sys
+import json
 from PIL import Image
+
+if "--help" in sys.argv or "-h" in sys.argv:
+  print("usage: img2map.py [--json] input.gif")
+  sys.exit(0)
+
+jsonMode = False
+
+if "--json" in sys.argv:
+  jsonMode = True
+  sys.argv.remove("--json")
+
+if len(sys.argv) < 2:
+  print("usage: img2map.py [--json] input.gif", file=sys.stderr)
+  sys.exit(1)
+
+print("WARNING: assets/img2map.py is deprecated; use tools/gif2map/build/gif2map.", file=sys.stderr)
 
 elementTypes = [
     "NONE",
@@ -115,6 +132,7 @@ doorTex = getPixel(41,130)
 playerStart = [0,0,0]
 textures = []
 elements = []
+elementCount = 0
 defines = []
 
 levelMap = [[(0,False) for i in range(64)] for j in range(64)]
@@ -130,7 +148,7 @@ for y in range(64):
     else:
       # tile with special property, create a define for it
 
-      prop = n / 64 - 1
+      prop = n // 64 - 1
       tile = n % 64
 
       defNum = -1
@@ -168,6 +186,8 @@ if not playerFound:
 
 if len(elements) > 128:
   raise(Exception("More than 128 level elements."))
+
+elementCount = len(elements)
 
 for i in range(128 - len(elements)):
   elements.append((0,0,0))
@@ -281,5 +301,59 @@ def printC():
 
   print(result)
 
-printC()
+def mapPropertyMask(propIndex):
+  if propIndex == 0:
+    return 0x40
+  elif propIndex == 1:
+    return 0x80
+  return 0xc0
+
+def td(floorH, ceilH, floorT, ceilT):
+  return ((floorH & 0x001f) |
+          ((floorT & 0x0007) << 5) |
+          ((ceilH & 0x001f) << 8) |
+          ((ceilT & 0x0007) << 13))
+
+def printJSON():
+  mapArray = []
+
+  for y in range(64):
+    for x in range(64):
+      item = levelMap[x][y]
+
+      if item[1]:
+        tile, prop = defines[item[0]]
+        mapArray.append(tile | mapPropertyMask(prop))
+      else:
+        mapArray.append(item[0])
+
+  tileDictionary = []
+
+  for i in range(64):
+    tileDictionary.append(td(floorDict[i][1], ceilDict[i][1], floorDict[i][0], ceilDict[i][0]))
+
+  jsonElements = []
+
+  for e in elements:
+    jsonElements.append({"type": e[0], "x": e[1], "y": e[2]})
+
+  payload = {
+    "map_array": mapArray,
+    "tile_dictionary": tileDictionary,
+    "texture_indices": textures,
+    "door_texture_index": doorTex,
+    "floor_color": floorColor,
+    "ceiling_color": ceilColor,
+    "player_start": playerStart,
+    "background_image": backgroundTex,
+    "element_count": elementCount,
+    "elements": jsonElements
+  }
+
+  print(json.dumps(payload, separators=(",", ":"), sort_keys=False))
+
+if jsonMode:
+  printJSON()
+else:
+  printC()
 

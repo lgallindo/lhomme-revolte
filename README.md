@@ -26,6 +26,15 @@ You can compile the game for your platform using the included `tools/make.sh` sc
 
 Run the resulting SDL binary with `./revolte`; other build outputs are written under `build/`.
 
+## Map Conversion Tooling
+
+`tools/gif2map` is the canonical map converter.
+
+`assets/img2map.py` is now deprecated and kept for one transition release only.
+Its retirement gate is enforced by `tests/test_img2map_retirement_gate.sh`,
+which verifies parity against `tools/gif2map` across all `assets/level*.gif`
+files and checks deterministic output stability.
+
 ## Testing Status
 
 Only the Linux SDL frontend is currently tested.
