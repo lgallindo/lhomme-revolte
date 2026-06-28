@@ -46,6 +46,8 @@ typedef struct
   const char *globalIntroText;
   const char *globalOutroText;
   const char *malwareWarning;
+  const char *textOn;
+  const char *textOff;
   const SFG_LevelMeta *levelMeta;
 } SFG_Locale;
 

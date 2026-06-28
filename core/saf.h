@@ -36,10 +36,7 @@
 
   thanks for suggestions/testing/etc go also to: jsangradorp
 
-  Released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
-  plus a waiver of all other intellectual property. The goal of this work is
-  be and remain completely in the public domain forever, available for any use
-  whatsoever. */
+  SPDX-License-Identifier: GPL-3.0-or-later */
 
 /* user settings, these can be redefined before including the library (platform
   specific settings are listed under each platform implementation later): */

@@ -4,10 +4,7 @@
   This is a SAF (smallabstractfish) implementation of the game front end.
 
 
-  Released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
-  plus a waiver of all other intellectual property. The goal of this work is
-  be and remain completely in the public domain forever, available for any use
-  whatsoever.
+  SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #define SAF_PROGRAM_NAME "L'Homme Révolté"
@@ -29,6 +26,7 @@
 
 #define SFG_DITHERED_SHADOW 1
 
+#define SFG_PC 1
 #include "game.h"
 
 uint8_t palette[256];

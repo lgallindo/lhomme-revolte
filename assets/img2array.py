@@ -1,7 +1,7 @@
 # Python tool to convert an image to C array for small3dlib.
 #
-# by drummerfish
-# released under CC0 1.0.
+# Original tool by drummerfish.
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 import sys
 from PIL import Image
@@ -20,7 +20,7 @@ def printHelp():
   print("  -t      transpose (store by columns)")
   print("");
   print("Original Engine")
-  print("released under CC0 1.0")
+  print("released under GPL-3.0-or-later")
 
 def rgbTo565(rgb):
   return ((rgb[0] >> 3) << 11) | ((rgb[1] >> 2) << 5) | ((rgb[2] >> 3))

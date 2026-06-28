@@ -17,7 +17,8 @@ static const char *const SFG_menuItemTexts_pt_br[] =
   "mapa",
   "jogar",
   "carregar",
-  "som",
+  "som fx",
+  "musica",
   "camera",
   "idioma",
   "sair"
@@ -39,6 +40,8 @@ static const SFG_Locale SFG_locale_pt_br =
   "Nao encontramos salvacao, mas encontramos dignidade na luta. "
   "A luta basta para encher o coracao. Voce segue adiante.",
   "SISTEMA MALICIOSO DETECTADO",
+  "ligado",
+  "desligado",
   SFG_levelMeta_pt_br
 };
 

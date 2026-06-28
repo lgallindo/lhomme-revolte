@@ -1,6 +1,6 @@
 # WORK IN PROGRESS
 # Tools assisted speedrun demo for L'Homme Révolté.
-# by drummyfish, released under CC0 1.0, public domain
+# by drummerfish, released under CC0 1.0, public domain
 # L'Homme Révolté demo, 700 x 512, 60 FPS, v. 1.1d
 # level 1:
 #   CMPNLMRLjcbaldru 

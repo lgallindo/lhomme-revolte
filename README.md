@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+
 # L'Homme Révolté
 
 **L'Homme Révolté** is a FPS game engine designed to run on absolutely anything (from modern PCs to tiny microcontrollers). It features 10 levels, raycasted graphics, and a minimalist design.
@@ -17,7 +19,7 @@ Inspired by Albert Camus' *L'Homme Révolté* (The Rebel), this project rebels a
 - **Extreme Portability:** Runs on X11, SDL, SDL 1.2, terminal, ncurses, CSFML, web browsers (Emscripten), Pokitto, and more.
 - **Zero Dependencies:** Written in pure C99, requiring only a standard C library.
 - **Tiny Footprint:** The entire game logic, assets, and engine fit into less than 200KB of compiled binary.
-- **Licensing:** See LICENSES.md for the full fork licensing matrix (legacy code ambiguity, GPL-3.0-or-later fork code, CC0 legacy assets, CC BY-NC-SA 4.0 new assets).
+- **Licensing:** See LICENSES.md for the full fork licensing matrix (legacy code, GPL-3.0-or-later fork code, CC0 legacy assets, CC BY-NC-SA 4.0 new assets).
 
 ## Compiling
 

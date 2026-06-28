@@ -6,7 +6,7 @@ Note that each demo is specific to game resolution, FPS and version! Also note
 that when using mouse, a long demo can get big (megabytes) as many mouse inputs
 have to be recorded (with keyboard only the demo will be relatively small).
 
-by drummyfish, released under CC0 1.0, public domain
+by drummerfish, released under CC0 1.0, public domain
 
 diff --git a/demo.h b/demo.h
 new file mode 100644
@@ -37,7 +37,7 @@ index 0000000..94898be
 +  where each letter is either 0 (not pressed) or 1 (pressed), A means key
 +  with value 0 (SFG_KEY_UP), B means key with value 1 (SFG_KEY_RIGHT) etc.
 +  
-+  by drummyfish, released under CC0 1.0, public domain
++  by drummerfish, released under CC0 1.0, public domain
 +*/
 +
 +#include <stdio.h>

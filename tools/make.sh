@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # Optional helper build script for Revolte.
-# by drummyfish, released under CC0 1.0, public domain
+# Original helper by drummerfish.
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # usage:
 #

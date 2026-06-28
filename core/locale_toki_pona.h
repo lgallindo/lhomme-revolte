@@ -17,7 +17,8 @@ static const char *const SFG_menuItemTexts_tok[] =
   "sitelen",
   "open",
   "kama jo",
-  "kalama",
+  "kalama utala",
+  "kalama musi",
   "lukin",
   "toki",
   "pini"
@@ -34,6 +35,8 @@ static const SFG_Locale SFG_locale_tok =
   "ma li nasa. ilo pi Macrochip li wile lawa e ale. sina ken utala.",
   "ilo li pini, taso ma li nasa kin. sina kama tawa suno sin.",
   "MALWARE OS DETECTED",
+  "lon",
+  "ala",
   SFG_levelMeta_tok
 };
 

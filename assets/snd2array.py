@@ -3,8 +3,8 @@
 # Pass sound file name to this sctipt as a parameter. The file must be in raw
 # mono 8kHz 8bit PCM format.
 #
-# by drummerfish
-# released under CC0 1.0.
+# Original tool by drummerfish.
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 import sys
 

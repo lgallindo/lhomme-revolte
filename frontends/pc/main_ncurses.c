@@ -7,10 +7,7 @@
   version very hard to play.
 
 
-  Released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
-  plus a waiver of all other intellectual property. The goal of this work is to
-  be and remain completely in the public domain forever, available for any use
-  whatsoever.
+  SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #include <ncurses.h>
@@ -22,6 +19,7 @@
 #define SFG_SCREEN_RESOLUTION_Y 40
 #define SFG_FPS 30
 
+#define SFG_PC 1
 #include "game.h"
 
 uint8_t ncScreen[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];

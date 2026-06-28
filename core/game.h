@@ -13,10 +13,7 @@
   - Highest step a player can jump onto is 3 height steps.
 
 
-  Released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
-  plus a waiver of all other intellectual property. The goal of this work is
-  be and remain completely in the public domain forever, available for any use
-  whatsoever.
+  SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef _SFG_GAME_H
@@ -341,10 +338,11 @@ typedef struct
 #define SFG_MENU_ITEM_MAP 1
 #define SFG_MENU_ITEM_PLAY 2
 #define SFG_MENU_ITEM_LOAD 3
-#define SFG_MENU_ITEM_SOUND 4
-#define SFG_MENU_ITEM_SHEAR 5
-#define SFG_MENU_ITEM_LANGUAGE 6
-#define SFG_MENU_ITEM_EXIT 7
+#define SFG_MENU_ITEM_SFX 4
+#define SFG_MENU_ITEM_MUSIC 5
+#define SFG_MENU_ITEM_SHEAR 6
+#define SFG_MENU_ITEM_LANGUAGE 7
+#define SFG_MENU_ITEM_EXIT 8
 
 #define SFG_MENU_ITEM_NONE 255
 
@@ -3800,7 +3798,8 @@ uint8_t SFG_getMenuItem(uint8_t index)
     if ( // skip non-legitimate items
       ((current <= SFG_MENU_ITEM_MAP) && (SFG_currentLevel.levelPointer == 0))
       || ((current == SFG_MENU_ITEM_LOAD) && ((SFG_game.save[0] >> 4) == 0))
-      || ((current == SFG_MENU_ITEM_LANGUAGE) && !SFG_LOCALE_RUNTIME_SWITCH))
+      || ((current == SFG_MENU_ITEM_LANGUAGE) && !SFG_LOCALE_RUNTIME_SWITCH)
+      || ((current == SFG_MENU_ITEM_SHEAR) && SFG_PC))
     {
       current++;
       continue;
@@ -4693,7 +4692,7 @@ void SFG_drawMenu(void)
     i++;
   }
   
-  SFG_drawText(SFG_VERSION_STRING " CC0",SFG_HUD_MARGIN,SFG_GAME_RESOLUTION_Y -
+  SFG_drawText(SFG_VERSION_STRING " GPL",SFG_HUD_MARGIN,SFG_GAME_RESOLUTION_Y -
     SFG_HUD_MARGIN - SFG_FONT_SIZE_SMALL * SFG_FONT_CHARACTER_SIZE,
     SFG_FONT_SIZE_SMALL,4,0,0);
 

@@ -9,10 +9,7 @@
   you personal settings file.
 
 
-  Released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
-  plus a waiver of all other intellectual property. The goal of this work is to
-  be and remain completely in the public domain forever, available for any use
-  whatsoever.
+  SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef _SFG_SETTINGS_H
@@ -419,6 +416,10 @@
 */
 #ifndef SFG_CAN_EXIT
   #define SFG_CAN_EXIT 1
+#endif
+
+#ifndef SFG_PC
+  #define SFG_PC 0
 #endif
 
 /**

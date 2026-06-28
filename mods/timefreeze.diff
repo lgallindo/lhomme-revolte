@@ -1,5 +1,5 @@
 Mod that stops time if the player is not moving (or more precisely not holding
-any keys or moving mouse). By drummyfish.
+any keys or moving mouse). By drummerfish.
 
 diff --git a/game.h b/game.h
 index 8ab69b6..1cc2dae 100644

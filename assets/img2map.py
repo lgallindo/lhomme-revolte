@@ -1,8 +1,8 @@
 # Python tool to convert an image to map for the L'Homme Révolté game. The input image
 # has to be in gif format.
 #
-# by drummerfish
-# released under CC0 1.0.
+# Original tool by drummerfish.
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 import sys
 import json

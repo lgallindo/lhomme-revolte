@@ -17,7 +17,8 @@ static const char *const SFG_menuItemTexts_en_us[] =
   "map",
   "play",
   "load",
-  "sound",
+  "sound fx",
+  "music",
   "look",
   "language",
   "exit"
@@ -42,6 +43,8 @@ static const SFG_Locale SFG_locale_en_us =
   "One must imagine Sisyphus happy. You walk out into the dawn, ready to push "
   "the rock once more.",
   "MALWARE OS DETECTED",
+  "on",
+  "off",
   SFG_levelMeta_en_us
 };
 

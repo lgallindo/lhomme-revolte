@@ -1,4 +1,4 @@
-# Complete playthrough demo of L'Homme Révolté by drummyfish, with keyboard only so as
+# Complete playthrough demo of L'Homme Révolté by drummerfish, with keyboard only so as
 # to keep it small. Released under CC0 1.0, public domain.
 # L'Homme Révolté demo, 700 x 512, 60 FPS, v. 1.1d, commit 1fca497d9b
 # level 1:

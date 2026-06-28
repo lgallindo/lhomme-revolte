@@ -5,10 +5,7 @@
   used as a fallback on most Unices where other frontends somehow fail.
 
 
-  Released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
-  plus a waiver of all other intellectual property. The goal of this work is to
-  be and remain completely in the public domain forever, available for any use
-  whatsoever.
+  SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #if defined(_WIN32) || defined(WIN32) || defined(__WIN32__) || defined(__NT__) || defined(__APPLE__)
@@ -36,6 +33,7 @@
 #define SFG_RAYCASTING_MAX_STEPS 18
 #define SFG_RAYCASTING_MAX_HITS 8
 
+#define SFG_PC 1
 #include "game.h"
 #include "palette.h"
 #define WIPE_PIXEL_TYPE uint_least16_t

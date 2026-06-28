@@ -10,10 +10,7 @@
   perfectly and everywhere.
 
 
-  Released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/)
-  plus a waiver of all other intellectual property. The goal of this work is
-  be and remain completely in the public domain forever, available for any use
-  whatsoever.
+  SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef USE_LINUX_FRAMEBUFFER
@@ -56,6 +53,7 @@
 #define SFG_DITHERED_SHADOW 1
 #define SFG_FPS 30
 
+#define SFG_PC 1
 #include "game.h"
 
 #define SCREENSIZE ((SFG_SCREEN_RESOLUTION_X + 1) * SFG_SCREEN_RESOLUTION_Y + 1)

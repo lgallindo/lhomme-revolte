@@ -24,7 +24,7 @@
     unit length, texture coordinates etc.).
   - Screen coordinates are normal: [0,0] = top left, x goes right, y goes down.
 
-  license: CC0 1.0
+  SPDX-License-Identifier: GPL-3.0-or-later
   version: 0.909d
 
   Version numbering: major.minor[d], id 'd' is appended, this is a

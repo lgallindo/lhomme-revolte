@@ -1,7 +1,7 @@
 # Python tool to convert font image to C bit array.
 #
-# by drummerfish
-# released under CC0 1.0.
+# Original tool by drummerfish.
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from PIL import Image
 
