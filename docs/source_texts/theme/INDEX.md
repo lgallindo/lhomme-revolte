@@ -12,6 +12,8 @@ This directory contains local source copies used by
 | TSI-005 | `voline_red_fascism.muse` | https://theanarchistlibrary.org/library/voline-red-fascism |
 | TSI-006 | `voltairine_de_cleyre_anarchism.muse` | https://theanarchistlibrary.org/library/voltairine-de-cleyre-anarchism |
 | TSI-014 | `jean_michel_dumay_l_homme_revolte.md` | https://archive.wikiwix.com/cache/?url=https%3A%2F%2Fwww.lemonde.fr%2Fidees%2Farticle%2F2008%2F07%2F21%2Fl-homme-revolte-par-jean-michel-dumay_1075543_3232.html |
+| TSI-014a | `jean_michel_dumay_l_homme_revolte_en.md` | English translation of `TSI-014` |
+| TSI-014b | `jean_michel_dumay_l_homme_revolte_pt_br.md` | Portuguese translation of `TSI-014` |
 
 ## External-Only References
 
