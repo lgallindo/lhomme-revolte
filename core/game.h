@@ -3964,18 +3964,27 @@ void SFG_gameStepMenu(void)
         SFG_setGameState(SFG_GAME_STATE_MAP);
         break;
 
-      case SFG_MENU_ITEM_SOUND:
-        SFG_LOG("sound changed");
+      case SFG_MENU_ITEM_SFX:
+        SFG_LOG("sfx changed");
 
-        SFG_game.settings = 
-          (SFG_game.settings & ~0x03) | ((SFG_game.settings + 1)  & 0x03);
+        SFG_game.settings ^= 0x01;
 
         SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
 
-        if ((SFG_game.settings & 0x02) !=
-            ((SFG_game.settings - 1) & 0x02))
-            SFG_setMusic((SFG_game.settings & 0x02) ? 
-              SFG_MUSIC_TURN_ON : SFG_MUSIC_TURN_OFF);
+        SFG_game.save[1] = SFG_game.settings;
+        SFG_gameSave();
+
+        break;
+
+      case SFG_MENU_ITEM_MUSIC:
+        SFG_LOG("music changed");
+
+        SFG_game.settings ^= 0x02;
+
+        SFG_setMusic((SFG_game.settings & 0x02) ? 
+          SFG_MUSIC_TURN_ON : SFG_MUSIC_TURN_OFF);
+
+        SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
 
         SFG_game.save[1] = SFG_game.settings;
         SFG_gameSave();
@@ -4658,7 +4667,7 @@ void SFG_drawMenu(void)
   
     SFG_drawText(text,drawX,y,SFG_FONT_SIZE_MEDIUM,textColor,0,0);
 
-        if ((item == SFG_MENU_ITEM_PLAY || item == SFG_MENU_ITEM_SOUND
+        if ((item == SFG_MENU_ITEM_PLAY || item == SFG_MENU_ITEM_SFX || item == SFG_MENU_ITEM_MUSIC
           || item == SFG_MENU_ITEM_SHEAR || item == SFG_MENU_ITEM_LANGUAGE) &&
         ((i != SFG_game.selectedMenuItem) || SFG_game.blink))
     {
@@ -4675,14 +4684,13 @@ void SFG_drawMenu(void)
 
         SFG_drawNumber(n == 3 ? 2 : n,x,y,SFG_FONT_SIZE_MEDIUM,c);
       }
-      else if (item == SFG_MENU_ITEM_SOUND)
+      else if (item == SFG_MENU_ITEM_SFX)
       {
-        char settingText[3] = "  ";
-
-        settingText[0] = (SFG_game.settings & 0x01) ? 'S' : ' ';
-        settingText[1] = (SFG_game.settings & 0x02) ? 'M' : ' ';
-
-        SFG_drawText(settingText,x,y,SFG_FONT_SIZE_MEDIUM,c,0,0);
+        SFG_drawText((SFG_game.settings & 0x01) ? SFG_activeLocale->textOn : SFG_activeLocale->textOff,x,y,SFG_FONT_SIZE_MEDIUM,c,0,0);
+      }
+      else if (item == SFG_MENU_ITEM_MUSIC)
+      {
+        SFG_drawText((SFG_game.settings & 0x02) ? SFG_activeLocale->textOn : SFG_activeLocale->textOff,x,y,SFG_FONT_SIZE_MEDIUM,c,0,0);
       }
       else
         SFG_drawText(SFG_activeLocale->localeId,x,y,SFG_FONT_SIZE_MEDIUM,c,0,0);

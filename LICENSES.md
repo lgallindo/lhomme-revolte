@@ -6,8 +6,8 @@ This matrix defines licensing policy for this fork.
 
 ## Principles
 
-- Legacy code keeps original in-file notices and provenance as-is.
-- New code added in this fork is GPL-3.0-or-later.
+- Legacy code that has not been modified keeps original in-file notices and provenance as-is.
+- Git tracked files edited by Lucas Gallindo or the coding agent (Antigravity) must be under GPL-3.0-or-later, and headers on them are updated to reflect that.
 - Legacy assets remain CC0 / Public Domain.
 - New assets added in this fork are CC BY-NC-SA 4.0.
 
@@ -15,8 +15,8 @@ This matrix defines licensing policy for this fork.
 
 | ID | Scope | License Classification | Notes |
 | --- | --- | --- | --- |
-| LM-001 | Legacy code portions | CC0 / Public Domain | Keep historical notices untouched. |
-| LM-002 | New fork code (all code added or substantially modified in this fork) | GPL-3.0-or-later | |
+| LM-001 | Legacy code portions (unmodified) | CC0 / Public Domain | Keep historical notices untouched. |
+| LM-002 | Git tracked files edited by Lucas Gallindo or the agent | GPL-3.0-or-later | Headers updated to GPL-3.0-or-later. |
 | LM-003 | Legacy assets | CC0 / Public Domain | Existing asset licensing retained. |
 | LM-004 | New fork assets | CC BY-NC-SA 4.0 | Applies to newly added fork-era media/assets. |
 

@@ -1,5 +1,5 @@
 This mod rotates and flips some sprites during gameplay so as to make
-them appear animated. By drummerfish, released under CC0 1.0, public domain.
+them appear animated. By drummerfish, Released under GPL-3.0-or-later. SPDX-License-Identifier: GPL-3.0-or-later, public domain.
 
 diff --git a/game.h b/game.h
 index 991058d..7e1a103 100755

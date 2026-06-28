@@ -1,6 +1,6 @@
 L'Homme Révolté cooperative multiplayer mod. More info in README_multiplayer.txt.
 
-by drummerfish, released under CC0 1.0, public domain
+by drummerfish, Released under GPL-3.0-or-later. SPDX-License-Identifier: GPL-3.0-or-later, public domain
 
 diff --git a/README_multiplayer.txt b/README_multiplayer.txt
 new file mode 100644
@@ -10,7 +10,7 @@ index 0000000..51925e1
 @@ -0,0 +1,100 @@
 +ANARCH: COOPERATIVE MULTIPLAYER MOD README
 +
-+by drummerfish, released under CC0 1.0, public domain
++by drummerfish, Released under GPL-3.0-or-later. SPDX-License-Identifier: GPL-3.0-or-later, public domain
 +
 +This mod adds cooperative multiplayer for up to 4 players. The game is further
 +modified a bit to make it better playable that way -- for example dying just
