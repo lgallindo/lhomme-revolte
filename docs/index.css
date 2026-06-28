@@ -1,0 +1,192 @@
+@font-face
+{
+  font-family: Aileron;
+  src: url(vendor/fonts/Aileron-Light.otf);
+}
+
+@font-face
+{
+  font-family: Aileron;
+  src: url(vendor/fonts/Aileron-Bold.otf);
+  font-weight: bold;
+}
+
+@font-face
+{
+  font-family: Aileron;
+  src: url(vendor/fonts/Aileron-LightItalic.otf);
+  font-style: italic;
+}
+
+b
+{
+  color: #d91a1a;
+}
+
+ul
+{
+  width: 75%;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: rgb(28,24,22);
+}
+
+li
+{
+  display: inline-block;
+  width: 24%;
+  margin: 10px 0;
+  padding: 0;
+  text-align: center;
+  vertical-align: top;
+}
+
+.logo
+{
+  margin: 20px auto;
+}
+
+a
+{
+  text-decoration: none;
+  color: white;
+  border-bottom: 1px solid white;
+}
+
+body
+{
+  font-family: 'Aileron', sans-serif;
+  max-width: 750px;
+  margin: auto;
+  padding: 50px 0;
+  color: white;
+  background-color: black;
+}
+
+p
+{
+  text-align: justify;
+}
+
+h1
+{
+  text-align: center;
+  font-size: 70px;
+}
+
+h2
+{
+  font-size: 25px;
+  text-align: center;
+  margin: 70px 0 25px;
+  color: white;
+}
+
+.subtitle
+{ 
+  display: block;
+  margin: 20px;
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.wow
+{
+  display: block;
+  width: 100%;
+  font-weight: bold;
+  font-size: 45px;
+  text-align: center;
+  color: white;
+  margin: 70px auto 35px;
+  text-shadow: 0px 0px 60px red;
+}
+
+.wow::before, .wow::after
+{
+  content: "";
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  margin: 0 30px;
+  position: relative;
+  top: 4px;
+  background: url(vendor/images/Anarcho__animation_2_inverted.gif) no-repeat;
+  background-size: contain;
+}
+
+.description
+{
+  display: block;
+  width: 75%;
+  margin: 20px auto;
+  font-size: 20px;
+  font-style: italic;
+  color: #dddddd;
+}
+
+.footer
+{
+  border-top: 1px solid white;
+  display: block;
+  margin: 40px auto;
+  padding: 10px;
+  font-size: 15px;
+  font-style: italic;
+  color: #cccccc;
+  text-align: center;
+}
+
+img
+{
+  display: block;
+  margin: auto;
+}
+
+.subtitle
+{
+  display: block;
+  text-align: center;
+}
+
+iframe, .screenshot
+{
+  display: block;
+  margin: 20px auto;
+}
+
+.photo
+{
+  width: 75%; 
+}
+
+.ap
+{
+  width: 30px;
+}
+
+.quotes
+{
+  display: block;
+  width: 75%;
+  margin: 10px auto;
+  padding: 0;
+}
+
+.quotes dt
+{
+  margin-top: 35px;
+  font-style: italic;
+  font-size: 20px;
+}
+
+.quotes dt a
+{
+  text-decoration: none;
+  border-bottom: none;
+}
+
+.quotes dt a::before, .quotes dt a::after
+{
+  content: "\"";
+}

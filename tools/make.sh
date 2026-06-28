@@ -107,13 +107,13 @@ elif [ "$FRONTEND" = "emscripten" ]; then
   # emscripten (browser Javascript) build, requires:
   # - emscripten
 
-  COMMAND="../emsdk/upstream/emscripten/emcc frontends/pc/main_sdl.c -Icore -s USE_SDL=2 -O3 -lopenal --shell-file frontends/web/HTMLshell.html -o revolte.html -s EXPORTED_FUNCTIONS='[\"_main\",\"_webButton\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'"
+  COMMAND="../emsdk/upstream/emscripten/emcc frontends/pc/main_sdl.c -Icore -s USE_SDL=2 -O3 -lopenal --shell-file frontends/web/HTMLshell.html -o docs/revolte.html -s EXPORTED_FUNCTIONS='[\"_main\",\"_webButton\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'"
 elif [ "$FRONTEND" = "emscripten_pt_br" ]; then
   # emscripten (browser Javascript) Portuguese-only build
-  COMMAND="../emsdk/upstream/emscripten/emcc frontends/pc/main_sdl.c -Icore -DSFG_LOCALE_ONLY_PT_BR -s USE_SDL=2 -O3 -lopenal --shell-file frontends/web/HTMLshell_pt_br.html -o revolte_pt_br.html -s EXPORTED_FUNCTIONS='[\"_main\",\"_webButton\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'"
+  COMMAND="../emsdk/upstream/emscripten/emcc frontends/pc/main_sdl.c -Icore -DSFG_LOCALE_ONLY_PT_BR -s USE_SDL=2 -O3 -lopenal --shell-file frontends/web/HTMLshell_pt_br.html -o docs/revolte_pt_br.html -s EXPORTED_FUNCTIONS='[\"_main\",\"_webButton\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'"
 elif [ "$FRONTEND" = "emscripten_tok" ]; then
   # emscripten (browser Javascript) Toki Pona-only build
-  COMMAND="../emsdk/upstream/emscripten/emcc frontends/pc/main_sdl.c -Icore -DSFG_LOCALE_ONLY_TOK -s USE_SDL=2 -O3 -lopenal --shell-file frontends/web/HTMLshell_tok.html -o revolte_tok.html -s EXPORTED_FUNCTIONS='[\"_main\",\"_webButton\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'"
+  COMMAND="../emsdk/upstream/emscripten/emcc frontends/pc/main_sdl.c -Icore -DSFG_LOCALE_ONLY_TOK -s USE_SDL=2 -O3 -lopenal --shell-file frontends/web/HTMLshell_tok.html -o docs/revolte_tok.html -s EXPORTED_FUNCTIONS='[\"_main\",\"_webButton\"]' -s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'"
 else
   echo "unknown parameter: $1"
   return 1

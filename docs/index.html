@@ -1,207 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="author" content="lgallindo">
-  <meta name="description" content="L'Homme Révolté - Minimalist FPS game engine. Play English, Portuguese, or Toki Pona versions directly in your browser.">
-  <title>L'Homme Révolté</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-color: #0b0707;
-      --card-bg: rgba(30, 20, 20, 0.4);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --accent-color: #d91a1a;
-      --accent-glow: rgba(217, 26, 26, 0.4);
-      --text-main: #f5f0f0;
-      --text-muted: #a69a9a;
-    }
+  <!-- L'Homme Revolte game webpage, SPDX-License-Identifier: GPL-3.0-or-later. -->
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="author" content="lgallindo">
+    <meta name="description" content="Revolte game website">
 
-    body {
-      font-family: 'Outfit', sans-serif;
-      background: radial-gradient(circle at center, #1b0c0c 0%, var(--bg-color) 100%);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      padding: 40px 20px;
-      overflow-x: hidden;
-    }
+    <title> Revolte </title>
 
-    header {
-      text-align: center;
-      margin-top: 40px;
-    }
+    <link rel="stylesheet" href="index.css">
+  </head>
 
-    h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--text-main);
-      text-shadow: 0 0 20px var(--accent-glow);
-      margin-bottom: 10px;
-    }
+  <body>
 
-    .subtitle {
-      font-size: 1.1rem;
-      color: var(--text-muted);
-      font-weight: 300;
-      font-style: italic;
-    }
+    <span class="subtitle"><i>, anticapitalist, GPL free software game for everyone</i></span>
 
-    main {
-      width: 100%;
-      max-width: 900px;
-      margin: 40px 0;
-    }
+    <iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" src="https://libre.video/videos/embed/c968774a-c12d-46d6-8851-0c578ffa8dcb" frameborder="0" allowfullscreen></iframe>
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 25px;
-    }
 
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 30px;
-      text-align: center;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      text-decoration: none;
-      color: inherit;
-    }
+    <dl class="quotes">
+      <dt> <a href="https://forum.freegamedev.net/viewtopic.php?f=22&t=14771#p95387">Easily the most plain and boring FPS I've ever played.</a> </dt> <dd> Onpon4, libre game developer </dd>
+      <dt> <a href="https://talk.pokitto.com/t/anarch-doom-clone-fps/2008/70">Technically the most impressive game on Pokito yet.</a> </dt> <dd> Jonne, the creator of Pokitto </dd>
+      <dt> <a href="https://archive.li/tFWrL#84%">Kill yourself.</a> </dt> <dd> Anonymous on 4chan </dd>
+    </dl>
 
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: var(--accent-color);
-      box-shadow: 0 10px 30px rgba(217, 26, 26, 0.15);
-    }
+    <span class="wow">THIS IS SPECIAL</span>
 
-    .card h2 {
-      font-size: 1.6rem;
-      font-weight: 600;
-      margin-bottom: 15px;
-      color: var(--text-main);
-      transition: color 0.3s ease;
-    }
+    <ul>
+      <li>needs only <b>200 KB</b>, <b>32 KB RAM</b>, <b>40 MHz CPU</b>!</li>
+      <li><b></b>, pure C, <b>no dependencies</b>, no FPU, GPU or file I/O needed</li>
+      <li>10 levels, 6 weapons, 7 enemy types, 3 ammo types</li>
+      <li>varying floor/ceiling oldschool SW ray casting engine with mouse support</li>
+      <li><b>GPL free software</b> with preserved legacy provenance</li>
+      <li>100% original work, no third party assets</li>
+      <li>well documented, hackable, <b>extremely portable</b></li>
+      <li>completely <b>gratis</b>, without ads, DRM or similar bullshit</li>
+    </ul>
 
-    .card:hover h2 {
-      color: var(--accent-color);
-    }
+    <p class="description">
+      This isn't a 90s style retro shooter, this <b>is</b> a 90s shooter.
+    </p>
 
-    .card p {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 25px;
-      flex-grow: 1;
-    }
+    <p class="description">
+      This game runs everywhere and adheres to great <a href="https://.org">simplicity</a>.
+      It is much more efficient and portable than Doom and has completely
+      <b>no dependencies</b>. Not even floating point is used, in case your
+      computer doesn't have the HW unit. The game can fit into <b>200 KB</b>
+      (including assets!) and can run with just <b>32 KB RAM</b>. No build system,
+      library, internet connection or package manager is inherently required for
+      compilation as the whole game is written in pure C language.
+    </p>
 
-    .play-btn {
-      width: 100%;
-      padding: 12px 20px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: var(--text-main);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: all 0.3s ease;
-    }
+    <p class="description">
+      This is an experiment and art that categorically rejects capitalist
+      technology.
+    </p>
+ 
+    <img class="photo" src="media/3screens.png" alt="screenshots">
+    <img class="photo" src="media/hd.png" alt="hd screenshots">
 
-    .card:hover .play-btn {
-      background: var(--accent-color);
-      border-color: var(--accent-color);
-      box-shadow: 0 0 15px var(--accent-glow);
-    }
+    <span class="wow">MORE THAN A GAME</span>
 
-    footer {
-      text-align: center;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-    }
+    <p class="description">
+      This is not a mere entertainment or toy meant for killing time or pursuing
+      low goals such as making profit or something to put on portfolio, this is
+      much more. Revolte is completely <b>gratis and free as in freedom</b> and
+      besides entertainment can also be used for education, research, hacking, media
+      creation, as a benchmark, as a test, as an environment, as an engine, as
+      a basis for something greater. You are not limited by anything, there are
+      no conditions to agree to. Nothing is hidden, everything is allowed, no
+      burdens are imposed. The best motivation for creating anything is only
+      the <b>pure love of creation for its own sake</b>, unburdened by any other
+      goal than creating something truly useful. 
+    </p>
 
-    footer a {
-      color: var(--text-main);
-      text-decoration: none;
-      border-bottom: 1px dotted var(--text-main);
-      transition: color 0.3s ease;
-    }
+    <img class="photo" src="vendor/images/Anarch_Devices.jpg" alt="screenshots">
 
-    footer a:hover {
-      color: var(--accent-color);
-      border-color: var(--accent-color);
-    }
+    <span class="wow">NO ONE OWNS THIS</span>
 
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 2.2rem;
-      }
-    }
-  </style>
-</head>
-<body>
+    <p class="description">
+      Not even I, the creator, own any part of this game.
+      I&nbsp;have purposefully created everything myself from scratch,
+      including the engine, graphics, sounds, music, even the font and palette,
+      so that this fork can preserve historical provenance while licensing
+      Lucas/agent-edited tracked files under <b>GPL-3.0-or-later</b>, for you,
+      my dear fellow human being. No one should be allowed to own information
+      and art.
+    </p>
 
-  <header>
-    <h1>L'Homme Révolté</h1>
-    <p class="subtitle">Select your language / Selecione o idioma / o pona e toki</p>
-  </header>
+    <p class="description">
+      I've done my best to ensure this is 100% free as in freedom software and
+      culture, well understandable and documented. This isn't made for any
+      profit. This is made out of <b>love</b>, for you and for the greater good.
+    </p>
 
-  <main>
-    <div class="grid">
-      <!-- English Target -->
-      <a href="index-en_us.html" class="card">
-        <div>
-          <h2>English</h2>
-          <p>Play the default version. Contains full multi-language selection dynamically inside the game settings.</p>
-        </div>
-        <button class="play-btn">Play Game</button>
-      </a>
+    <h2>Download</h2>
 
-      <!-- Portuguese Target -->
-      <a href="index-pt_br.html" class="card">
-        <div>
-          <h2>Português</h2>
-          <p>Jogue a versão compilada em Português. Inclui documentação local de comandos, teclas de atalho e menus detalhados.</p>
-        </div>
-        <button class="play-btn">Jogar</button>
-      </a>
+    <ul>
+    </ul>
 
-      <!-- Toki Pona Target -->
-      <a href="index-tok.html" class="card">
-        <div>
-          <h2>Toki Pona</h2>
-          <p>o musi lon toki pona. musi li jo e toki pona taso lon insa musi lon ilo lipu sina.</p>
-        </div>
-        <button class="play-btn">musi</button>
-      </a>
-    </div>
-  </main>
+    <h2>Explore</h2>
 
-  <footer>
-    <p>View source code & documentation on <a href="https://github.com/lgallindo/lhomme-revolte" target="_blank">GitHub</a></p>
-  </footer>
+    <ul>
+      <li><a href="https://www..cz">author's website</a></li>
+      <li><a href="https://libregamewiki.org/Anarch">libre game wiki</a></li>
+      <li><a href="">OGA assets</a></li>
+    </ul>
 
-</body>
+
+    <p class="footer">
+      <a href="LICENSES.md">GPL-3.0-or-later fork licensing matrix</a>.
+      This page uses <a href="http://dotcolon.net/font/aileron/">Aileron</a>
+      CC0 font (if loaded properly).
+    </p>
+
+  </body>
 </html>

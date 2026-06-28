@@ -298,9 +298,32 @@ static uint16_t wipe_scr_start[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y
 static uint16_t wipe_scr_end[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
 static int wipe_y[SFG_SCREEN_RESOLUTION_X];
 
+static uint8_t isWiping = 0;
+
 void mainLoopIteration(void)
 {
   SDL_Event event;
+
+  if (isWiping)
+  {
+    int done = wipe_doMelt(sdlScreen, wipe_scr_start, wipe_scr_end, wipe_y, SFG_SCREEN_RESOLUTION_X, SFG_SCREEN_RESOLUTION_Y);
+    if (done)
+    {
+      isWiping = 0;
+    }
+    while (SDL_PollEvent(&event))
+    {
+      if (event.type == SDL_QUIT) { running = 0; isWiping = 0; }
+    }
+    SDL_UpdateTexture(texture, NULL, sdlScreen, SFG_SCREEN_RESOLUTION_X * sizeof(uint16_t));
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
+    SDL_RenderPresent(renderer);
+#ifndef __EMSCRIPTEN__
+    SDL_Delay(10);
+#endif
+    return;
+  }
 
   uint8_t stateBefore = SFG_game.state;
   if (stateBefore == SFG_GAME_STATE_MENU || stateBefore == SFG_GAME_STATE_WIN || stateBefore == SFG_GAME_STATE_LOSE) {
@@ -419,19 +442,7 @@ void mainLoopIteration(void)
        
        memcpy(wipe_scr_end, sdlScreen, sizeof(sdlScreen));
        wipe_initMelt(wipe_y, SFG_SCREEN_RESOLUTION_X);
-       
-       int done = 0;
-       while (!done && running) {
-          done = wipe_doMelt(sdlScreen, wipe_scr_start, wipe_scr_end, wipe_y, SFG_SCREEN_RESOLUTION_X, SFG_SCREEN_RESOLUTION_Y);
-          while (SDL_PollEvent(&event)) {
-             if (event.type == SDL_QUIT) { running = 0; done = 1; }
-          }
-          SDL_UpdateTexture(texture,NULL,sdlScreen, SFG_SCREEN_RESOLUTION_X * sizeof(uint16_t));
-          SDL_RenderClear(renderer);
-          SDL_RenderCopy(renderer,texture,NULL,NULL);
-          SDL_RenderPresent(renderer);
-          SDL_Delay(10);
-       }
+       isWiping = 1;
   }
 
   SDL_UpdateTexture(texture,NULL,sdlScreen,
