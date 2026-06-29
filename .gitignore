@@ -5,3 +5,4 @@ screenshot.bmp
 screenshot_*.bmp
 tools/gif2map/build/*.o
 tools/gif2map/build/*.a
+docs/references/

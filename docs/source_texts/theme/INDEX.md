@@ -29,3 +29,4 @@ full-text copies in this directory.
 | TSI-011 | Gregory Stevens, `The Violence of Dogmatic Pacifism` | Core reference at https://www.hamptonthink.org/read/the-violence-of-dogmatic-pacifism; shell download was blocked during the update pass. |
 | TSI-012 | Alexander Berkman, `O grande jogo` | Secondary reference at https://bibliotecaanarquista.org/library/alexander-berkman-o-grande-jogo; shell download was blocked during the update pass. |
 | TSI-013 | Friedrich Nietzsche, `The Genealogy of Morals` | Accent reference at https://www.gutenberg.org/ebooks/52319; shell download was blocked during the update pass. |
+| TSI-014 | Jean-Michel Dumay, `L'Homme révolté`, par Jean-Michel Dumay | Secondary Camus commentary reference at https://archive.wikiwix.com/cache/?url=https%3A%2F%2Fwww.lemonde.fr%2Fidees%2Farticle%2F2008%2F07%2F21%2Fl-homme-revolte-par-jean-michel-dumay_1075543_3232.html |

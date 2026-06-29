@@ -5,9 +5,9 @@
   columns for cache friendliness (as rendering also happens by columns),
   4 bits per pixel, which means an index to 16 color subpalette stored at the
   beginning of the image. Images can be converted to this format with the
-  provided pything script:
+  provided C tool:
 
-  python img2array.py -t -c -x32 -y32 -ppalette565.png image.png
+  ./tools/img2array/build/img2array -t -c -x32 -y32 -ppalette565.png image.png
 
 
   SPDX-License-Identifier: GPL-3.0-or-later
