@@ -93,6 +93,8 @@ elif [ "$FRONTEND" = "test" ]; then
   # - g++
 
   COMMAND="${COMPILER} ${C_FLAGS} -Icore tests/main_test.c"
+elif [ "$FRONTEND" = "agent" ]; then
+  COMMAND="${COMPILER} ${C_FLAGS} -Icore tests/agent_test.c"
 elif [ "$FRONTEND" = "pokitto" ]; then
   # Pokitto build, requires:
   # - PokittoLib, in this folder create a symlink named "PokittoLib" to the 

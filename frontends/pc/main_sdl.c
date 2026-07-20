@@ -93,12 +93,20 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #define SFG_PC 1
 #include "game.h"
 #include "sounds.h"
 #include "wipe_effect.h"
+#include <sys/select.h>
+
+uint8_t agentSyncMode = 0;
+uint16_t agentKeyBitmask = 0;
+int16_t agentMouseDx = 0;
+int16_t agentMouseDy = 0;
+uint8_t screen[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y]; // Needed by agent_harness.h
+#include "agent_harness.h"
 
 const uint8_t *sdlKeyboardState;
 uint8_t webKeyboardState[SFG_KEY_COUNT];
@@ -122,10 +130,16 @@ SDL_Texture *texture;
 void SFG_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
 {
   sdlScreen[y * SFG_SCREEN_RESOLUTION_X + x] = paletteRGB565[colorIndex];
+  screen[y * SFG_SCREEN_RESOLUTION_X + x] = colorIndex;
 }
 
 uint32_t SFG_getTimeMs(void)
 {
+  if (agentSyncMode) {
+    static uint32_t t = 0;
+    t += 33; // SFG_MS_PER_FRAME is typically 33
+    return t;
+  }
   return SDL_GetTicks();
 }
 
@@ -192,6 +206,14 @@ int8_t mouseMoved = 0; /* Whether the mouse has moved since program started,
 
 void SFG_getMouseOffset(int16_t *x, int16_t *y)
 {
+  if (agentSyncMode)
+  {
+    *x = agentMouseDx;
+    *y = agentMouseDy;
+    agentMouseDx = 0;
+    agentMouseDy = 0;
+    return;
+  }
 #ifdef __EMSCRIPTEN__
   *x = webMouseX;
   *y = webMouseY;
@@ -232,6 +254,7 @@ void SFG_processEvent(uint8_t event, uint8_t data)
 
 int8_t SFG_keyPressed(uint8_t key)
 {
+  if (agentSyncMode) return (agentKeyBitmask >> key) & 0x01;
   if (webKeyboardState[key]) // this only takes effect in the web version 
     return 1;
 
@@ -304,7 +327,59 @@ void mainLoopIteration(void)
 {
   SDL_Event event;
 
-  if (isWiping)
+  if (agentSyncMode)
+  {
+    static uint8_t pendingTicks = 0;
+    if (pendingTicks > 0)
+    {
+      pendingTicks--;
+    }
+    else
+    {
+      SFG_agentDumpStateJSON(stdout);
+      
+      char buffer[256];
+      int gotCommand = 0;
+      fd_set readfds;
+      struct timeval tv;
+      
+      while (!gotCommand && running)
+      {
+        FD_ZERO(&readfds);
+        FD_SET(STDIN_FILENO, &readfds);
+        tv.tv_sec = 0;
+        tv.tv_usec = 10000;
+        
+        int ret = select(STDIN_FILENO + 1, &readfds, NULL, NULL, &tv);
+        if (ret > 0 && FD_ISSET(STDIN_FILENO, &readfds))
+        {
+          if (fgets(buffer, sizeof(buffer), stdin))
+          {
+            SFG_AgentAction act = SFG_agentParseActionLine(buffer);
+            agentKeyBitmask = act.keyBitmask;
+            agentMouseDx = act.mouseDx;
+            agentMouseDy = act.mouseDy;
+            pendingTicks = act.stepTicks;
+            if (pendingTicks > 0) pendingTicks--;
+            gotCommand = 1;
+          }
+          else running = 0;
+        }
+        
+        while (SDL_PollEvent(&event))
+          if (event.type == SDL_QUIT) running = 0;
+
+        // Keep Mac window alive and rendered while waiting for agent
+        SDL_UpdateTexture(texture, NULL, sdlScreen, SFG_SCREEN_RESOLUTION_X * sizeof(uint16_t));
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, texture, NULL, NULL);
+        SDL_RenderPresent(renderer);
+      }
+      if (!running) return;
+    }
+  }
+
+  if (isWiping && !agentSyncMode)
   {
     int done = wipe_doMelt(sdlScreen, wipe_scr_start, wipe_scr_end, wipe_y, SFG_SCREEN_RESOLUTION_X, SFG_SCREEN_RESOLUTION_Y);
     if (done)
@@ -452,6 +527,10 @@ void mainLoopIteration(void)
   SDL_RenderCopy(renderer,texture,NULL,NULL);
   SDL_RenderPresent(renderer);
 
+  if (agentSyncMode) {
+    SDL_Delay(16); // Pace it to ~60FPS visually so the user can actually watch the gameplay!
+  }
+
   if (autoScreenshot)
   {
     static int screenshotFrameCount = 0;
@@ -583,6 +662,11 @@ int main(int argc, char *argv[])
       autoScreenshot = 1;
       argForceWindow = 1;
     }
+    else if (strcmp(argv[i], "--agent-sync") == 0)
+    {
+      agentSyncMode = 1;
+      argForceWindow = 1; // Good to force window so user can watch it easily
+    }
     else
       puts("SDL: unknown argument"); 
   }
@@ -645,7 +729,7 @@ int main(int argc, char *argv[])
   renderer = SDL_CreateRenderer(window,-1,0);
 
   texture =
-    SDL_CreateTexture(renderer,SDL_PIXELFORMAT_RGB565,SDL_TEXTUREACCESS_STATIC,
+    SDL_CreateTexture(renderer,SDL_PIXELFORMAT_RGB565,SDL_TEXTUREACCESS_STREAMING,
     SFG_SCREEN_RESOLUTION_X,SFG_SCREEN_RESOLUTION_Y);
 
 #if SFG_FULLSCREEN
