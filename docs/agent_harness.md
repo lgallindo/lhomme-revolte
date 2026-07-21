@@ -85,4 +85,20 @@ cd agent
 uv run llm_agent.py
 # or for the fixed sequence script:
 uv run agent_brain.py
+# or for a local llama.cpp server:
+uv run local_llama_agent.py
+```
+
+## Demo Recording and Replay
+
+Because the game engine's harness processes raw text commands synchronously, it naturally functions as a complete record/replay system out of the box!
+
+To **record** a demo, pass a file to the script:
+```bash
+uv run local_llama_agent.py --record demo.txt
+```
+
+To **replay** that demo, simply pipe the text file directly into the C engine. The engine will pace the frames visually and exit cleanly when EOF is reached:
+```bash
+cat demo.txt | ../build/revolte_sdl --agent-sync --lhrwarp 0
 ```
