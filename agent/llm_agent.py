@@ -64,7 +64,7 @@ def play():
     client = genai.Client()
     
     print("Launching game process...")
-    p = subprocess.Popen(["./build/revolte_sdl", "--agent-sync", "--lhrwarp", "0"], 
+    p = subprocess.Popen(["../build/revolte_sdl", "--agent-sync", "--lhrwarp", "0"], 
                          stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     
     # Skip intro automatically

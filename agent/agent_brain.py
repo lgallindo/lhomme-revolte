@@ -13,7 +13,7 @@ def play():
         "0011 0 0 10\n", # UP + SHOOT
     ]
     
-    p = subprocess.Popen(["./build/revolte_sdl", "--agent-sync", "--lhrwarp", "0"], 
+    p = subprocess.Popen(["../build/revolte_sdl", "--agent-sync", "--lhrwarp", "0"], 
                          stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     
     while True:

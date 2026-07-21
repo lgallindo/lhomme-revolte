@@ -77,5 +77,12 @@ To build the headless agent:
 To build the SDL visual agent:
 `LINK_MODE=dynamic ./tools/make.sh sdl`
 
-To run the full visual test:
-`python3 agent_brain.py`
+To run the full visual test or the LLM agent:
+We use `uv` for python dependency management. The scripts are located in the `agent/` directory.
+
+```bash
+cd agent
+uv run llm_agent.py
+# or for the fixed sequence script:
+uv run agent_brain.py
+```
