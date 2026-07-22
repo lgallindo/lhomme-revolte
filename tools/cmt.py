@@ -27,19 +27,23 @@ def load_palette(header_path):
         raise ValueError("Could not find paletteRGB565 array in palette.h")
         
     array_content = match.group(1)
-    # Extract hex values
-    hex_vals = re.findall(r'0x[0-9a-fA-F]+', array_content)
+    # Extract integer values (base 10)
+    vals = re.findall(r'\b\d+\b', array_content)
     
-    if len(hex_vals) != 256:
-        raise ValueError(f"Expected 256 colors, found {len(hex_vals)}")
+    if len(vals) != 256:
+        # It's possible there are two #if/#else arrays. Let's just take the first 256.
+        if len(vals) >= 256:
+            vals = vals[:256]
+        else:
+            raise ValueError(f"Expected 256 colors, found {len(vals)}")
         
-    for h in hex_vals:
-        val = int(h, 16)
+    for v in vals:
+        val = int(v)
         palette.append(rgb565_to_rgb(val))
         
     return np.array(palette)
 
-def process_image(image_path, palette, dither=False):
+def process_image(image_path, palette, dither=True):
     img = Image.open(image_path)
     
     frames = []
@@ -66,15 +70,35 @@ def process_image(image_path, palette, dither=False):
     mapped_frames = []
     for frame in frames:
         if dither:
-            # Simple Floyd-Steinberg dithering could go here
-            # For this MVP, we will stick to KDTree nearest neighbor on the raw image
-            # as vectorization is much faster.
-            pass
+            # Floyd-Steinberg dithering
+            float_frame = frame.astype(np.float32)
+            mapped_frame = np.zeros((height, width), dtype=np.uint8)
             
-        # Flatten frame to [N, 3], query KDTree, reshape to [height, width]
-        flat_pixels = frame.reshape(-1, 3)
-        _, indices = tree.query(flat_pixels)
-        mapped_frame = indices.reshape((height, width)).astype(np.uint8)
+            for y in range(height):
+                for x in range(width):
+                    old_pixel = float_frame[y, x]
+                    # Clamp to 0-255 before querying
+                    clamped = np.clip(old_pixel, 0, 255)
+                    _, idx = tree.query(clamped)
+                    new_pixel = palette[idx]
+                    mapped_frame[y, x] = idx
+                    
+                    quant_error = old_pixel - new_pixel
+                    
+                    if x + 1 < width:
+                        float_frame[y, x + 1] += quant_error * 7 / 16
+                    if y + 1 < height:
+                        if x - 1 >= 0:
+                            float_frame[y + 1, x - 1] += quant_error * 3 / 16
+                        float_frame[y + 1, x] += quant_error * 5 / 16
+                        if x + 1 < width:
+                            float_frame[y + 1, x + 1] += quant_error * 1 / 16
+        else:
+            # Flatten frame to [N, 3], query KDTree, reshape to [height, width]
+            flat_pixels = frame.reshape(-1, 3)
+            _, indices = tree.query(flat_pixels)
+            mapped_frame = indices.reshape((height, width)).astype(np.uint8)
+            
         mapped_frames.append(mapped_frame)
         
     return mapped_frames, width, height, num_frames, fps
