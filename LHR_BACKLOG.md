@@ -9,7 +9,7 @@ Scope: full conversation demand inventory across all user requests in this sessi
 | D-001 | Locate references to media/texts.txt | Done | Workspace search and ripgrep performed; no direct runtime path references found. |
 | D-002 | Confirm AGENTS.md was read | Done | Confirmed in chat and repeatedly consulted afterward. |
 | D-003 | Add README disclaimer that only Linux SDL is tested and others are AS-IS | Done | Testing-status section added in README. |
-| D-004 | Remove ANARCH branding from Pokitto frontend | Done | save namespace switched to REVOLTE in main_pokitto.cpp. |
+| D-004 | Remove LHR branding from Pokitto frontend | Done | save namespace switched to REVOLTE in main_pokitto.cpp. |
 | D-005 | Find current default SDL text sources | Done | Mapped to core text symbols consumed via core/game.h in SDL build path. |
 | D-006 | Find CC0/public-domain references and propose fixes | Done | Repository scan performed and remediation strategy documented/partially applied in licensing docs. |
 | D-007 | Create checkpoint commit before more work | Done | Checkpoint commit created as requested. |
@@ -50,7 +50,7 @@ Scope: full conversation demand inventory across all user requests in this sessi
 | D-042 | API-005: remove “legal determination rests with distributor” wording | Done | Wording removed from tracked docs where requested. |
 | D-043 | API-005: avoid “upstream” references unless necessary; document in PROJECT_RULES.md | Done | Documentation style rule inserted into PROJECT_RULES.md. |
 | D-044 | API-005: raycastlib clause is memo only, not for repo docs | Done | Removed from LICENSES and adjusted policy placement per instruction. |
-| D-045 | Check whether ~/code/research/Anarch was merged and update merge plan doc | Done | Merge history checked and plan document updated with status section. |
+| D-045 | Check whether ~/code/research/LHR was merged and update merge plan doc | Done | Merge history checked and plan document updated with status section. |
 | D-046 | List all Python scripts currently in repo | Done | Full list generated via rg --files -g '*.py'. |
 | D-047 | Ensure no rollback/revert without authorization | Done | Changes were additive and targeted; no unauthorized rollback performed. |
 | D-048 | Keep a comprehensive demands table and revise when incomplete | Done | This revised table expands missing items and preserves status rationale. |
