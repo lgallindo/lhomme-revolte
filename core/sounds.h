@@ -48,6 +48,60 @@ struct
 } LHR_MusicState;
 
 /**
+ * Procedural Audio: Atari Punk Console (APC) Emulation
+ * Simulates a stepped square wave tone generator using frequency and modulation/duty cycle.
+ */
+static inline uint8_t LHR_getAPCVolume(uint32_t t, uint16_t freq, uint16_t mod)
+{
+    // A simplistic APC emulation: an astable oscillator modulating a monostable multivibrator.
+    // Creates harsh, stepped square waves.
+    if (freq == 0) return 127;
+    uint32_t period = 8000 / freq; 
+    uint32_t phase = t % period;
+    
+    // The modulation dictates the duty cycle/pulse width of the monostable part
+    uint32_t pulse_width = (period * mod) / 255;
+    
+    if (phase < pulse_width) {
+        return 200; // High state
+    } else {
+        return 55;  // Low state
+    }
+}
+
+/**
+ * Procedural Audio: 2-Operator FM Synthesis
+ * Generates sound by frequency-modulating a carrier sine (approximated) with a modulator sine.
+ */
+static inline uint8_t LHR_getFMVolume(uint32_t t, uint16_t c_freq, uint16_t m_freq, uint8_t m_index)
+{
+    // Fast sine approximation using a triangle wave folded via bitwise logic
+    // Sine approximation for x in 0..255 mapping to -127..127
+    // Not a true sine, but a very fast FM-compatible waveform.
+    
+    // Calculate modulator
+    if (m_freq == 0 || c_freq == 0) return 127;
+    
+    uint32_t m_period = 8000 / m_freq;
+    uint32_t m_phase = (t % m_period) * 255 / m_period;
+    
+    // Triangle wave approximation for modulator (0 to 255 back to 0)
+    int16_t mod_val = (m_phase < 128) ? (m_phase * 2) : (511 - m_phase * 2);
+    mod_val -= 128; // centered at 0
+    
+    // Modulate carrier frequency
+    uint32_t c_period = 8000 / c_freq;
+    // Add phase modulation
+    uint32_t c_phase = ((t % c_period) * 255 / c_period) + ((mod_val * m_index) / 128);
+    c_phase %= 256;
+    
+    // Triangle wave approximation for carrier
+    int16_t car_val = (c_phase < 128) ? (c_phase * 2) : (511 - c_phase * 2);
+    
+    return (uint8_t)(car_val);
+}
+
+/**
   Gets the next 8bit 8KHz music sample for the bytebeat soundtrack. This
   function is to be used by the frontend that plays music.
 */
