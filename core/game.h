@@ -4380,6 +4380,8 @@ void SFG_drawStoryText(void)
   uint8_t clearColor = 9;
   uint8_t sprite = 18;
 
+  const SFG_MapImage *bgImage = 0;
+
   if (SFG_game.state == SFG_GAME_STATE_INTRO)
   {
     if (SFG_game.storyType == SFG_STORY_MAP_INTRO)
@@ -4390,6 +4392,7 @@ void SFG_drawStoryText(void)
         idx = 0;
 
       text = SFG_activeLocale->levelMeta[idx].introText;
+      bgImage = SFG_activeLocale->levelMeta[idx].introImage;
     }
     else
       text = SFG_introText;
@@ -4400,14 +4403,30 @@ void SFG_drawStoryText(void)
   }
   else if (SFG_game.storyType == SFG_STORY_MAP_OUTRO)
   {
-    if (SFG_currentLevel.levelNumber < SFG_NUMBER_OF_LEVELS)
+    if (SFG_currentLevel.levelNumber < SFG_NUMBER_OF_LEVELS) {
       text = SFG_activeLocale->levelMeta[SFG_currentLevel.levelNumber].outroText;
+      bgImage = SFG_activeLocale->levelMeta[SFG_currentLevel.levelNumber].outroImage;
+    }
   }
 
   if (text == 0)
     text = "";
+
+  if (bgImage != 0) {
+    uint16_t frame = SFG_getMapImageFrame(bgImage, SFG_game.stateTime);
+    uint32_t frameOffset = frame * bgImage->width * bgImage->height;
     
-  SFG_clearScreen(clearColor);
+    for (uint16_t y = 0; y < SFG_GAME_RESOLUTION_Y; ++y) {
+      uint32_t srcY = (y * bgImage->height) / SFG_GAME_RESOLUTION_Y;
+      for (uint16_t x = 0; x < SFG_GAME_RESOLUTION_X; ++x) {
+        uint32_t srcX = (x * bgImage->width) / SFG_GAME_RESOLUTION_X;
+        uint8_t color = bgImage->data[frameOffset + srcY * bgImage->width + srcX];
+        SFG_setPixel(x, y, color);
+      }
+    }
+  } else {
+    SFG_clearScreen(clearColor);
+  }
 
   if (SFG_GAME_RESOLUTION_Y > 50) 
     SFG_blitImage(SFG_monsterSprites + sprite * SFG_TEXTURE_STORE_SIZE,
