@@ -1,0 +1,11 @@
+[project]
+name = "wad-extractor"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "omgifol>=0.5.1",
+    "pillow>=12.3.0",
+    "pytest>=9.1.1",
+]
