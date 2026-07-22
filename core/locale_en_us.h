@@ -6,10 +6,10 @@
   SPDX-License-Identifier: GPL-3.0-or-later
 */
 
-#ifndef _SFG_LOCALE_EN_US_H
-#define _SFG_LOCALE_EN_US_H
+#ifndef _LHR_LOCALE_EN_US_H
+#define _LHR_LOCALE_EN_US_H
 
-static const SFG_LevelMeta SFG_levelMeta_en_us[SFG_NUMBER_OF_LEVELS] = {
+static const LHR_LevelMeta LHR_levelMeta_en_us[LHR_NUMBER_OF_LEVELS] = {
   { "Entering the facility...", "You survived the first sector.", 1, 2 },
   { "The deeper you go...", "Sector 2 cleared.", 3, 4 },
   { "No turning back.", "Sector 3 cleared.", 5, 0 },
@@ -22,7 +22,7 @@ static const SFG_LevelMeta SFG_levelMeta_en_us[SFG_NUMBER_OF_LEVELS] = {
   { "The heart of the absurdity.", "The nightmare is finally over.", 2, 6 }
 };
 
-static const char *const SFG_menuItemTexts_en_us[] =
+static const char *const LHR_menuItemTexts_en_us[] =
 {
   "continue",
   "map",
@@ -35,10 +35,10 @@ static const char *const SFG_menuItemTexts_en_us[] =
   "exit"
 };
 
-static const SFG_Locale SFG_locale_en_us =
+static const LHR_Locale LHR_locale_en_us =
 {
   "en_US",
-  SFG_menuItemTexts_en_us,
+  LHR_menuItemTexts_en_us,
   "kills",
   "save? L no yes R",
   "saved",
@@ -56,7 +56,7 @@ static const SFG_Locale SFG_locale_en_us =
   "MALWARE OS DETECTED",
   "on",
   "off",
-  SFG_levelMeta_en_us
+  LHR_levelMeta_en_us
 };
 
 #endif

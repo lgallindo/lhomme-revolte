@@ -10,7 +10,7 @@
 #ifndef PALETTE_256_H
 #define PALETTE_256_H
 
-SFG_PROGRAM_MEMORY uint16_t paletteRGB565[256] = {
+LHR_PROGRAM_MEMORY uint16_t paletteRGB565[256] = {
 #if 1
 // manually adjusted, more saturated palette
 0, 6371, 14855, 27436, 38066, 48631, 59228, 65535, 6241, 14563, 24966, 33320, 

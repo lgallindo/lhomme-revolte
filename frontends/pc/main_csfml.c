@@ -17,21 +17,21 @@
 
 #include <SFML/Audio/Types.h>
 
-#define SFG_SCREEN_RESOLUTION_X 640
-#define SFG_SCREEN_RESOLUTION_Y 480
+#define LHR_SCREEN_RESOLUTION_X 640
+#define LHR_SCREEN_RESOLUTION_Y 480
 
-#define SFG_DITHERED_SHADOW 1
-#define SFG_DIMINISH_SPRITES 1
-#define SFG_RESOLUTION_SCALEDOWN 1
-#define SFG_BACKGROUND_BLUR 1
+#define LHR_DITHERED_SHADOW 1
+#define LHR_DIMINISH_SPRITES 1
+#define LHR_RESOLUTION_SCALEDOWN 1
+#define LHR_BACKGROUND_BLUR 1
 
-#define SFG_LOG(s) printf("game: %s\n",s);
+#define LHR_LOG(s) printf("game: %s\n",s);
 
 #define MUSIC_VOLUME 16
 
-#define WINDOW_SIZE (SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y)
+#define WINDOW_SIZE (LHR_SCREEN_RESOLUTION_X * LHR_SCREEN_RESOLUTION_Y)
 
-#define SFG_PC 1
+#define LHR_PC 1
 #include "game.h"
 #include "sounds.h"
 #define WIPE_PIXEL_TYPE uint32_t
@@ -40,7 +40,7 @@
 
 static uint32_t wipe_scr_start[WINDOW_SIZE];
 static uint32_t wipe_scr_end[WINDOW_SIZE];
-static int wipe_y[SFG_SCREEN_RESOLUTION_X];
+static int wipe_y[LHR_SCREEN_RESOLUTION_X];
 
 uint32_t windowPixels[WINDOW_SIZE];
 
@@ -52,33 +52,33 @@ sfRenderWindow* window;
 uint8_t musicOn = 0;
 int8_t mouseWheelState = 0;
 
-int8_t SFG_keyPressed(uint8_t key)
+int8_t LHR_keyPressed(uint8_t key)
 {
   #define k(x) sfKeyboard_isKeyPressed(sfKey ## x)
 
   switch (key)
   {
-    case SFG_KEY_UP: return k(W) || k(Up) || k(Num8); break;
-    case SFG_KEY_RIGHT: return k(E) || k(Right) || k(Num6);
+    case LHR_KEY_UP: return k(W) || k(Up) || k(Num8); break;
+    case LHR_KEY_RIGHT: return k(E) || k(Right) || k(Num6);
       break;
-    case SFG_KEY_DOWN:
+    case LHR_KEY_DOWN:
       return k(S) || k(Down) || k(Num5) || k (Num2); break;
-    case SFG_KEY_LEFT: return k(Q) || k(Left) || k(Num4); break;
-    case SFG_KEY_A:
+    case LHR_KEY_LEFT: return k(Q) || k(Left) || k(Num4); break;
+    case LHR_KEY_A:
       return k(J) || k(Return) || k(LControl) || k(RControl) ||
       sfMouse_isButtonPressed(sfMouseLeft); break;
-    case SFG_KEY_B: return k(K) || k(LShift); break;
-    case SFG_KEY_C: return k(L); break;
-    case SFG_KEY_JUMP: return k(Space); break;
-    case SFG_KEY_STRAFE_LEFT: return k(A) || k(Num7); break;
-    case SFG_KEY_STRAFE_RIGHT: return k(D) || k(Num9); break;
-    case SFG_KEY_MAP: return k(Tab); break;
-    case SFG_KEY_CYCLE_WEAPON: return k(F);
-    case SFG_KEY_TOGGLE_FREELOOK:
+    case LHR_KEY_B: return k(K) || k(LShift); break;
+    case LHR_KEY_C: return k(L); break;
+    case LHR_KEY_JUMP: return k(Space); break;
+    case LHR_KEY_STRAFE_LEFT: return k(A) || k(Num7); break;
+    case LHR_KEY_STRAFE_RIGHT: return k(D) || k(Num9); break;
+    case LHR_KEY_MAP: return k(Tab); break;
+    case LHR_KEY_CYCLE_WEAPON: return k(F);
+    case LHR_KEY_TOGGLE_FREELOOK:
       return sfMouse_isButtonPressed(sfMouseRight);
       break;
 
-    case SFG_KEY_NEXT_WEAPON:
+    case LHR_KEY_NEXT_WEAPON:
       if (k(P) || k(X))
         return 1;
 
@@ -90,7 +90,7 @@ int8_t SFG_keyPressed(uint8_t key)
       return 0;
       break;
 
-    case SFG_KEY_PREVIOUS_WEAPON:
+    case LHR_KEY_PREVIOUS_WEAPON:
       if (k(O) || k(Y) || k(Z)) 
         return 1;
 
@@ -101,7 +101,7 @@ int8_t SFG_keyPressed(uint8_t key)
       return 0;
       break;
 
-    case SFG_KEY_MENU: return sfKeyboard_isKeyPressed(sfKeyEscape); break;
+    case LHR_KEY_MENU: return sfKeyboard_isKeyPressed(sfKeyEscape); break;
     default: return 0; break;
 
     #undef k
@@ -110,7 +110,7 @@ int8_t SFG_keyPressed(uint8_t key)
   return 0;
 }
 
-void SFG_getMouseOffset(int16_t *x, int16_t *y)
+void LHR_getMouseOffset(int16_t *x, int16_t *y)
 {
   sfVector2u s = sfWindow_getSize((const sfWindow *) window);
   sfVector2i p = sfMouse_getPosition((const sfWindow *) window);
@@ -127,57 +127,57 @@ void SFG_getMouseOffset(int16_t *x, int16_t *y)
   sfMouse_setPosition(p,(const sfWindow *) window);
 }
 
-uint32_t SFG_getTimeMs(void)
+uint32_t LHR_getTimeMs(void)
 {
   return sfClock_getElapsedTime(clock).microseconds / 1000 ;
 }
 
-void SFG_sleepMs(uint16_t timeMs)
+void LHR_sleepMs(uint16_t timeMs)
 {
   sfTime t;
   t.microseconds = timeMs * 1000;
   sfSleep(t);
 }
 
-void SFG_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
+void LHR_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
 {
-  windowPixels[y * SFG_SCREEN_RESOLUTION_X + x] = paletteRGB32[colorIndex];
+  windowPixels[y * LHR_SCREEN_RESOLUTION_X + x] = paletteRGB32[colorIndex];
 }
 
-void SFG_setMusic(uint8_t value)
+void LHR_setMusic(uint8_t value)
 {
   switch (value)
   {
-    case SFG_MUSIC_TURN_ON: musicOn = 1; break;
-    case SFG_MUSIC_TURN_OFF: musicOn = 0; break;
-    case SFG_MUSIC_NEXT: SFG_nextMusicTrack(); break;
+    case LHR_MUSIC_TURN_ON: musicOn = 1; break;
+    case LHR_MUSIC_TURN_OFF: musicOn = 0; break;
+    case LHR_MUSIC_NEXT: LHR_nextMusicTrack(); break;
     default: break;
   }
 }
 
-void SFG_processEvent(uint8_t event, uint8_t data)
+void LHR_processEvent(uint8_t event, uint8_t data)
 {
 }
 
-void SFG_save(uint8_t data[SFG_SAVE_SIZE])
+void LHR_save(uint8_t data[LHR_SAVE_SIZE])
 {
-  FILE *f = fopen(SFG_SAVE_FILE_PATH,"wb");
+  FILE *f = fopen(LHR_SAVE_FILE_PATH,"wb");
 
   if (f == NULL)
     return;
 
-  fwrite(data,1,SFG_SAVE_SIZE,f);
+  fwrite(data,1,LHR_SAVE_SIZE,f);
 
   fclose(f);
 }
 
-uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
+uint8_t LHR_load(uint8_t data[LHR_SAVE_SIZE])
 {
-  FILE *f = fopen(SFG_SAVE_FILE_PATH,"rb");
+  FILE *f = fopen(LHR_SAVE_FILE_PATH,"rb");
 
   if (f != NULL)
   {
-    if (fread(data, 1, SFG_SAVE_SIZE, f) != SFG_SAVE_SIZE)
+    if (fread(data, 1, LHR_SAVE_SIZE, f) != LHR_SAVE_SIZE)
     {
       puts("CSFML: warning: save file size mismatch or read error");
     }
@@ -192,7 +192,7 @@ uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
 
 sfSoundStream *sound;
 
-#define AUDIO_BUFFER_SIZE (SFG_SFX_SAMPLE_COUNT * 2) // total size of the buffer
+#define AUDIO_BUFFER_SIZE (LHR_SFX_SAMPLE_COUNT * 2) // total size of the buffer
 #define AUDIO_BUFFER_OFFSET 400 /* size of the beginning portion of the buffer
                                    that's being played, while the other part
                                    is being filled with audio */
@@ -209,20 +209,20 @@ static inline int16_t mixSamples(int16_t sample1, int16_t sample2)
   return sample1 + sample2;
 }
 
-void SFG_playSound(uint8_t soundIndex, uint8_t volume)
+void LHR_playSound(uint8_t soundIndex, uint8_t volume)
 {
   uint16_t volumeScale = 1 << (volume / 37);
 
   uint32_t pos = AUDIO_BUFFER_OFFSET +
-    ((SFG_game.frame - audioUpdateFrame) * SFG_MS_PER_FRAME * 8);
+    ((LHR_game.frame - audioUpdateFrame) * LHR_MS_PER_FRAME * 8);
 
-  for (int i = 0; i < SFG_SFX_SAMPLE_COUNT; ++i)
+  for (int i = 0; i < LHR_SFX_SAMPLE_COUNT; ++i)
   {
     if (pos >= AUDIO_BUFFER_SIZE)
       break;
 
     audioBuffer[pos] = mixSamples(audioBuffer[pos], 
-      (128 - SFG_GET_SFX_SAMPLE(soundIndex,i)) * volumeScale);
+      (128 - LHR_GET_SFX_SAMPLE(soundIndex,i)) * volumeScale);
 
     pos++;
   }
@@ -240,15 +240,15 @@ sfBool soundFill(sfSoundStreamChunk *data, void *userdata)
   if (musicOn)
     for (uint32_t i = 0; i < AUDIO_BUFFER_OFFSET; ++i) // mix in the music
     {
-      audioBuffer[i] = mixSamples((SFG_getNextMusicSample() - 
-        SFG_musicTrackAverages[SFG_MusicState.track]) * MUSIC_VOLUME,
+      audioBuffer[i] = mixSamples((LHR_getNextMusicSample() - 
+        LHR_musicTrackAverages[LHR_MusicState.track]) * MUSIC_VOLUME,
         audioBuffer[i]);
     }
 
   data->samples = audioBuffer;
   data->sampleCount = AUDIO_BUFFER_OFFSET;
 
-  audioUpdateFrame = SFG_game.frame;
+  audioUpdateFrame = LHR_game.frame;
 
   return sfTrue;
 }
@@ -276,7 +276,7 @@ void screenshot(void)
     return;
   }
 
-  fprintf(f,"P6 %d %d 255\n",SFG_SCREEN_RESOLUTION_X,SFG_SCREEN_RESOLUTION_Y);
+  fprintf(f,"P6 %d %d 255\n",LHR_SCREEN_RESOLUTION_X,LHR_SCREEN_RESOLUTION_Y);
 
   for (uint32_t i = 0; i < WINDOW_SIZE; ++i)
     fwrite(&windowPixels[i],1,3,f);
@@ -296,7 +296,7 @@ int main(int argc, char *argv[])
   {
     if (argv[i][0] == '-' && argv[i][1] == 'h' && argv[i][2] == 0)
     {
-      puts("L'Homme Révolté (CSFML), version " SFG_VERSION_STRING "\n");
+      puts("L'Homme Révolté (CSFML), version " LHR_VERSION_STRING "\n");
       puts("L'Homme Révolté is a unique FPS game. Collect weapons and items and destroy");
       puts("robot enemies in your way in order to get to the level finish. Some door are");
       puts("locked and require access cards. Good luck!\n");
@@ -322,9 +322,9 @@ int main(int argc, char *argv[])
       puts("SDL: unknown argument"); 
   }
  
-  SFG_init();
+  LHR_init();
 
-  sfVideoMode mode = {SFG_SCREEN_RESOLUTION_X, SFG_SCREEN_RESOLUTION_Y, 32};
+  sfVideoMode mode = {LHR_SCREEN_RESOLUTION_X, LHR_SCREEN_RESOLUTION_Y, 32};
   sfEvent event;
   clock = sfClock_create();
   sfClock_restart(clock);
@@ -345,7 +345,7 @@ int main(int argc, char *argv[])
   }
 
   sfTexture* windowTexture =
-    sfTexture_create(SFG_SCREEN_RESOLUTION_X,SFG_SCREEN_RESOLUTION_Y);
+    sfTexture_create(LHR_SCREEN_RESOLUTION_X,LHR_SCREEN_RESOLUTION_Y);
 
   sfTexture_setSmooth(windowTexture,sfTrue);
 
@@ -365,8 +365,8 @@ int main(int argc, char *argv[])
 
   while (sfRenderWindow_isOpen(window))
   {
-    uint8_t stateBefore = SFG_game.state;
-    if (stateBefore == SFG_GAME_STATE_MENU || stateBefore == SFG_GAME_STATE_WIN || stateBefore == SFG_GAME_STATE_LOSE || stateBefore == SFG_GAME_STATE_INTRO) {
+    uint8_t stateBefore = LHR_game.state;
+    if (stateBefore == LHR_GAME_STATE_MENU || stateBefore == LHR_GAME_STATE_WIN || stateBefore == LHR_GAME_STATE_LOSE || stateBefore == LHR_GAME_STATE_INTRO) {
         memcpy(wipe_scr_start, windowPixels, sizeof(windowPixels));
     }
 
@@ -378,32 +378,32 @@ int main(int argc, char *argv[])
       else if (event.type == sfEvtKeyPressed && event.key.code == sfKeyF12)
         screenshot();
 
-    if (!SFG_mainLoopBody())
+    if (!LHR_mainLoopBody())
       break;
 
-    if ( (stateBefore == SFG_GAME_STATE_MENU && SFG_game.state != SFG_GAME_STATE_MENU) ||
-         (stateBefore == SFG_GAME_STATE_WIN && SFG_game.state != SFG_GAME_STATE_WIN) ||
-         (stateBefore == SFG_GAME_STATE_LOSE && SFG_game.state == SFG_GAME_STATE_MENU) ) {
+    if ( (stateBefore == LHR_GAME_STATE_MENU && LHR_game.state != LHR_GAME_STATE_MENU) ||
+         (stateBefore == LHR_GAME_STATE_WIN && LHR_game.state != LHR_GAME_STATE_WIN) ||
+         (stateBefore == LHR_GAME_STATE_LOSE && LHR_game.state == LHR_GAME_STATE_MENU) ) {
          
          memcpy(wipe_scr_end, windowPixels, sizeof(windowPixels));
-         wipe_initMelt(wipe_y, SFG_SCREEN_RESOLUTION_X);
+         wipe_initMelt(wipe_y, LHR_SCREEN_RESOLUTION_X);
          
          int done = 0;
          while (!done && sfRenderWindow_isOpen(window)) {
-            done = wipe_doMelt(windowPixels, wipe_scr_start, wipe_scr_end, wipe_y, SFG_SCREEN_RESOLUTION_X, SFG_SCREEN_RESOLUTION_Y);
+            done = wipe_doMelt(windowPixels, wipe_scr_start, wipe_scr_end, wipe_y, LHR_SCREEN_RESOLUTION_X, LHR_SCREEN_RESOLUTION_Y);
             while (sfRenderWindow_pollEvent(window,&event)) {
                if (event.type == sfEvtClosed) { sfRenderWindow_close(window); done = 1; }
             }
-            sfTexture_updateFromPixels(windowTexture,(const sfUint8 *) windowPixels, SFG_SCREEN_RESOLUTION_X,SFG_SCREEN_RESOLUTION_Y,0,0);
+            sfTexture_updateFromPixels(windowTexture,(const sfUint8 *) windowPixels, LHR_SCREEN_RESOLUTION_X,LHR_SCREEN_RESOLUTION_Y,0,0);
             sfRenderWindow_clear(window, sfBlack);
             sfRenderWindow_drawSprite(window,windowSprite,NULL);
             sfRenderWindow_display(window);
-            SFG_sleepMs(10);
+            LHR_sleepMs(10);
          }
     }
 
     sfTexture_updateFromPixels(windowTexture,(const sfUint8 *) windowPixels,
-      SFG_SCREEN_RESOLUTION_X,SFG_SCREEN_RESOLUTION_Y,0,0);
+      LHR_SCREEN_RESOLUTION_X,LHR_SCREEN_RESOLUTION_Y,0,0);
     sfRenderWindow_clear(window, sfBlack);
     sfRenderWindow_drawSprite(window,windowSprite,NULL);
     sfRenderWindow_display(window);

@@ -15,15 +15,15 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-#define SFG_SCREEN_RESOLUTION_X 120
-#define SFG_SCREEN_RESOLUTION_Y 40
-#define SFG_FPS 30
+#define LHR_SCREEN_RESOLUTION_X 120
+#define LHR_SCREEN_RESOLUTION_Y 40
+#define LHR_FPS 30
 
-#define SFG_PC 1
+#define LHR_PC 1
 #include "game.h"
 
-uint8_t ncScreen[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
-uint8_t ncButtonStates[SFG_KEY_COUNT];
+uint8_t ncScreen[LHR_SCREEN_RESOLUTION_X * LHR_SCREEN_RESOLUTION_Y];
+uint8_t ncButtonStates[LHR_KEY_COUNT];
 uint32_t timeStart;
 
 const char asciiPalette[] = 
@@ -40,48 +40,48 @@ uint32_t currentTime()
   return t.tv_sec * 1000 + t.tv_usec / 1000;
 }
 
-int8_t SFG_keyPressed(uint8_t key)
+int8_t LHR_keyPressed(uint8_t key)
 {
   return ncButtonStates[key];
 }
 
-void SFG_getMouseOffset(int16_t *x, int16_t *y)
+void LHR_getMouseOffset(int16_t *x, int16_t *y)
 {
   return;
 }
 
-uint32_t SFG_getTimeMs()
+uint32_t LHR_getTimeMs()
 {
   return currentTime() - timeStart;
 }
 
-void SFG_sleepMs(uint16_t timeMs)
+void LHR_sleepMs(uint16_t timeMs)
 {
   usleep(1000 * timeMs);
 }
 
-void SFG_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
+void LHR_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
 {
-  ncScreen[y * SFG_SCREEN_RESOLUTION_X + x] = asciiPalette[colorIndex % 16];
+  ncScreen[y * LHR_SCREEN_RESOLUTION_X + x] = asciiPalette[colorIndex % 16];
 }
 
-void SFG_playSound(uint8_t soundIndex, uint8_t volume)
-{
-}
-
-void SFG_setMusic(uint8_t value)
+void LHR_playSound(uint8_t soundIndex, uint8_t volume)
 {
 }
 
-void SFG_processEvent(uint8_t event, uint8_t data)
+void LHR_setMusic(uint8_t value)
 {
 }
 
-void SFG_save(uint8_t data[SFG_SAVE_SIZE])
+void LHR_processEvent(uint8_t event, uint8_t data)
 {
 }
 
-uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
+void LHR_save(uint8_t data[LHR_SAVE_SIZE])
+{
+}
+
+uint8_t LHR_load(uint8_t data[LHR_SAVE_SIZE])
 {
   return 0;
 }
@@ -96,7 +96,7 @@ int main(void)
   noecho();
   curs_set(0);
 
-  SFG_init();
+  LHR_init();
 
   int goOn = 1;
 
@@ -107,11 +107,11 @@ int main(void)
 
     const uint8_t *scr = ncScreen;
 
-    for (int y = 0; y < SFG_SCREEN_RESOLUTION_Y; ++y)
+    for (int y = 0; y < LHR_SCREEN_RESOLUTION_Y; ++y)
     {
       move(y,0);
 
-      for (int x = 0; x < SFG_SCREEN_RESOLUTION_X; ++x)
+      for (int x = 0; x < LHR_SCREEN_RESOLUTION_X; ++x)
       {
         addch(*scr);
         scr++;
@@ -120,9 +120,9 @@ int main(void)
 
     refresh();
 
-    goOn = SFG_mainLoopBody();
+    goOn = LHR_mainLoopBody();
 
-    for (int i = 0; i < SFG_KEY_COUNT; ++i)
+    for (int i = 0; i < LHR_KEY_COUNT; ++i)
       ncButtonStates[i] = 0;
 
     for (int i = 0; i < 1024; ++i)
@@ -134,22 +134,22 @@ int main(void)
 
       switch (c)
       {
-        case KEY_UP:      ncButtonStates[SFG_KEY_UP] = 1; break;
-        case KEY_LEFT:    ncButtonStates[SFG_KEY_LEFT] = 1; break;
-        case KEY_RIGHT:   ncButtonStates[SFG_KEY_RIGHT] = 1; break;
-        case KEY_DOWN:    ncButtonStates[SFG_KEY_DOWN] = 1; break;
+        case KEY_UP:      ncButtonStates[LHR_KEY_UP] = 1; break;
+        case KEY_LEFT:    ncButtonStates[LHR_KEY_LEFT] = 1; break;
+        case KEY_RIGHT:   ncButtonStates[LHR_KEY_RIGHT] = 1; break;
+        case KEY_DOWN:    ncButtonStates[LHR_KEY_DOWN] = 1; break;
         case 'a':         // fallthrough
-        case KEY_ENTER:   ncButtonStates[SFG_KEY_A] = 1; break;
+        case KEY_ENTER:   ncButtonStates[LHR_KEY_A] = 1; break;
         case KEY_CANCEL:  // fallthrough
         case KEY_CLOSE:   // fallthrough
-        case 's':         ncButtonStates[SFG_KEY_B] = 1; break;
-        case 'd':         ncButtonStates[SFG_KEY_C] = 1; break;
-        case ' ':         ncButtonStates[SFG_KEY_JUMP] = 1; break;
-        case 'q':         ncButtonStates[SFG_KEY_MENU] = 1; break;
-        case 'f':         ncButtonStates[SFG_KEY_NEXT_WEAPON] = 1; break;
-        case 'g':         ncButtonStates[SFG_KEY_PREVIOUS_WEAPON] = 1; break;
-        case 'n':         ncButtonStates[SFG_KEY_STRAFE_LEFT] = 1; break;
-        case 'm':         ncButtonStates[SFG_KEY_STRAFE_RIGHT] = 1; break;
+        case 's':         ncButtonStates[LHR_KEY_B] = 1; break;
+        case 'd':         ncButtonStates[LHR_KEY_C] = 1; break;
+        case ' ':         ncButtonStates[LHR_KEY_JUMP] = 1; break;
+        case 'q':         ncButtonStates[LHR_KEY_MENU] = 1; break;
+        case 'f':         ncButtonStates[LHR_KEY_NEXT_WEAPON] = 1; break;
+        case 'g':         ncButtonStates[LHR_KEY_PREVIOUS_WEAPON] = 1; break;
+        case 'n':         ncButtonStates[LHR_KEY_STRAFE_LEFT] = 1; break;
+        case 'm':         ncButtonStates[LHR_KEY_STRAFE_RIGHT] = 1; break;
         default: break;
       }
     }

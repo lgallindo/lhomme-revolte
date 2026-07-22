@@ -13,80 +13,80 @@
 #include "saf.h"
 
 #if SAF_PLATFORM_HARWARD
-  #define SFG_AVR 1
+  #define LHR_AVR 1
 #endif
 
-#define SFG_FPS 25
-#define SFG_DIMINISH_SPRITES 1
-#define SFG_RAYCASTING_MAX_HITS 7
-#define SFG_CAN_EXIT 1
+#define LHR_FPS 25
+#define LHR_DIMINISH_SPRITES 1
+#define LHR_RAYCASTING_MAX_HITS 7
+#define LHR_CAN_EXIT 1
 
-#define SFG_SCREEN_RESOLUTION_X SAF_SCREEN_WIDTH
-#define SFG_SCREEN_RESOLUTION_Y SAF_SCREEN_HEIGHT
+#define LHR_SCREEN_RESOLUTION_X SAF_SCREEN_WIDTH
+#define LHR_SCREEN_RESOLUTION_Y SAF_SCREEN_HEIGHT
 
-#define SFG_DITHERED_SHADOW 1
+#define LHR_DITHERED_SHADOW 1
 
-#define SFG_PC 1
+#define LHR_PC 1
 #include "game.h"
 
 uint8_t palette[256];
 
-void SFG_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
+void LHR_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
 {
   SAF_drawPixel(x,y,palette[colorIndex]);
 }
 
-uint32_t SFG_getTimeMs(void)
+uint32_t LHR_getTimeMs(void)
 {
   return SAF_time();
 }
 
-void SFG_sleepMs(uint16_t timeMs)
+void LHR_sleepMs(uint16_t timeMs)
 {
 }
 
-int8_t SFG_keyPressed(uint8_t key)
+int8_t LHR_keyPressed(uint8_t key)
 {
   switch (key)
   {
-    case SFG_KEY_UP: return SAF_buttonPressed(SAF_BUTTON_UP); break; 
-    case SFG_KEY_DOWN: return SAF_buttonPressed(SAF_BUTTON_DOWN); break;
-    case SFG_KEY_RIGHT: return SAF_buttonPressed(SAF_BUTTON_RIGHT); break;
-    case SFG_KEY_LEFT: return SAF_buttonPressed(SAF_BUTTON_LEFT); break;
-    case SFG_KEY_A: return SAF_buttonPressed(SAF_BUTTON_A); break;
-    case SFG_KEY_B: return SAF_buttonPressed(SAF_BUTTON_B); break;
-    case SFG_KEY_C: return SAF_buttonPressed(SAF_BUTTON_C); break;
+    case LHR_KEY_UP: return SAF_buttonPressed(SAF_BUTTON_UP); break; 
+    case LHR_KEY_DOWN: return SAF_buttonPressed(SAF_BUTTON_DOWN); break;
+    case LHR_KEY_RIGHT: return SAF_buttonPressed(SAF_BUTTON_RIGHT); break;
+    case LHR_KEY_LEFT: return SAF_buttonPressed(SAF_BUTTON_LEFT); break;
+    case LHR_KEY_A: return SAF_buttonPressed(SAF_BUTTON_A); break;
+    case LHR_KEY_B: return SAF_buttonPressed(SAF_BUTTON_B); break;
+    case LHR_KEY_C: return SAF_buttonPressed(SAF_BUTTON_C); break;
     default: return 0; break;
   }
 }
 
-void SFG_getMouseOffset(int16_t *x, int16_t *y)
+void LHR_getMouseOffset(int16_t *x, int16_t *y)
 {
 }
 
-void SFG_setMusic(uint8_t value)
+void LHR_setMusic(uint8_t value)
 {
 }
 
-void SFG_save(uint8_t data[SFG_SAVE_SIZE])
+void LHR_save(uint8_t data[LHR_SAVE_SIZE])
 {
-  for (uint8_t i = 0; i < SFG_SAVE_SIZE; ++i)
+  for (uint8_t i = 0; i < LHR_SAVE_SIZE; ++i)
     SAF_save(i,data[i]);
 }
 
-void SFG_processEvent(uint8_t event, uint8_t data)
+void LHR_processEvent(uint8_t event, uint8_t data)
 {
 }
 
-uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
+uint8_t LHR_load(uint8_t data[LHR_SAVE_SIZE])
 {
-  for (uint8_t i = 0; i < SFG_SAVE_SIZE; ++i)
+  for (uint8_t i = 0; i < LHR_SAVE_SIZE; ++i)
     data[i] = SAF_load(i);
 
   return 1;
 }
 
-void SFG_playSound(uint8_t soundIndex, uint8_t volume)
+void LHR_playSound(uint8_t soundIndex, uint8_t volume)
 {
   switch (soundIndex)
   {
@@ -114,10 +114,10 @@ void SAF_init(void)
     palette[i] = SAF_colorFromRGB(r,g,b);
   }
 
-  SFG_init();
+  LHR_init();
 }
 
 uint8_t SAF_loop(void)
 {
-  return SFG_mainLoopBody();
+  return LHR_mainLoopBody();
 }

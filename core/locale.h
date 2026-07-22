@@ -6,25 +6,25 @@
   SPDX-License-Identifier: GPL-3.0-or-later
 */
 
-#ifndef _SFG_LOCALE_H
-#define _SFG_LOCALE_H
+#ifndef _LHR_LOCALE_H
+#define _LHR_LOCALE_H
 
 #include <stdint.h>
 #include <string.h>
 #include "levels.h"
 
-#ifndef SFG_LOCALE_ONLY_EN_US
-  #ifndef SFG_LOCALE_ONLY_PT_BR
-    #ifndef SFG_LOCALE_ONLY_TOK
-      #define SFG_LOCALE_RUNTIME_SWITCH 1
+#ifndef LHR_LOCALE_ONLY_EN_US
+  #ifndef LHR_LOCALE_ONLY_PT_BR
+    #ifndef LHR_LOCALE_ONLY_TOK
+      #define LHR_LOCALE_RUNTIME_SWITCH 1
     #else
-      #define SFG_LOCALE_RUNTIME_SWITCH 0
+      #define LHR_LOCALE_RUNTIME_SWITCH 0
     #endif
   #else
-    #define SFG_LOCALE_RUNTIME_SWITCH 0
+    #define LHR_LOCALE_RUNTIME_SWITCH 0
   #endif
 #else
-  #define SFG_LOCALE_RUNTIME_SWITCH 0
+  #define LHR_LOCALE_RUNTIME_SWITCH 0
 #endif
 
 typedef struct {
@@ -33,7 +33,7 @@ typedef struct {
   uint16_t height;
   uint8_t frames;
   uint8_t fps;
-} SFG_MapImage;
+} LHR_MapImage;
 
 typedef struct
 {
@@ -41,9 +41,14 @@ typedef struct
   const char *outroText;
   uint8_t introMusicTrack;
   uint8_t outroMusicTrack;
-  const SFG_MapImage *introImage;
-  const SFG_MapImage *outroImage;
-} SFG_LevelMeta;
+  const LHR_MapImage *introImage;
+  const LHR_MapImage *outroImage;
+} LHR_LevelMeta;
+
+static inline uint16_t LHR_getMapImageFrame(const LHR_MapImage *img, uint32_t stateTimeMs) {
+  if (img == 0 || img->frames <= 1 || img->fps == 0) return 0;
+  return ((stateTimeMs * img->fps) / 1000) % img->frames;
+}
 
 typedef struct
 {
@@ -58,66 +63,66 @@ typedef struct
   const char *malwareWarning;
   const char *textOn;
   const char *textOff;
-  const SFG_LevelMeta *levelMeta;
-} SFG_Locale;
+  const LHR_LevelMeta *levelMeta;
+} LHR_Locale;
 
 #include "locale_en_us.h"
 #include "locale_pt_br.h"
 #include "locale_toki_pona.h"
 
-#if defined(SFG_LOCALE_ONLY_EN_US)
-  static const SFG_Locale *SFG_availableLocales[] = {&SFG_locale_en_us};
-  #define SFG_LOCALE_COUNT 1
-#elif defined(SFG_LOCALE_ONLY_PT_BR)
-  static const SFG_Locale *SFG_availableLocales[] = {&SFG_locale_pt_br};
-  #define SFG_LOCALE_COUNT 1
-#elif defined(SFG_LOCALE_ONLY_TOK)
-  static const SFG_Locale *SFG_availableLocales[] = {&SFG_locale_tok};
-  #define SFG_LOCALE_COUNT 1
+#if defined(LHR_LOCALE_ONLY_EN_US)
+  static const LHR_Locale *LHR_availableLocales[] = {&LHR_locale_en_us};
+  #define LHR_LOCALE_COUNT 1
+#elif defined(LHR_LOCALE_ONLY_PT_BR)
+  static const LHR_Locale *LHR_availableLocales[] = {&LHR_locale_pt_br};
+  #define LHR_LOCALE_COUNT 1
+#elif defined(LHR_LOCALE_ONLY_TOK)
+  static const LHR_Locale *LHR_availableLocales[] = {&LHR_locale_tok};
+  #define LHR_LOCALE_COUNT 1
 #else
-  static const SFG_Locale *SFG_availableLocales[] = {
-    &SFG_locale_en_us,
-    &SFG_locale_pt_br,
-    &SFG_locale_tok
+  static const LHR_Locale *LHR_availableLocales[] = {
+    &LHR_locale_en_us,
+    &LHR_locale_pt_br,
+    &LHR_locale_tok
   };
-  #define SFG_LOCALE_COUNT 3
+  #define LHR_LOCALE_COUNT 3
 #endif
 
-static uint8_t SFG_activeLocaleIndex = 0;
-#if defined(SFG_LOCALE_ONLY_EN_US)
-  static const SFG_Locale *SFG_activeLocale = &SFG_locale_en_us;
-#elif defined(SFG_LOCALE_ONLY_PT_BR)
-  static const SFG_Locale *SFG_activeLocale = &SFG_locale_pt_br;
-#elif defined(SFG_LOCALE_ONLY_TOK)
-  static const SFG_Locale *SFG_activeLocale = &SFG_locale_tok;
+static uint8_t LHR_activeLocaleIndex = 0;
+#if defined(LHR_LOCALE_ONLY_EN_US)
+  static const LHR_Locale *LHR_activeLocale = &LHR_locale_en_us;
+#elif defined(LHR_LOCALE_ONLY_PT_BR)
+  static const LHR_Locale *LHR_activeLocale = &LHR_locale_pt_br;
+#elif defined(LHR_LOCALE_ONLY_TOK)
+  static const LHR_Locale *LHR_activeLocale = &LHR_locale_tok;
 #else
-  static const SFG_Locale *SFG_activeLocale = &SFG_locale_en_us;
+  static const LHR_Locale *LHR_activeLocale = &LHR_locale_en_us;
 #endif
 
-static inline void SFG_setLocaleByIndex(uint8_t index)
+static inline void LHR_setLocaleByIndex(uint8_t index)
 {
-#if SFG_LOCALE_RUNTIME_SWITCH
-  SFG_activeLocaleIndex = index % SFG_LOCALE_COUNT;
-  SFG_activeLocale = SFG_availableLocales[SFG_activeLocaleIndex];
+#if LHR_LOCALE_RUNTIME_SWITCH
+  LHR_activeLocaleIndex = index % LHR_LOCALE_COUNT;
+  LHR_activeLocale = LHR_availableLocales[LHR_activeLocaleIndex];
 #else
   (void) index;
-  SFG_activeLocaleIndex = 0;
-  SFG_activeLocale = SFG_availableLocales[0];
+  LHR_activeLocaleIndex = 0;
+  LHR_activeLocale = LHR_availableLocales[0];
 #endif
 }
 
-static inline uint8_t SFG_setLocaleByName(const char *name)
+static inline uint8_t LHR_setLocaleByName(const char *name)
 {
   uint8_t i;
 
   if (name == 0)
     return 0;
 
-  for (i = 0; i < SFG_LOCALE_COUNT; ++i)
+  for (i = 0; i < LHR_LOCALE_COUNT; ++i)
   {
-    if (strcmp(name, SFG_availableLocales[i]->localeId) == 0)
+    if (strcmp(name, LHR_availableLocales[i]->localeId) == 0)
     {
-      SFG_setLocaleByIndex(i);
+      LHR_setLocaleByIndex(i);
       return 1;
     }
   }

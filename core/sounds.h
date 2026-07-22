@@ -16,27 +16,27 @@
   SPDX-License-Identifier: GPL-3.0-or-later
 */
 
-#ifndef _SFG_SOUNDS_H
-#define _SFG_SOUNDS_H
+#ifndef _LHR_SOUNDS_H
+#define _LHR_SOUNDS_H
 
-#define SFG_SFX_SAMPLE_COUNT 2048
-#define SFG_SFX_SIZE (SFG_SFX_SAMPLE_COUNT / 2)
+#define LHR_SFX_SAMPLE_COUNT 2048
+#define LHR_SFX_SIZE (LHR_SFX_SAMPLE_COUNT / 2)
 
 /**
   Gets an 8bit sound sample.
 */
-#define SFG_GET_SFX_SAMPLE(soundIndex,sampleIndex) \
-  ((SFG_PROGRAM_MEMORY_U8(SFG_sounds + soundIndex * SFG_SFX_SIZE \
+#define LHR_GET_SFX_SAMPLE(soundIndex,sampleIndex) \
+  ((LHR_PROGRAM_MEMORY_U8(LHR_sounds + soundIndex * LHR_SFX_SIZE \
   + sampleIndex / 2) << (4 * ((sampleIndex % 2) != 0))) & 0xf0)
 
-#define SFG_TRACK_SAMPLES (512 * 1024)
-#define SFG_TRACK_COUNT 6
+#define LHR_TRACK_SAMPLES (512 * 1024)
+#define LHR_TRACK_COUNT 6
 
 /**
   Average value of each music track, can be used to correct DC offset issues if
   they appear.
 */
-SFG_PROGRAM_MEMORY uint8_t SFG_musicTrackAverages[SFG_TRACK_COUNT] =
+LHR_PROGRAM_MEMORY uint8_t LHR_musicTrackAverages[LHR_TRACK_COUNT] =
   {14,7,248,148,6,8};
 
 struct
@@ -45,43 +45,43 @@ struct
   uint32_t t;      // time variable/parameter
   uint32_t t2;     // stores t squared, for better performance
   uint32_t n11t;   // stores a multiple of 11, for better performance
-} SFG_MusicState;
+} LHR_MusicState;
 
 /**
   Gets the next 8bit 8KHz music sample for the bytebeat soundtrack. This
   function is to be used by the frontend that plays music.
 */
-uint8_t SFG_getNextMusicSample(void)
+uint8_t LHR_getNextMusicSample(void)
 {
-  if (SFG_MusicState.t >= SFG_TRACK_SAMPLES)
+  if (LHR_MusicState.t >= LHR_TRACK_SAMPLES)
   {
-    SFG_MusicState.track++;
+    LHR_MusicState.track++;
 
-    if (SFG_MusicState.track >= SFG_TRACK_COUNT)
-      SFG_MusicState.track = 0;
+    if (LHR_MusicState.track >= LHR_TRACK_COUNT)
+      LHR_MusicState.track = 0;
 
-    SFG_MusicState.t = 0;
-    SFG_MusicState.t2 = 0;
-    SFG_MusicState.n11t = 0;
+    LHR_MusicState.t = 0;
+    LHR_MusicState.t2 = 0;
+    LHR_MusicState.n11t = 0;
   }
 
   uint32_t result;
 
-  #define S SFG_MusicState.t // can't use "T" because of a C++ template
-  #define S2 SFG_MusicState.t2
-  #define N11S SFG_MusicState.n11t
+  #define S LHR_MusicState.t // can't use "T" because of a C++ template
+  #define S2 LHR_MusicState.t2
+  #define N11S LHR_MusicState.n11t
 
   /* CAREFUL! Bit shifts in any direction by amount greater than data type
      width (32) are undefined behavior. Use % 32. */
 
-  switch (SFG_MusicState.track) // individual music tracks
+  switch (LHR_MusicState.track) // individual music tracks
   {
     case 0:
     {
       uint32_t a = ((S >> 7) | (S >> 9) | (~S << 1) | S);
       result = (((S) & 65536) ? (a & (((S2) >> 16) & 0x09)) : ~a);
 
-      SFG_MusicState.t2 += S;
+      LHR_MusicState.t2 += S;
 
       break;
     }
@@ -119,7 +119,7 @@ uint8_t SFG_getNextMusicSample(void)
         (0x57 >> ((S >> 7) % 32)) |
         (0x06 >> ((S >> ((((N11S) >> 14) & 0x0e) % 32)) % 32));
 
-      SFG_MusicState.n11t += 11;
+      LHR_MusicState.n11t += 11;
 
       break;
     }
@@ -144,7 +144,7 @@ uint8_t SFG_getNextMusicSample(void)
   #undef S2
   #undef N11S
 
-  SFG_MusicState.t += 1;
+  LHR_MusicState.t += 1;
 
   return result;
 }
@@ -152,15 +152,15 @@ uint8_t SFG_getNextMusicSample(void)
 /**
   Switches the bytebeat to next music track.
 */
-void SFG_nextMusicTrack(void)
+void LHR_nextMusicTrack(void)
 {
-  uint8_t current = SFG_MusicState.track;
+  uint8_t current = LHR_MusicState.track;
 
-  while (SFG_MusicState.track == current)
-    SFG_getNextMusicSample();
+  while (LHR_MusicState.track == current)
+    LHR_getNextMusicSample();
 }
 
-SFG_PROGRAM_MEMORY uint8_t SFG_sounds[SFG_SFX_SIZE * 6] =
+LHR_PROGRAM_MEMORY uint8_t LHR_sounds[LHR_SFX_SIZE * 6] =
 {
 // 0, bullet shot
 135,119,120,136,136,153,153,153,154,169,152,119,101,85,86,102,119,118,119,

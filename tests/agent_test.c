@@ -12,29 +12,29 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define SFG_SCREEN_RESOLUTION_X 64
-#define SFG_SCREEN_RESOLUTION_Y 32
-#define SFG_BACKGROUND_BLUR 0
-#define SFG_DITHERED_SHADOW 0
-#define SFG_FPS 30
+#define LHR_SCREEN_RESOLUTION_X 64
+#define LHR_SCREEN_RESOLUTION_Y 32
+#define LHR_BACKGROUND_BLUR 0
+#define LHR_DITHERED_SHADOW 0
+#define LHR_FPS 30
 
 #include "game.h"
 #include "sounds.h"
 #include "agent_harness.h"
 
-uint8_t screen[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
+uint8_t screen[LHR_SCREEN_RESOLUTION_X * LHR_SCREEN_RESOLUTION_Y];
 static uint16_t currentKeyBitmask = 0;
 static int16_t currentMouseDx = 0;
 static int16_t currentMouseDy = 0;
 static uint32_t simulatedTimeMs = 0;
 
-int8_t SFG_keyPressed(uint8_t key)
+int8_t LHR_keyPressed(uint8_t key)
 {
-  if (key >= SFG_KEY_COUNT) return 0;
+  if (key >= LHR_KEY_COUNT) return 0;
   return (currentKeyBitmask >> key) & 0x01;
 }
 
-void SFG_getMouseOffset(int16_t *x, int16_t *y)
+void LHR_getMouseOffset(int16_t *x, int16_t *y)
 {
   *x = currentMouseDx;
   *y = currentMouseDy;
@@ -42,27 +42,27 @@ void SFG_getMouseOffset(int16_t *x, int16_t *y)
   currentMouseDy = 0;
 }
 
-uint32_t SFG_getTimeMs(void)
+uint32_t LHR_getTimeMs(void)
 {
   return simulatedTimeMs;
 }
 
-void SFG_sleepMs(uint16_t timeMs)
+void LHR_sleepMs(uint16_t timeMs)
 {
   simulatedTimeMs += timeMs;
 }
 
-static inline void SFG_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
+static inline void LHR_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
 {
-  if (x < SFG_SCREEN_RESOLUTION_X && y < SFG_SCREEN_RESOLUTION_Y)
-    screen[y * SFG_SCREEN_RESOLUTION_X + x] = colorIndex;
+  if (x < LHR_SCREEN_RESOLUTION_X && y < LHR_SCREEN_RESOLUTION_Y)
+    screen[y * LHR_SCREEN_RESOLUTION_X + x] = colorIndex;
 }
 
-void SFG_playSound(uint8_t soundIndex, uint8_t volume) {}
-void SFG_setMusic(uint8_t value) {}
-void SFG_processEvent(uint8_t event, uint8_t data) {}
-void SFG_save(uint8_t data[SFG_SAVE_SIZE]) {}
-uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE]) { return 0; }
+void LHR_playSound(uint8_t soundIndex, uint8_t volume) {}
+void LHR_setMusic(uint8_t value) {}
+void LHR_processEvent(uint8_t event, uint8_t data) {}
+void LHR_save(uint8_t data[LHR_SAVE_SIZE]) {}
+uint8_t LHR_load(uint8_t data[LHR_SAVE_SIZE]) { return 0; }
 
 int main(int argc, char *argv[])
 {
@@ -88,13 +88,13 @@ int main(int argc, char *argv[])
     }
   }
 
-  SFG_init();
+  LHR_init();
 
-  if (targetLevel >= 0 && targetLevel < SFG_NUMBER_OF_LEVELS)
+  if (targetLevel >= 0 && targetLevel < LHR_NUMBER_OF_LEVELS)
   {
-    SFG_game.selectedLevel = targetLevel;
-    SFG_setAndInitLevel(targetLevel);
-    SFG_game.state = SFG_GAME_STATE_PLAYING;
+    LHR_game.selectedLevel = targetLevel;
+    LHR_setAndInitLevel(targetLevel);
+    LHR_game.state = LHR_GAME_STATE_PLAYING;
   }
 
   if (interactiveMode)
@@ -104,22 +104,22 @@ int main(int argc, char *argv[])
     fprintf(stderr, "Example: '0001 0 0 1' (Press UP for 1 frame)\n\n");
 
     char buffer[256];
-    SFG_agentDumpStateJSON(stdout);
+    LHR_agentDumpStateJSON(stdout);
 
     while (fgets(buffer, sizeof(buffer), stdin))
     {
-      SFG_AgentAction act = SFG_agentParseActionLine(buffer);
+      LHR_AgentAction act = LHR_agentParseActionLine(buffer);
       currentKeyBitmask = act.keyBitmask;
       currentMouseDx = act.mouseDx;
       currentMouseDy = act.mouseDy;
 
       for (uint8_t t = 0; t < act.stepTicks; ++t)
       {
-        simulatedTimeMs += (1000 / SFG_FPS);
-        if (!SFG_mainLoopBody()) break;
+        simulatedTimeMs += (1000 / LHR_FPS);
+        if (!LHR_mainLoopBody()) break;
       }
 
-      SFG_agentDumpStateJSON(stdout);
+      LHR_agentDumpStateJSON(stdout);
     }
   }
   else
@@ -128,19 +128,19 @@ int main(int argc, char *argv[])
     fprintf(stderr, "[Agent Harness] Running level %d for %d ticks...\n", targetLevel, numTicks);
     
     // Initial State Dump
-    SFG_agentDumpStateJSON(stdout);
+    LHR_agentDumpStateJSON(stdout);
 
-    // Simulate straight walk forward (SFG_KEY_UP is key index 0 -> bitmask 0x0001)
+    // Simulate straight walk forward (LHR_KEY_UP is key index 0 -> bitmask 0x0001)
     currentKeyBitmask = 0x0001; 
 
     for (int t = 0; t < numTicks; ++t)
     {
-      simulatedTimeMs += (1000 / SFG_FPS);
-      if (!SFG_mainLoopBody()) break;
+      simulatedTimeMs += (1000 / LHR_FPS);
+      if (!LHR_mainLoopBody()) break;
     }
 
     // Final State Dump
-    SFG_agentDumpStateJSON(stdout);
+    LHR_agentDumpStateJSON(stdout);
   }
 
   return 0;

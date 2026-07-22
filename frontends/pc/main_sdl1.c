@@ -13,67 +13,67 @@
 */
 
 #if defined(_WIN32) || defined(WIN32) || defined(__WIN32__) || defined(__NT__) || defined(__APPLE__)
-  #define SFG_OS_IS_MALWARE 1
+  #define LHR_OS_IS_MALWARE 1
 #endif
 
-// #define SFG_START_LEVEL 1
-// #define SFG_QUICK_WIN 1
-// #define SFG_IMMORTAL 1
-// #define SFG_ALL_LEVELS 1
-// #define SFG_UNLOCK_DOOR 1
-// #define SFG_REVEAL_MAP 1
-// #define SFG_INFINITE_AMMO 1
-// #define SFG_TIME_MULTIPLIER 512
-// #define SFG_CPU_LOAD(percent) printf("CPU load: %d%\n",percent);
+// #define LHR_START_LEVEL 1
+// #define LHR_QUICK_WIN 1
+// #define LHR_IMMORTAL 1
+// #define LHR_ALL_LEVELS 1
+// #define LHR_UNLOCK_DOOR 1
+// #define LHR_REVEAL_MAP 1
+// #define LHR_INFINITE_AMMO 1
+// #define LHR_TIME_MULTIPLIER 512
+// #define LHR_CPU_LOAD(percent) printf("CPU load: %d%\n",percent);
 // #define GAME_LQ
 
 #ifndef __EMSCRIPTEN__
   #if defined(MIYOO) || defined(RETROFW)
-    #define SFG_FPS 60
-    #define SFG_LOG(str) puts(str);
-    #define SFG_SCREEN_RESOLUTION_X 320
-    #define SFG_SCREEN_RESOLUTION_Y 240
-    #define SFG_DITHERED_SHADOW 1
-    #define SFG_DIMINISH_SPRITES 1
-    #define SFG_HEADBOB_SHEAR (-1 * SFG_SCREEN_RESOLUTION_Y / 80)
-    #define SFG_BACKGROUND_BLUR 1
+    #define LHR_FPS 60
+    #define LHR_LOG(str) puts(str);
+    #define LHR_SCREEN_RESOLUTION_X 320
+    #define LHR_SCREEN_RESOLUTION_Y 240
+    #define LHR_DITHERED_SHADOW 1
+    #define LHR_DIMINISH_SPRITES 1
+    #define LHR_HEADBOB_SHEAR (-1 * LHR_SCREEN_RESOLUTION_Y / 80)
+    #define LHR_BACKGROUND_BLUR 1
   #else
   #ifndef GAME_LQ
     // higher quality
-    #define SFG_FPS 60
-    #define SFG_LOG(str) puts(str);
-    #define SFG_SCREEN_RESOLUTION_X 700
-    #define SFG_SCREEN_RESOLUTION_Y 512
-    #define SFG_DITHERED_SHADOW 1
-    #define SFG_DIMINISH_SPRITES 1
-    #define SFG_HEADBOB_SHEAR (-1 * SFG_SCREEN_RESOLUTION_Y / 80)
-    #define SFG_BACKGROUND_BLUR 1
+    #define LHR_FPS 60
+    #define LHR_LOG(str) puts(str);
+    #define LHR_SCREEN_RESOLUTION_X 700
+    #define LHR_SCREEN_RESOLUTION_Y 512
+    #define LHR_DITHERED_SHADOW 1
+    #define LHR_DIMINISH_SPRITES 1
+    #define LHR_HEADBOB_SHEAR (-1 * LHR_SCREEN_RESOLUTION_Y / 80)
+    #define LHR_BACKGROUND_BLUR 1
   #else
     // lower quality
-    #define SFG_FPS 35
-    #define SFG_SCREEN_RESOLUTION_X 640
-    #define SFG_SCREEN_RESOLUTION_Y 480
-    #define SFG_RAYCASTING_SUBSAMPLE 2
-    #define SFG_RESOLUTION_SCALEDOWN 2
-    #define SFG_LOG(str) puts(str);
-    #define SFG_DIMINISH_SPRITES 0
-    #define SFG_DITHERED_SHADOW 0
-    #define SFG_BACKGROUND_BLUR 0
-    #define SFG_RAYCASTING_MAX_STEPS 18
-    #define SFG_RAYCASTING_MAX_HITS 8
+    #define LHR_FPS 35
+    #define LHR_SCREEN_RESOLUTION_X 640
+    #define LHR_SCREEN_RESOLUTION_Y 480
+    #define LHR_RAYCASTING_SUBSAMPLE 2
+    #define LHR_RESOLUTION_SCALEDOWN 2
+    #define LHR_LOG(str) puts(str);
+    #define LHR_DIMINISH_SPRITES 0
+    #define LHR_DITHERED_SHADOW 0
+    #define LHR_BACKGROUND_BLUR 0
+    #define LHR_RAYCASTING_MAX_STEPS 18
+    #define LHR_RAYCASTING_MAX_HITS 8
   #endif
   #endif
 #else
   // emscripten
-  #define SFG_FPS 35
-  #define SFG_SCREEN_RESOLUTION_X 512
-  #define SFG_SCREEN_RESOLUTION_Y 320
-  #define SFG_CAN_EXIT 0
-  #define SFG_RESOLUTION_SCALEDOWN 2
-  #define SFG_DITHERED_SHADOW 1
-  #define SFG_BACKGROUND_BLUR 0
-  #define SFG_RAYCASTING_MAX_STEPS 18
-  #define SFG_RAYCASTING_MAX_HITS 8
+  #define LHR_FPS 35
+  #define LHR_SCREEN_RESOLUTION_X 512
+  #define LHR_SCREEN_RESOLUTION_Y 320
+  #define LHR_CAN_EXIT 0
+  #define LHR_RESOLUTION_SCALEDOWN 2
+  #define LHR_DITHERED_SHADOW 1
+  #define LHR_BACKGROUND_BLUR 0
+  #define LHR_RAYCASTING_MAX_STEPS 18
+  #define LHR_RAYCASTING_MAX_HITS 8
 
   #include <emscripten.h>
 #endif
@@ -82,13 +82,13 @@
   SDL is easier to play thanks to nice controls so make the player take full
   damage to make it a bit harder.
 */
-#define SFG_PLAYER_DAMAGE_MULTIPLIER 1024
+#define LHR_PLAYER_DAMAGE_MULTIPLIER 1024
 
 #define SDL_MUSIC_VOLUME 16
 
 #define SDL_ANALOG_DIVIDER 1024
 
-#if !SFG_OS_IS_MALWARE
+#if !LHR_OS_IS_MALWARE
   #include <signal.h>
 #endif
 
@@ -100,32 +100,32 @@
 #include <unistd.h>
 #include <SDL/SDL.h>
 
-#define SFG_PC 1
+#define LHR_PC 1
 #include "game.h"
 #include "sounds.h"
 
 const uint8_t *sdlKeyboardState;
-uint8_t webKeyboardState[SFG_KEY_COUNT];
+uint8_t webKeyboardState[LHR_KEY_COUNT];
 uint8_t sdlMouseButtonState = 0;
 int8_t sdlMouseWheelState = 0;
 
-uint16_t sdlScreen[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y]; // RGB565
+uint16_t sdlScreen[LHR_SCREEN_RESOLUTION_X * LHR_SCREEN_RESOLUTION_Y]; // RGB565
 
 SDL_Surface *screenSurface;
 
-// now implement the L'Homme Révolté API functions (SFG_*)
+// now implement the L'Homme Révolté API functions (LHR_*)
 
-void SFG_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
+void LHR_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
 {
-  sdlScreen[y * SFG_SCREEN_RESOLUTION_X + x] = paletteRGB565[colorIndex];
+  sdlScreen[y * LHR_SCREEN_RESOLUTION_X + x] = paletteRGB565[colorIndex];
 }
 
-uint32_t SFG_getTimeMs()
+uint32_t LHR_getTimeMs()
 {
   return SDL_GetTicks();
 }
 
-void SFG_save(uint8_t data[SFG_SAVE_SIZE])
+void LHR_save(uint8_t data[LHR_SAVE_SIZE])
 {
 #ifdef RETROFW
   const char *home = getenv("HOME");
@@ -144,12 +144,12 @@ void SFG_save(uint8_t data[SFG_SAVE_SIZE])
     return;
   }
 
-  fwrite(data,1,SFG_SAVE_SIZE,f);
+  fwrite(data,1,LHR_SAVE_SIZE,f);
 
   fclose(f);
 }
 
-uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
+uint8_t LHR_load(uint8_t data[LHR_SAVE_SIZE])
 {
 #ifndef __EMSCRIPTEN__
 #ifdef RETROFW
@@ -169,7 +169,7 @@ uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
   }
   else
   {
-    fread(data,1,SFG_SAVE_SIZE,f);
+    fread(data,1,LHR_SAVE_SIZE,f);
     fclose(f);
   }
 
@@ -180,7 +180,7 @@ uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
 #endif
 }
 
-void SFG_sleepMs(uint16_t timeMs)
+void LHR_sleepMs(uint16_t timeMs)
 {
 #ifndef __EMSCRIPTEN__
   SDL_Delay(timeMs);
@@ -197,7 +197,7 @@ void webButton(uint8_t key, uint8_t down) // HTML button pressed
 int8_t mouseMoved = 0; /* Whether the mouse has moved since program started,
                           this is needed to fix an SDL limitation. */
 
-void SFG_getMouseOffset(int16_t *x, int16_t *y)
+void LHR_getMouseOffset(int16_t *x, int16_t *y)
 {
 #ifndef __EMSCRIPTEN__
   if (mouseMoved)
@@ -206,68 +206,68 @@ void SFG_getMouseOffset(int16_t *x, int16_t *y)
 
     SDL_GetMouseState(&mX,&mY);
 
-    *x = mX - SFG_SCREEN_RESOLUTION_X / 2;
-    *y = mY - SFG_SCREEN_RESOLUTION_Y / 2;
+    *x = mX - LHR_SCREEN_RESOLUTION_X / 2;
+    *y = mY - LHR_SCREEN_RESOLUTION_Y / 2;
 
-    SDL_WarpMouse(SFG_SCREEN_RESOLUTION_X / 2, SFG_SCREEN_RESOLUTION_Y / 2);
+    SDL_WarpMouse(LHR_SCREEN_RESOLUTION_X / 2, LHR_SCREEN_RESOLUTION_Y / 2);
   }
 #endif
 }
 
-void SFG_processEvent(uint8_t event, uint8_t data)
+void LHR_processEvent(uint8_t event, uint8_t data)
 {
 }
 
 #if defined(MIYOO)
-int8_t SFG_keyPressed(uint8_t key)
+int8_t LHR_keyPressed(uint8_t key)
 {
   #define k(x) sdlKeyboardState[SDLK_ ## x]
 
   switch (key)
   {
-    case SFG_KEY_UP: return k(UP); break;
-    case SFG_KEY_RIGHT: return k(RIGHT); break;
-    case SFG_KEY_DOWN: return k(DOWN); break;
-    case SFG_KEY_LEFT: return k(LEFT); break;
-    case SFG_KEY_A: return k(LALT); break;
-    case SFG_KEY_B: return k(LCTRL); break;
-    case SFG_KEY_C: return k(LSHIFT); break;
-    case SFG_KEY_JUMP: return k(SPACE); break;
-    case SFG_KEY_STRAFE_LEFT: return k(TAB); break;
-    case SFG_KEY_STRAFE_RIGHT: return k(BACKSPACE); break;
-    case SFG_KEY_MAP: return k(ESCAPE); break;
-    case SFG_KEY_MENU: return k(RCTRL) || k(RETURN); break;
+    case LHR_KEY_UP: return k(UP); break;
+    case LHR_KEY_RIGHT: return k(RIGHT); break;
+    case LHR_KEY_DOWN: return k(DOWN); break;
+    case LHR_KEY_LEFT: return k(LEFT); break;
+    case LHR_KEY_A: return k(LALT); break;
+    case LHR_KEY_B: return k(LCTRL); break;
+    case LHR_KEY_C: return k(LSHIFT); break;
+    case LHR_KEY_JUMP: return k(SPACE); break;
+    case LHR_KEY_STRAFE_LEFT: return k(TAB); break;
+    case LHR_KEY_STRAFE_RIGHT: return k(BACKSPACE); break;
+    case LHR_KEY_MAP: return k(ESCAPE); break;
+    case LHR_KEY_MENU: return k(RCTRL) || k(RETURN); break;
     default: return 0; break;
   }
 
   #undef k
 }
 #elif defined(RETROFW)
-int8_t SFG_keyPressed(uint8_t key)
+int8_t LHR_keyPressed(uint8_t key)
 {
   #define k(x) sdlKeyboardState[SDLK_ ## x]
 
   switch (key)
   {
-    case SFG_KEY_UP: return k(UP); break;
-    case SFG_KEY_RIGHT: return k(RIGHT); break;
-    case SFG_KEY_DOWN: return k(DOWN); break;
-    case SFG_KEY_LEFT: return k(LEFT); break;
-    case SFG_KEY_A: return k(LCTRL); break;
-    case SFG_KEY_B: return k(LALT); break;
-    case SFG_KEY_C: return k(SPACE); break;
-    case SFG_KEY_JUMP: return k(LSHIFT); break;
-    case SFG_KEY_STRAFE_LEFT: return k(TAB); break;
-    case SFG_KEY_STRAFE_RIGHT: return k(BACKSPACE); break;
-    case SFG_KEY_MAP: return k(ESCAPE); break;
-    case SFG_KEY_MENU: return k(RCTRL) || k(RETURN); break;
+    case LHR_KEY_UP: return k(UP); break;
+    case LHR_KEY_RIGHT: return k(RIGHT); break;
+    case LHR_KEY_DOWN: return k(DOWN); break;
+    case LHR_KEY_LEFT: return k(LEFT); break;
+    case LHR_KEY_A: return k(LCTRL); break;
+    case LHR_KEY_B: return k(LALT); break;
+    case LHR_KEY_C: return k(SPACE); break;
+    case LHR_KEY_JUMP: return k(LSHIFT); break;
+    case LHR_KEY_STRAFE_LEFT: return k(TAB); break;
+    case LHR_KEY_STRAFE_RIGHT: return k(BACKSPACE); break;
+    case LHR_KEY_MAP: return k(ESCAPE); break;
+    case LHR_KEY_MENU: return k(RCTRL) || k(RETURN); break;
     default: return 0; break;
   }
 
   #undef k
 }
 #else
-int8_t SFG_keyPressed(uint8_t key)
+int8_t LHR_keyPressed(uint8_t key)
 {
   if (webKeyboardState[key]) // this only takes effect in the web version 
     return 1;
@@ -276,25 +276,25 @@ int8_t SFG_keyPressed(uint8_t key)
 
   switch (key)
   {
-    case SFG_KEY_UP: return k(UP) || k(w) || k(KP8); break;
-    case SFG_KEY_RIGHT: 
+    case LHR_KEY_UP: return k(UP) || k(w) || k(KP8); break;
+    case LHR_KEY_RIGHT: 
       return k(RIGHT) || k(e) || k(KP6); break;
-    case SFG_KEY_DOWN: 
+    case LHR_KEY_DOWN: 
       return k(DOWN) || k(s) || k(KP5) || k(KP2); break;
-    case SFG_KEY_LEFT: return k(LEFT) || k(q) || k(KP4); break;
-    case SFG_KEY_A: return k(j) || k(RETURN) || k(LCTRL) || k(RCTRL) ||
+    case LHR_KEY_LEFT: return k(LEFT) || k(q) || k(KP4); break;
+    case LHR_KEY_A: return k(j) || k(RETURN) || k(LCTRL) || k(RCTRL) ||
       (sdlMouseButtonState & SDL_BUTTON_LMASK); break;
-    case SFG_KEY_B: return k(k) || k(LSHIFT); break;
-    case SFG_KEY_C: return k(l); break;
-    case SFG_KEY_JUMP: return k(SPACE); break;
-    case SFG_KEY_STRAFE_LEFT: return k(a) || k(KP7); break;
-    case SFG_KEY_STRAFE_RIGHT: return k(d) || k(KP9); break;
-    case SFG_KEY_MAP: return k(TAB); break;
-    case SFG_KEY_CYCLE_WEAPON: return k(f) ||
+    case LHR_KEY_B: return k(k) || k(LSHIFT); break;
+    case LHR_KEY_C: return k(l); break;
+    case LHR_KEY_JUMP: return k(SPACE); break;
+    case LHR_KEY_STRAFE_LEFT: return k(a) || k(KP7); break;
+    case LHR_KEY_STRAFE_RIGHT: return k(d) || k(KP9); break;
+    case LHR_KEY_MAP: return k(TAB); break;
+    case LHR_KEY_CYCLE_WEAPON: return k(f) ||
       (sdlMouseButtonState & SDL_BUTTON_MMASK); break;
-    case SFG_KEY_TOGGLE_FREELOOK: return (sdlMouseButtonState & SDL_BUTTON_RMASK); break;
-    case SFG_KEY_MENU: return k(ESCAPE); break;
-    case SFG_KEY_NEXT_WEAPON:
+    case LHR_KEY_TOGGLE_FREELOOK: return (sdlMouseButtonState & SDL_BUTTON_RMASK); break;
+    case LHR_KEY_MENU: return k(ESCAPE); break;
+    case LHR_KEY_NEXT_WEAPON:
       if (k(p) || k(x))
         return 1;
 
@@ -306,7 +306,7 @@ int8_t SFG_keyPressed(uint8_t key)
       return 0;
       break;
 
-    case SFG_KEY_PREVIOUS_WEAPON:
+    case LHR_KEY_PREVIOUS_WEAPON:
       if (k(o) || k(y) || k(z))
         return 1;
 
@@ -333,7 +333,7 @@ void mainLoopIteration()
 #ifdef __EMSCRIPTEN__
   // hack, without it sound won't work because of shitty browser audio policies
 
-  if (SFG_game.frame % 512 == 0)
+  if (LHR_game.frame % 512 == 0)
     SDL_PauseAudio(0);
 #endif
 
@@ -347,7 +347,7 @@ void mainLoopIteration()
 
   sdlMouseButtonState = SDL_GetMouseState(NULL,NULL);
 
-  if (!SFG_mainLoopBody())
+  if (!LHR_mainLoopBody())
     running = 0;
 
   SDL_LockSurface(screenSurface);
@@ -362,7 +362,7 @@ void emscripten_set_main_loop(
        em_callback_func func, int fps, int simulate_infinite_loop);
 #endif
 
-uint16_t audioBuff[SFG_SFX_SAMPLE_COUNT];
+uint16_t audioBuff[LHR_SFX_SAMPLE_COUNT];
 uint16_t audioPos = 0; // audio position for the next audio buffer fill
 uint32_t audioUpdateFrame = 0; // game frame at which audio buffer fill happened
 
@@ -382,41 +382,41 @@ void audioFillCallback(void *userdata, uint8_t *s, int l)
   {
     s16[i] = musicOn ?
       mixSamples(audioBuff[audioPos], SDL_MUSIC_VOLUME *
-      (SFG_getNextMusicSample() - SFG_musicTrackAverages[SFG_MusicState.track]))
+      (LHR_getNextMusicSample() - LHR_musicTrackAverages[LHR_MusicState.track]))
       : audioBuff[audioPos];
 
     audioBuff[audioPos] = 0;
-    audioPos = (audioPos < SFG_SFX_SAMPLE_COUNT - 1) ? (audioPos + 1) : 0;
+    audioPos = (audioPos < LHR_SFX_SAMPLE_COUNT - 1) ? (audioPos + 1) : 0;
   }
 
-  audioUpdateFrame = SFG_game.frame;
+  audioUpdateFrame = LHR_game.frame;
 }
 
-void SFG_setMusic(uint8_t value)
+void LHR_setMusic(uint8_t value)
 {
   switch (value)
   {
-    case SFG_MUSIC_TURN_ON: musicOn = 1; break;
-    case SFG_MUSIC_TURN_OFF: musicOn = 0; break;
-    case SFG_MUSIC_NEXT: SFG_nextMusicTrack(); break;
+    case LHR_MUSIC_TURN_ON: musicOn = 1; break;
+    case LHR_MUSIC_TURN_OFF: musicOn = 0; break;
+    case LHR_MUSIC_NEXT: LHR_nextMusicTrack(); break;
     default: break;
   }
 }
 
-void SFG_playSound(uint8_t soundIndex, uint8_t volume)
+void LHR_playSound(uint8_t soundIndex, uint8_t volume)
 {
   uint16_t pos = (audioPos +
-    ((SFG_game.frame - audioUpdateFrame) * SFG_MS_PER_FRAME * 8)) %
-    SFG_SFX_SAMPLE_COUNT;
+    ((LHR_game.frame - audioUpdateFrame) * LHR_MS_PER_FRAME * 8)) %
+    LHR_SFX_SAMPLE_COUNT;
 
   uint16_t volumeScale = 1 << (volume / 37);
 
-  for (int i = 0; i < SFG_SFX_SAMPLE_COUNT; ++i)
+  for (int i = 0; i < LHR_SFX_SAMPLE_COUNT; ++i)
   {
     audioBuff[pos] = mixSamples(audioBuff[pos], 
-      (128 - SFG_GET_SFX_SAMPLE(soundIndex,i)) * volumeScale);
+      (128 - LHR_GET_SFX_SAMPLE(soundIndex,i)) * volumeScale);
 
-    pos = (pos < SFG_SFX_SAMPLE_COUNT - 1) ? (pos + 1) : 0;
+    pos = (pos < LHR_SFX_SAMPLE_COUNT - 1) ? (pos + 1) : 0;
   }
 }
 
@@ -429,7 +429,7 @@ int main(int argc, char *argv[])
 {
   uint8_t argHelp = 0;
 
-  for (uint8_t i = 0; i < SFG_KEY_COUNT; ++i)
+  for (uint8_t i = 0; i < LHR_KEY_COUNT; ++i)
     webKeyboardState[i] = 0;
 
   for (uint8_t i = 1; i < argc; ++i)
@@ -442,7 +442,7 @@ int main(int argc, char *argv[])
 
   if (argHelp)
   {
-    puts("L'Homme Révolté (SDL 1.2), version " SFG_VERSION_STRING "\n");
+    puts("L'Homme Révolté (SDL 1.2), version " LHR_VERSION_STRING "\n");
     puts("L'Homme Révolté is a unique FPS game. Collect weapons and items and destroy");
     puts("robot enemies in your way in order to get to the level finish. Some door are");
     puts("locked and require access cards. Good luck!\n");
@@ -465,18 +465,18 @@ int main(int argc, char *argv[])
     return 0;
   }
 
-  SFG_init();
+  LHR_init();
 
   puts("SDL: initializing SDL");
 
   SDL_Init(SDL_INIT_AUDIO | SDL_INIT_JOYSTICK);
 
-  screenSurface = SDL_SetVideoMode(SFG_SCREEN_RESOLUTION_X, SFG_SCREEN_RESOLUTION_Y, 16,
+  screenSurface = SDL_SetVideoMode(LHR_SCREEN_RESOLUTION_X, LHR_SCREEN_RESOLUTION_Y, 16,
 	SDL_SWSURFACE | SDL_DOUBLEBUF);
 
   sdlKeyboardState = SDL_GetKeyState(NULL);
 
-#if !SFG_OS_IS_MALWARE
+#if !LHR_OS_IS_MALWARE
   signal(SIGINT,handleSignal);
   signal(SIGQUIT,handleSignal);
   signal(SIGTERM,handleSignal);
@@ -498,7 +498,7 @@ int main(int argc, char *argv[])
   if (SDL_OpenAudio(&audioSpec,NULL) < 0)
     puts("SDL: could not initialize audio");
 
-  for (int16_t i = 0; i < SFG_SFX_SAMPLE_COUNT; ++i)
+  for (int16_t i = 0; i < LHR_SFX_SAMPLE_COUNT; ++i)
     audioBuff[i] = 0;
 
   SDL_PauseAudio(0);
@@ -509,7 +509,7 @@ int main(int argc, char *argv[])
 
   SDL_PumpEvents();
 
-  SDL_WarpMouse(SFG_SCREEN_RESOLUTION_X / 2, SFG_SCREEN_RESOLUTION_Y / 2);
+  SDL_WarpMouse(LHR_SCREEN_RESOLUTION_X / 2, LHR_SCREEN_RESOLUTION_Y / 2);
 
 #ifdef __EMSCRIPTEN__
   emscripten_set_main_loop(mainLoopIteration,0,1);
