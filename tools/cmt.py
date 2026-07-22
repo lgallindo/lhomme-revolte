@@ -43,7 +43,7 @@ def load_palette(header_path):
         
     return np.array(palette)
 
-def process_image(image_path, palette, dither=True):
+def process_image(image_path, palette, dither=True, chromakey=None):
     img = Image.open(image_path)
     
     frames = []
@@ -76,14 +76,18 @@ def process_image(image_path, palette, dither=True):
             
             for y in range(height):
                 for x in range(width):
-                    old_pixel = float_frame[y, x]
-                    # Clamp to 0-255 before querying
-                    clamped = np.clip(old_pixel, 0, 255)
-                    _, idx = tree.query(clamped)
-                    new_pixel = palette[idx]
-                    mapped_frame[y, x] = idx
-                    
-                    quant_error = old_pixel - new_pixel
+                    if chromakey is not None and np.array_equal(frame[y, x], chromakey):
+                        mapped_frame[y, x] = 0
+                        quant_error = 0.0
+                    else:
+                        old_pixel = float_frame[y, x]
+                        # Clamp to 0-255 before querying
+                        clamped = np.clip(old_pixel, 0, 255)
+                        _, idx = tree.query(clamped)
+                        new_pixel = palette[idx]
+                        mapped_frame[y, x] = idx
+                        
+                        quant_error = old_pixel - new_pixel
                     
                     if x + 1 < width:
                         float_frame[y, x + 1] += quant_error * 7 / 16
@@ -97,6 +101,9 @@ def process_image(image_path, palette, dither=True):
             # Flatten frame to [N, 3], query KDTree, reshape to [height, width]
             flat_pixels = frame.reshape(-1, 3)
             _, indices = tree.query(flat_pixels)
+            if chromakey is not None:
+                mask = np.all(flat_pixels == chromakey, axis=-1)
+                indices[mask] = 0
             mapped_frame = indices.reshape((height, width)).astype(np.uint8)
             
         mapped_frames.append(mapped_frame)
