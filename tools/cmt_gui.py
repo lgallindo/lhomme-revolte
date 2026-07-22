@@ -94,7 +94,8 @@ class CMTGui:
         self.panel_dither.grid(row=1, column=2, padx=10)
 
     def load_image(self):
-        filepath = filedialog.askopenfilename(filetypes=[("Images", "*.png;*.gif;*.jpg;*.bmp")])
+        # Use space separation for macOS Tkinter filetypes compatibility
+        filepath = filedialog.askopenfilename(filetypes=[("Images", "*.png *.gif *.jpg *.jpeg *.bmp")])
         if not filepath:
             return
             
