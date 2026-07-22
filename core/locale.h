@@ -27,12 +27,22 @@
   #define SFG_LOCALE_RUNTIME_SWITCH 0
 #endif
 
+typedef struct {
+  const uint8_t *data;
+  uint16_t width;
+  uint16_t height;
+  uint8_t frames;
+  uint8_t fps;
+} SFG_MapImage;
+
 typedef struct
 {
   const char *introText;
   const char *outroText;
   uint8_t introMusicTrack;
   uint8_t outroMusicTrack;
+  const SFG_MapImage *introImage;
+  const SFG_MapImage *outroImage;
 } SFG_LevelMeta;
 
 typedef struct
