@@ -16,8 +16,8 @@
   SPDX-License-Identifier: GPL-3.0-or-later
 */
 
-#ifndef _SFG_GAME_H
-#define _SFG_GAME_H
+#ifndef _LHR_GAME_H
+#define _LHR_GAME_H
 
 #include <stdint.h> // Needed for fixed width types, can easily be replaced.
 
@@ -25,29 +25,29 @@
   The following keys are mandatory to be implemented on any platform in order
   for the game to be playable. Enums are bloat.
 */
-#define SFG_KEY_UP 0
-#define SFG_KEY_RIGHT 1
-#define SFG_KEY_DOWN 2
-#define SFG_KEY_LEFT 3
-#define SFG_KEY_A 4     ///< fire, confirm
-#define SFG_KEY_B 5     ///< cancel, strafe, look up/down
-#define SFG_KEY_C 6     ///< menu, jump, switch weapons
+#define LHR_KEY_UP 0
+#define LHR_KEY_RIGHT 1
+#define LHR_KEY_DOWN 2
+#define LHR_KEY_LEFT 3
+#define LHR_KEY_A 4     ///< fire, confirm
+#define LHR_KEY_B 5     ///< cancel, strafe, look up/down
+#define LHR_KEY_C 6     ///< menu, jump, switch weapons
 
 /*
   The following keys are optional for a platform to implement. They just make
   the controls more comfortable.
 */
-#define SFG_KEY_JUMP 7
-#define SFG_KEY_STRAFE_LEFT 8
-#define SFG_KEY_STRAFE_RIGHT 9
-#define SFG_KEY_MAP 10
-#define SFG_KEY_TOGGLE_FREELOOK 11
-#define SFG_KEY_NEXT_WEAPON 12
-#define SFG_KEY_PREVIOUS_WEAPON 13
-#define SFG_KEY_MENU 14
-#define SFG_KEY_CYCLE_WEAPON 15
+#define LHR_KEY_JUMP 7
+#define LHR_KEY_STRAFE_LEFT 8
+#define LHR_KEY_STRAFE_RIGHT 9
+#define LHR_KEY_MAP 10
+#define LHR_KEY_TOGGLE_FREELOOK 11
+#define LHR_KEY_NEXT_WEAPON 12
+#define LHR_KEY_PREVIOUS_WEAPON 13
+#define LHR_KEY_MENU 14
+#define LHR_KEY_CYCLE_WEAPON 15
 
-#define SFG_KEY_COUNT 16 ///< Number of keys.
+#define LHR_KEY_COUNT 16 ///< Number of keys.
 
 /* ============================= PORTING =================================== */
 
@@ -55,25 +55,25 @@
    - Include this file (and possibly other optional files, like sounds.h) in
      your main_*.c frontend source.
    - Implement the following functions in your frontend source.
-   - Call SFG_init() from your frontend initialization code.
-   - Call SFG_mainLoopBody() from within your frontend main loop.
+   - Call LHR_init() from your frontend initialization code.
+   - Call LHR_mainLoopBody() from within your frontend main loop.
 
    If your platform is an AVR CPU (e.g. some Arduinos) and so has Harvard
-   architecture, define #SFG_AVR 1 before including this file in your frontend
+   architecture, define #LHR_AVR 1 before including this file in your frontend
    source. */
 
-#ifndef SFG_LOG
-  #define SFG_LOG(str) {} ///< Can be redefined to log game messages.
+#ifndef LHR_LOG
+  #define LHR_LOG(str) {} ///< Can be redefined to log game messages.
 #endif
 
-#ifndef SFG_CPU_LOAD
-  #define SFG_CPU_LOAD(percent) {} ///< Can be redefined to check CPU load in %.
+#ifndef LHR_CPU_LOAD
+  #define LHR_CPU_LOAD(percent) {} ///< Can be redefined to check CPU load in %.
 #endif
 
-#ifndef SFG_GAME_STEP_COMMAND
-  #define SFG_GAME_STEP_COMMAND {} /**< Will be called each simulation step
+#ifndef LHR_GAME_STEP_COMMAND
+  #define LHR_GAME_STEP_COMMAND {} /**< Will be called each simulation step
                                    (good for creating deterministic behavior
-                                   such as demos (SFG_mainLoopBody() calls
+                                   such as demos (LHR_mainLoopBody() calls
                                    potentially multiple simulation steps). */
 #endif
 
@@ -82,7 +82,7 @@
   keys have to be implemented, the optional keys don't have to ever return 1.
   See the key constant definitions to see which ones are mandatory.
 */
-int8_t SFG_keyPressed(uint8_t key);
+int8_t LHR_keyPressed(uint8_t key);
 
 /**
   Optional function for mouse/joystick/analog controls, gets mouse x and y
@@ -91,26 +91,26 @@ int8_t SFG_keyPressed(uint8_t key);
   platform isn't using a mouse, this function can simply return [0,0] offset at
   each call, or even do nothing at all (leave the variables as are).
 */
-void SFG_getMouseOffset(int16_t *x, int16_t *y);
+void LHR_getMouseOffset(int16_t *x, int16_t *y);
 
 /**
   Returns time in milliseconds sice program start.
 */
-uint32_t SFG_getTimeMs(void);
+uint32_t LHR_getTimeMs(void);
 
 /** 
   Sleep (yield CPU) for specified amount of ms. This is used to relieve CPU
   usage. If your platform doesn't need this or handles it in other way, this
   function can do nothing.
 */
-void SFG_sleepMs(uint16_t timeMs);
+void LHR_sleepMs(uint16_t timeMs);
 
 /**
   Set specified screen pixel. ColorIndex is the index of the game's palette.
   The function doesn't have to (and shouldn't, for the sake of performance)
   check whether the coordinates are within screen bounds.
 */
-static inline void SFG_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex);
+static inline void LHR_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex);
 
 /**
   Play given sound effect (SFX). This function may or may not use the sound
@@ -121,39 +121,39 @@ static inline void SFG_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex);
   function doesn't have to implement safety measures, the back end takes cares
   of them.
 */
-void SFG_playSound(uint8_t soundIndex, uint8_t volume);
+void LHR_playSound(uint8_t soundIndex, uint8_t volume);
 
-#define SFG_MUSIC_TURN_OFF 0
-#define SFG_MUSIC_TURN_ON 1
-#define SFG_MUSIC_NEXT 2
+#define LHR_MUSIC_TURN_OFF 0
+#define LHR_MUSIC_TURN_ON 1
+#define LHR_MUSIC_NEXT 2
 
 /**
   Informs the frontend how music should play, e.g. turn on/off, change track,
-  ... See SFG_MUSIC_* constants. Playing music is optional and the frontend may
+  ... See LHR_MUSIC_* constants. Playing music is optional and the frontend may
   ignore this. If a frontend wants to implement music, it can use the bytebeat
   provided in sounds.h or use its own.
 */
-void SFG_setMusic(uint8_t value);
+void LHR_setMusic(uint8_t value);
 
-#define SFG_EVENT_VIBRATE 0 ///< the controller should vibrate (or blink etc.)
-#define SFG_EVENT_PLAYER_HURT 1 
-#define SFG_EVENT_PLAYER_DIES 2
-#define SFG_EVENT_LEVEL_STARTS 3
-#define SFG_EVENT_LEVEL_WON 4
-#define SFG_EVENT_MONSTER_DIES 5
-#define SFG_EVENT_PLAYER_TAKES_ITEM 6
-#define SFG_EVENT_EXPLOSION 7
-#define SFG_EVENT_PLAYER_TELEPORTS 8
-#define SFG_EVENT_PLAYER_CHANGES_WEAPON 9
+#define LHR_EVENT_VIBRATE 0 ///< the controller should vibrate (or blink etc.)
+#define LHR_EVENT_PLAYER_HURT 1 
+#define LHR_EVENT_PLAYER_DIES 2
+#define LHR_EVENT_LEVEL_STARTS 3
+#define LHR_EVENT_LEVEL_WON 4
+#define LHR_EVENT_MONSTER_DIES 5
+#define LHR_EVENT_PLAYER_TAKES_ITEM 6
+#define LHR_EVENT_EXPLOSION 7
+#define LHR_EVENT_PLAYER_TELEPORTS 8
+#define LHR_EVENT_PLAYER_CHANGES_WEAPON 9
 
 /**
   This is an optional function that informs the frontend about special events
   which may trigger something special on the platform, such as a controller
   vibration, logging etc. The implementation of this function may be left empty.
 */
-void SFG_processEvent(uint8_t event, uint8_t data);
+void LHR_processEvent(uint8_t event, uint8_t data);
 
-#define SFG_SAVE_SIZE 12 ///< size of the save in bytes
+#define LHR_SAVE_SIZE 12 ///< size of the save in bytes
 
 /**
   Optional function for permanently saving the game state. Platforms that don't
@@ -161,7 +161,7 @@ void SFG_processEvent(uint8_t event, uint8_t data);
   nothing. If implemented, the function should save the passed data into its
   permanent storage, e.g. a file, a cookie etc.
 */
-void SFG_save(uint8_t data[SFG_SAVE_SIZE]);
+void LHR_save(uint8_t data[LHR_SAVE_SIZE]);
 
 /**
   Optional function for retrieving game data that were saved to permanent
@@ -169,14 +169,14 @@ void SFG_save(uint8_t data[SFG_SAVE_SIZE]);
   If implemented, the function should fill the passed array with data from
   permanent storage, e.g. a file, a cookie etc.
 
-  If this function is called before SFG_save was ever called and no data is
+  If this function is called before LHR_save was ever called and no data is
   present in permanent memory, this function should do nothing (leave the data
   array as is).
 
   This function should return 1 if saving/loading is possible or 0 if not (this
   will be used by the game to detect saving/loading capability).
 */
-uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE]);
+uint8_t LHR_load(uint8_t data[LHR_SAVE_SIZE]);
 
 /* ========================================================================= */
 
@@ -186,23 +186,23 @@ uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE]);
   halt. This functions handles reaching the target FPS and sleeping for
   relieving CPU, so don't do this.
 */
-uint8_t SFG_mainLoopBody(void);
+uint8_t LHR_mainLoopBody(void);
 
 /**
   Initializes the game, call this in the platform's initialization code.
 */
-void SFG_init(void);
+void LHR_init(void);
 
 #include "settings.h"
 
-#if SFG_AVR
+#if LHR_AVR
   #include <avr/pgmspace.h>
 
-  #define SFG_PROGRAM_MEMORY const PROGMEM
-  #define SFG_PROGRAM_MEMORY_U8(addr) pgm_read_byte(addr)
+  #define LHR_PROGRAM_MEMORY const PROGMEM
+  #define LHR_PROGRAM_MEMORY_U8(addr) pgm_read_byte(addr)
 #else
-  #define SFG_PROGRAM_MEMORY static const
-  #define SFG_PROGRAM_MEMORY_U8(addr) ((uint8_t) (*(addr)))
+  #define LHR_PROGRAM_MEMORY static const
+  #define LHR_PROGRAM_MEMORY_U8(addr) ((uint8_t) (*(addr)))
 #endif
 
 #include "images.h" // don't change the order of these includes
@@ -210,18 +210,18 @@ void SFG_init(void);
 #include "texts.h"
 #include "palette.h"
 
-#if SFG_TEXTURE_DISTANCE == 0
+#if LHR_TEXTURE_DISTANCE == 0
   #define RCL_COMPUTE_WALL_TEXCOORDS 0
 #endif
 
-#define RCL_PIXEL_FUNCTION SFG_pixelFunc
+#define RCL_PIXEL_FUNCTION LHR_pixelFunc
 #define RCL_TEXTURE_VERTICAL_STRETCH 0
 
 #define RCL_CAMERA_COLL_HEIGHT_BELOW 800
 #define RCL_CAMERA_COLL_HEIGHT_ABOVE 200
 
-#define RCL_HORIZONTAL_FOV SFG_FOV_HORIZONTAL
-#define RCL_VERTICAL_FOV SFG_FOV_VERTICAL
+#define RCL_HORIZONTAL_FOV LHR_FOV_HORIZONTAL
+#define RCL_VERTICAL_FOV LHR_FOV_VERTICAL
 
 #include "raycastlib.h" 
 
@@ -238,16 +238,16 @@ typedef struct
                          b:     whether currently going up (0) or down (1)
                          cc:    by which card (key) the door is unlocked, 00
                                 means no card (unlocked), 1 means card 0 etc. */
-} SFG_DoorRecord;
+} LHR_DoorRecord;
 
-#define SFG_SPRITE_SIZE(size0to3) \
-  (((size0to3 + 3) * SFG_BASE_SPRITE_SIZE) / 4)
+#define LHR_SPRITE_SIZE(size0to3) \
+  (((size0to3 + 3) * LHR_BASE_SPRITE_SIZE) / 4)
 
-#define SFG_SPRITE_SIZE_TO_HEIGHT_ABOVE_GROUND(size0to3) \
-  (SFG_SPRITE_SIZE(size0to3) / 2)
+#define LHR_SPRITE_SIZE_TO_HEIGHT_ABOVE_GROUND(size0to3) \
+  (LHR_SPRITE_SIZE(size0to3) / 2)
 
-#define SFG_SPRITE_SIZE_PIXELS(size0to3) \
-  ((SFG_SPRITE_SIZE(size0to3) * SFG_SPRITE_MAX_SIZE) / RCL_UNITS_PER_SQUARE)
+#define LHR_SPRITE_SIZE_PIXELS(size0to3) \
+  ((LHR_SPRITE_SIZE(size0to3) * LHR_SPRITE_MAX_SIZE) / RCL_UNITS_PER_SQUARE)
 
 /**
   Holds information about one instance of a level item (a type of level element,
@@ -259,13 +259,13 @@ typedef struct
   bbbbbbb:  index to elements array of the current level, pointing to element
             representing this item 
 */
-typedef uint8_t SFG_ItemRecord;
+typedef uint8_t LHR_ItemRecord;
 
-#define SFG_ITEM_RECORD_ACTIVE_MASK 0x80
+#define LHR_ITEM_RECORD_ACTIVE_MASK 0x80
 
-#define SFG_ITEM_RECORD_LEVEL_ELEMENT(itemRecord) \
-  (SFG_currentLevel.levelPointer->elements[itemRecord & \
-  ~SFG_ITEM_RECORD_ACTIVE_MASK])
+#define LHR_ITEM_RECORD_LEVEL_ELEMENT(itemRecord) \
+  (LHR_currentLevel.levelPointer->elements[itemRecord & \
+  ~LHR_ITEM_RECORD_ACTIVE_MASK])
 
 typedef struct 
 {
@@ -273,35 +273,35 @@ typedef struct
                            4 bits). */
   uint8_t coords[2];  /**< monster position, in 1/4s of a square */
   uint8_t health;
-} SFG_MonsterRecord;
+} LHR_MonsterRecord;
 
-#define SFG_MR_STATE(mr) ((mr).stateType & SFG_MONSTER_MASK_STATE)
-#define SFG_MR_TYPE(mr) \
-  (SFG_MONSTER_INDEX_TO_TYPE(((mr).stateType & SFG_MONSTER_MASK_TYPE) >> 4))
+#define LHR_MR_STATE(mr) ((mr).stateType & LHR_MONSTER_MASK_STATE)
+#define LHR_MR_TYPE(mr) \
+  (LHR_MONSTER_INDEX_TO_TYPE(((mr).stateType & LHR_MONSTER_MASK_TYPE) >> 4))
 
-#define SFG_MONSTER_COORD_TO_RCL_UNITS(c) ((RCL_UNITS_PER_SQUARE / 8) + c * 256)
-#define SFG_MONSTER_COORD_TO_SQUARES(c) (c / 4)
+#define LHR_MONSTER_COORD_TO_RCL_UNITS(c) ((RCL_UNITS_PER_SQUARE / 8) + c * 256)
+#define LHR_MONSTER_COORD_TO_SQUARES(c) (c / 4)
 
-#define SFG_ELEMENT_COORD_TO_RCL_UNITS(c) \
+#define LHR_ELEMENT_COORD_TO_RCL_UNITS(c) \
   (c * RCL_UNITS_PER_SQUARE + RCL_UNITS_PER_SQUARE / 2)
 
-#define SFG_MONSTER_MASK_STATE 0x0f
-#define SFG_MONSTER_MASK_TYPE  0xf0
+#define LHR_MONSTER_MASK_STATE 0x0f
+#define LHR_MONSTER_MASK_TYPE  0xf0
 
-#define SFG_MONSTER_STATE_INACTIVE  0 ///< Not nearby, not actively updated.
-#define SFG_MONSTER_STATE_IDLE      1
-#define SFG_MONSTER_STATE_ATTACKING 2
-#define SFG_MONSTER_STATE_HURTING   3
-#define SFG_MONSTER_STATE_DYING     4
-#define SFG_MONSTER_STATE_GOING_N   5
-#define SFG_MONSTER_STATE_GOING_NE  6
-#define SFG_MONSTER_STATE_GOING_E   7
-#define SFG_MONSTER_STATE_GOING_SE  8
-#define SFG_MONSTER_STATE_GOING_S   9
-#define SFG_MONSTER_STATE_GOING_SW  10
-#define SFG_MONSTER_STATE_GOING_W   11
-#define SFG_MONSTER_STATE_GOING_NW  12
-#define SFG_MONSTER_STATE_DEAD      13
+#define LHR_MONSTER_STATE_INACTIVE  0 ///< Not nearby, not actively updated.
+#define LHR_MONSTER_STATE_IDLE      1
+#define LHR_MONSTER_STATE_ATTACKING 2
+#define LHR_MONSTER_STATE_HURTING   3
+#define LHR_MONSTER_STATE_DYING     4
+#define LHR_MONSTER_STATE_GOING_N   5
+#define LHR_MONSTER_STATE_GOING_NE  6
+#define LHR_MONSTER_STATE_GOING_E   7
+#define LHR_MONSTER_STATE_GOING_SE  8
+#define LHR_MONSTER_STATE_GOING_S   9
+#define LHR_MONSTER_STATE_GOING_SW  10
+#define LHR_MONSTER_STATE_GOING_W   11
+#define LHR_MONSTER_STATE_GOING_NW  12
+#define LHR_MONSTER_STATE_DEAD      13
 
 typedef struct
 {
@@ -313,38 +313,38 @@ typedef struct
                              that is exactly enough to store position on 64x64
                              map. */
   int16_t direction[3]; /**< Added to position each game step. */
-} SFG_ProjectileRecord;
+} LHR_ProjectileRecord;
 
-#define SFG_GAME_STATE_INIT 0 ///< first state, waiting for key releases
-#define SFG_GAME_STATE_PLAYING 1
-#define SFG_GAME_STATE_WIN 2
-#define SFG_GAME_STATE_LOSE 3
-#define SFG_GAME_STATE_INTRO 4
-#define SFG_GAME_STATE_OUTRO 5
-#define SFG_GAME_STATE_MAP 6
-#define SFG_GAME_STATE_LEVEL_START 7
-#define SFG_GAME_STATE_MENU 8  
+#define LHR_GAME_STATE_INIT 0 ///< first state, waiting for key releases
+#define LHR_GAME_STATE_PLAYING 1
+#define LHR_GAME_STATE_WIN 2
+#define LHR_GAME_STATE_LOSE 3
+#define LHR_GAME_STATE_INTRO 4
+#define LHR_GAME_STATE_OUTRO 5
+#define LHR_GAME_STATE_MAP 6
+#define LHR_GAME_STATE_LEVEL_START 7
+#define LHR_GAME_STATE_MENU 8  
 
-#ifndef SFG_DEMO_MODE
-  #define SFG_DEMO_MODE 0
+#ifndef LHR_DEMO_MODE
+  #define LHR_DEMO_MODE 0
 #endif
 
-#define SFG_STORY_GLOBAL_INTRO 0
-#define SFG_STORY_GLOBAL_OUTRO 1
-#define SFG_STORY_MAP_INTRO 2
-#define SFG_STORY_MAP_OUTRO 3
+#define LHR_STORY_GLOBAL_INTRO 0
+#define LHR_STORY_GLOBAL_OUTRO 1
+#define LHR_STORY_MAP_INTRO 2
+#define LHR_STORY_MAP_OUTRO 3
 
-#define SFG_MENU_ITEM_CONTINUE 0
-#define SFG_MENU_ITEM_MAP 1
-#define SFG_MENU_ITEM_PLAY 2
-#define SFG_MENU_ITEM_LOAD 3
-#define SFG_MENU_ITEM_SFX 4
-#define SFG_MENU_ITEM_MUSIC 5
-#define SFG_MENU_ITEM_SHEAR 6
-#define SFG_MENU_ITEM_LANGUAGE 7
-#define SFG_MENU_ITEM_EXIT 8
+#define LHR_MENU_ITEM_CONTINUE 0
+#define LHR_MENU_ITEM_MAP 1
+#define LHR_MENU_ITEM_PLAY 2
+#define LHR_MENU_ITEM_LOAD 3
+#define LHR_MENU_ITEM_SFX 4
+#define LHR_MENU_ITEM_MUSIC 5
+#define LHR_MENU_ITEM_SHEAR 6
+#define LHR_MENU_ITEM_LANGUAGE 7
+#define LHR_MENU_ITEM_EXIT 8
 
-#define SFG_MENU_ITEM_NONE 255
+#define LHR_MENU_ITEM_NONE 255
 
 /*
   GLOBAL VARIABLES
@@ -366,15 +366,15 @@ struct
                                     sounds at once. */
   RCL_RayConstraints rayConstraints; ///< Ray constraints for rendering.
   RCL_RayConstraints visibilityRayConstraints; ///< Constraints for visibility.
-  uint8_t keyStates[SFG_KEY_COUNT]; /**< Pressed states of keys, each value
+  uint8_t keyStates[LHR_KEY_COUNT]; /**< Pressed states of keys, each value
                                     stores the number of frames for which the
                                     key has been held. */
-  uint8_t zBuffer[SFG_Z_BUFFER_SIZE];
-  uint8_t textureAverageColors[SFG_WALL_TEXTURE_COUNT]; /**< Contains average
+  uint8_t zBuffer[LHR_Z_BUFFER_SIZE];
+  uint8_t textureAverageColors[LHR_WALL_TEXTURE_COUNT]; /**< Contains average
                                     color for each wall texture. */
-  int8_t backgroundScaleMap[SFG_GAME_RESOLUTION_Y];
+  int8_t backgroundScaleMap[LHR_GAME_RESOLUTION_Y];
   uint16_t backgroundScroll;
-  uint8_t spriteSamplingPoints[SFG_MAX_SPRITE_SIZE]; /**< Helper for
+  uint8_t spriteSamplingPoints[LHR_MAX_SPRITE_SIZE]; /**< Helper for
                                                      precomputing sprite
                                                      sampling positions for
                                                      drawing. */
@@ -382,7 +382,7 @@ struct
   uint32_t frame;          ///< frame number
   uint8_t selectedMenuItem;
   uint8_t selectedLevel;   ///< level to play selected in the main menu
-  uint8_t storyType;       ///< SFG_STORY_* selector for text/music source
+  uint8_t storyType;       ///< LHR_STORY_* selector for text/music source
   uint8_t introTargetLevel;
   uint8_t outroTargetLevel;
   uint8_t antiSpam;        ///< Prevents log message spamming.
@@ -400,7 +400,7 @@ struct
                            0 (not saved), 1 (just saved) or 255 (can't save).*/
   uint8_t cheatState; /**< Highest bit say whether cheat is enabled, other bits
                            represent the state of typing the cheat code. */
-  uint8_t save[SFG_SAVE_SIZE];  /**< Stores the game save state that's kept in
+  uint8_t save[LHR_SAVE_SIZE];  /**< Stores the game save state that's kept in
                            the persistent memory.
 
                            The save format is binary and platform independent.
@@ -409,7 +409,7 @@ struct
 
          0  4b  (less signif.) highest level that has been reached
          0  4b  (more signif.) level number of the saved position (0: no save)
-         1  8b  game settings (SFG_game.settings)
+         1  8b  game settings (LHR_game.settings)
          2  8b  health at saved position
          3  8b  bullet ammo at saved position
          4  8b  rocket ammo at saved position
@@ -417,10 +417,10 @@ struct
          6  32b little endian total play time, in 10ths of sec
          10 16b little endian total enemies killed from start */
   uint8_t continues;  ///< Whether the game continues or was exited.
-} SFG_game;
+} LHR_game;
 
-#define SFG_SAVE_TOTAL_TIME (SFG_game.save[6] + SFG_game.save[7] * 256 + \
-  SFG_game.save[8] * 65536 + SFG_game.save[9] * 4294967296)
+#define LHR_SAVE_TOTAL_TIME (LHR_game.save[6] + LHR_game.save[7] * 256 + \
+  LHR_game.save[8] * 65536 + LHR_game.save[9] * 4294967296)
 
 /**
   Stores player state.
@@ -440,21 +440,21 @@ struct
   uint32_t weaponCooldownFrames;   ///< frames left for weapon cooldown
   uint32_t lastHurtFrame;
   uint32_t lastItemTakenFrame;
-  uint8_t  ammo[SFG_AMMO_TOTAL];
+  uint8_t  ammo[LHR_AMMO_TOTAL];
   uint8_t  cards;                  /**< Lowest 3 bits say which access cards
                                    have been taken, the next 3 bits say
                                    which cards should be blinking in the HUD,
                                    the last 2 bits are a blink reset counter. */
   uint8_t  justTeleported;
   int8_t   previousWeaponDirection; ///< Direction (+/0/-) of previous weapon.
-} SFG_player;
+} LHR_player;
 
 /**
   Stores the current level and helper precomputed values for better performance.
 */
 struct
 {
-  const SFG_Level *levelPointer;
+  const LHR_Level *levelPointer;
   uint8_t levelNumber;
   const uint8_t* textures[7];    ///< textures the level is using
   uint32_t timeStart;
@@ -463,19 +463,19 @@ struct
   uint8_t floorColor;
   uint8_t ceilingColor;
 
-  SFG_DoorRecord doorRecords[SFG_MAX_DOORS];
+  LHR_DoorRecord doorRecords[LHR_MAX_DOORS];
   uint8_t doorRecordCount;
   uint8_t checkedDoorIndex; ///< Says which door are currently being checked.
 
-  SFG_ItemRecord itemRecords[SFG_MAX_ITEMS]; ///< Holds level items.
+  LHR_ItemRecord itemRecords[LHR_MAX_ITEMS]; ///< Holds level items.
   uint8_t itemRecordCount;
   uint8_t checkedItemIndex; ///< Same as checkedDoorIndex, but for items.
 
-  SFG_MonsterRecord monsterRecords[SFG_MAX_MONSTERS];
+  LHR_MonsterRecord monsterRecords[LHR_MAX_MONSTERS];
   uint8_t monsterRecordCount;
   uint8_t checkedMonsterIndex; 
 
-  SFG_ProjectileRecord projectileRecords[SFG_MAX_PROJECTILES];
+  LHR_ProjectileRecord projectileRecords[LHR_MAX_PROJECTILES];
   uint8_t projectileRecordCount;
   uint8_t bossCount;
   uint8_t monstersDead;
@@ -483,54 +483,54 @@ struct
   uint8_t teleporterCount;
   uint16_t mapRevealMask; /**< Bits say which parts of the map have been
                                revealed. */
-  uint8_t itemCollisionMap[(SFG_MAP_SIZE * SFG_MAP_SIZE) / 8];
+  uint8_t itemCollisionMap[(LHR_MAP_SIZE * LHR_MAP_SIZE) / 8];
                           /**< Bit array, for each map square says whether there
                                is a colliding item or not. */
-} SFG_currentLevel;
+} LHR_currentLevel;
 
-#if SFG_AVR
+#if LHR_AVR
 /**
   Copy of the current level that is stored in RAM. This is only done on Arduino
   because accessing it in program memory (PROGMEM) directly would be a pain.
   Because of this Arduino needs more RAM.
 */
-SFG_Level SFG_ramLevel;
+LHR_Level LHR_ramLevel;
 #endif
 
 /**
   Helper function for accessing the itemCollisionMap bits.
 */
-void SFG_getItemCollisionMapIndex(
+void LHR_getItemCollisionMapIndex(
   uint8_t x, uint8_t y, uint16_t *byte, uint8_t *bit)
 {
-  uint16_t index = y * SFG_MAP_SIZE + x;
+  uint16_t index = y * LHR_MAP_SIZE + x;
 
   *byte = index / 8;
   *bit = index % 8;
 }
 
-void SFG_setItemCollisionMapBit(uint8_t x, uint8_t y, uint8_t value)
+void LHR_setItemCollisionMapBit(uint8_t x, uint8_t y, uint8_t value)
 {
   uint16_t byte;
   uint8_t bit;
 
-  SFG_getItemCollisionMapIndex(x,y,&byte,&bit);
+  LHR_getItemCollisionMapIndex(x,y,&byte,&bit);
 
-  SFG_currentLevel.itemCollisionMap[byte] &= ~(0x01 << bit);
-  SFG_currentLevel.itemCollisionMap[byte] |= (value & 0x01) << bit;
+  LHR_currentLevel.itemCollisionMap[byte] &= ~(0x01 << bit);
+  LHR_currentLevel.itemCollisionMap[byte] |= (value & 0x01) << bit;
 }
 
-uint8_t SFG_getItemCollisionMapBit(uint8_t x, uint8_t y)
+uint8_t LHR_getItemCollisionMapBit(uint8_t x, uint8_t y)
 {
   uint16_t byte;
   uint8_t bit;
 
-  SFG_getItemCollisionMapIndex(x,y,&byte,&bit);
-  return (SFG_currentLevel.itemCollisionMap[byte] >> bit) & 0x01;
+  LHR_getItemCollisionMapIndex(x,y,&byte,&bit);
+  return (LHR_currentLevel.itemCollisionMap[byte] >> bit) & 0x01;
 }
 
-#if SFG_DITHERED_SHADOW
-static const uint8_t SFG_ditheringPatterns[] =
+#if LHR_DITHERED_SHADOW
+static const uint8_t LHR_ditheringPatterns[] =
 {
   0,0,0,0,
   0,0,0,0,
@@ -571,42 +571,42 @@ static const uint8_t SFG_ditheringPatterns[] =
   parameters have been chosen so that each number (0-255) is included in the
   output exactly once!
 */
-uint8_t SFG_random(void)
+uint8_t LHR_random(void)
 {
-  SFG_game.currentRandom *= 13;
-  SFG_game.currentRandom += 7;
+  LHR_game.currentRandom *= 13;
+  LHR_game.currentRandom += 7;
   
-  return SFG_game.currentRandom;
+  return LHR_game.currentRandom;
 }
 
-void SFG_playGameSound(uint8_t soundIndex, uint8_t volume)
+void LHR_playGameSound(uint8_t soundIndex, uint8_t volume)
 {
-  if (!(SFG_game.settings & 0x01))
+  if (!(LHR_game.settings & 0x01))
     return;
 
   uint8_t mask = 0x01 << soundIndex;
 
-  if (!(SFG_game.soundsPlayedThisFrame & mask))
+  if (!(LHR_game.soundsPlayedThisFrame & mask))
   {
-    SFG_playSound(soundIndex,volume);
-    SFG_game.soundsPlayedThisFrame |= mask;
+    LHR_playSound(soundIndex,volume);
+    LHR_game.soundsPlayedThisFrame |= mask;
   }
 }
 
 /**
-  Returns a damage value for specific attack type (SFG_WEAPON_FIRE_TYPE_...),
+  Returns a damage value for specific attack type (LHR_WEAPON_FIRE_TYPE_...),
   with added randomness (so the values will differ). For explosion pass
-  SFG_WEAPON_FIRE_TYPE_FIREBALL.
+  LHR_WEAPON_FIRE_TYPE_FIREBALL.
 */
-uint8_t SFG_getDamageValue(uint8_t attackType)
+uint8_t LHR_getDamageValue(uint8_t attackType)
 {
-  if (attackType >= SFG_WEAPON_FIRE_TYPES_TOTAL)
+  if (attackType >= LHR_WEAPON_FIRE_TYPES_TOTAL)
     return 0;
 
-  int32_t value = SFG_attackDamageTable[attackType]; // has to be signed
-  int32_t maxAdd = (value * SFG_DAMAGE_RANDOMNESS) / 256;
+  int32_t value = LHR_attackDamageTable[attackType]; // has to be signed
+  int32_t maxAdd = (value * LHR_DAMAGE_RANDOMNESS) / 256;
 
-  value = value + (maxAdd / 2) - (SFG_random() * maxAdd / 256);
+  value = value + (maxAdd / 2) - (LHR_random() * maxAdd / 256);
 
   if (value < 0)
     value = 0;
@@ -617,111 +617,111 @@ uint8_t SFG_getDamageValue(uint8_t attackType)
 /**
   Saves game data to persistent storage.
 */
-void SFG_gameSave(void)
+void LHR_gameSave(void)
 {
-  if (SFG_game.saved == SFG_CANT_SAVE)
+  if (LHR_game.saved == LHR_CANT_SAVE)
     return;
 
-  SFG_LOG("saving game data");
+  LHR_LOG("saving game data");
 
-  SFG_save(SFG_game.save);
+  LHR_save(LHR_game.save);
 }
 
 /**
   Loads game data from persistent storage.
 */
-void SFG_gameLoad(void)
+void LHR_gameLoad(void)
 {
-  if (SFG_game.saved == SFG_CANT_SAVE)
+  if (LHR_game.saved == LHR_CANT_SAVE)
     return;
 
-  SFG_LOG("loading game data");
+  LHR_LOG("loading game data");
 
-  uint8_t result = SFG_load(SFG_game.save);
+  uint8_t result = LHR_load(LHR_game.save);
 
   if (result == 0)
-    SFG_game.saved = SFG_CANT_SAVE;
+    LHR_game.saved = LHR_CANT_SAVE;
 }
 
 /**
   Returns ammo type for given weapon.
 */
-uint8_t SFG_weaponAmmo(uint8_t weapon)
+uint8_t LHR_weaponAmmo(uint8_t weapon)
 {
-  if (weapon == SFG_WEAPON_KNIFE)
-    return SFG_AMMO_NONE;
-  if (weapon == SFG_WEAPON_MACHINE_GUN ||
-      weapon == SFG_WEAPON_SHOTGUN)
-    return SFG_AMMO_BULLETS;
-  else if (weapon == SFG_WEAPON_ROCKET_LAUNCHER)
-    return SFG_AMMO_ROCKETS;
+  if (weapon == LHR_WEAPON_KNIFE)
+    return LHR_AMMO_NONE;
+  if (weapon == LHR_WEAPON_MACHINE_GUN ||
+      weapon == LHR_WEAPON_SHOTGUN)
+    return LHR_AMMO_BULLETS;
+  else if (weapon == LHR_WEAPON_ROCKET_LAUNCHER)
+    return LHR_AMMO_ROCKETS;
   else
-    return SFG_AMMO_PLASMA;
+    return LHR_AMMO_PLASMA;
 }
 
-RCL_Unit SFG_taxicabDistance(
+RCL_Unit LHR_taxicabDistance(
   RCL_Unit x0, RCL_Unit y0, RCL_Unit z0, RCL_Unit x1, RCL_Unit y1, RCL_Unit z1)
 {
   return (RCL_abs(x0 - x1) + RCL_abs(y0 - y1) + RCL_abs(z0 - z1));
 }
 
-uint8_t SFG_isInActiveDistanceFromPlayer(RCL_Unit x, RCL_Unit y, RCL_Unit z)
+uint8_t LHR_isInActiveDistanceFromPlayer(RCL_Unit x, RCL_Unit y, RCL_Unit z)
 {
-  return SFG_taxicabDistance(
-    x,y,z,SFG_player.camera.position.x,SFG_player.camera.position.y,
-    SFG_player.camera.height) <= SFG_LEVEL_ELEMENT_ACTIVE_DISTANCE;
+  return LHR_taxicabDistance(
+    x,y,z,LHR_player.camera.position.x,LHR_player.camera.position.y,
+    LHR_player.camera.height) <= LHR_LEVEL_ELEMENT_ACTIVE_DISTANCE;
 }
 
 /**
   Function called when a level end to compute the stats etc.
 */
-void SFG_levelEnds(void)
+void LHR_levelEnds(void)
 {
-  SFG_currentLevel.completionTime10sOfS = (SFG_MS_PER_FRAME *
-    (SFG_game.frame - SFG_currentLevel.frameStart)) / 100; 
+  LHR_currentLevel.completionTime10sOfS = (LHR_MS_PER_FRAME *
+    (LHR_game.frame - LHR_currentLevel.frameStart)) / 100; 
 
   if (
-   (SFG_player.health != 0) &&
-   (SFG_currentLevel.levelNumber >= (SFG_game.save[0] & 0x0f)) &&
-   ((SFG_currentLevel.levelNumber + 1) < SFG_NUMBER_OF_LEVELS))
+   (LHR_player.health != 0) &&
+   (LHR_currentLevel.levelNumber >= (LHR_game.save[0] & 0x0f)) &&
+   ((LHR_currentLevel.levelNumber + 1) < LHR_NUMBER_OF_LEVELS))
   {
-    SFG_game.save[0] = // save progress
-      (SFG_game.save[0] & 0xf0) | (SFG_currentLevel.levelNumber + 1);
+    LHR_game.save[0] = // save progress
+      (LHR_game.save[0] & 0xf0) | (LHR_currentLevel.levelNumber + 1);
 
-    SFG_gameSave();
+    LHR_gameSave();
   }
 
-  SFG_currentLevel.monstersDead = 0;
+  LHR_currentLevel.monstersDead = 0;
        
-  for (uint16_t i = 0; i < SFG_currentLevel.monsterRecordCount; ++i)
-    if (SFG_currentLevel.monsterRecords[i].health == 0)
-      SFG_currentLevel.monstersDead++;
+  for (uint16_t i = 0; i < LHR_currentLevel.monsterRecordCount; ++i)
+    if (LHR_currentLevel.monsterRecords[i].health == 0)
+      LHR_currentLevel.monstersDead++;
 
-  uint32_t totalTime = SFG_SAVE_TOTAL_TIME;
+  uint32_t totalTime = LHR_SAVE_TOTAL_TIME;
 
-  if ((SFG_currentLevel.levelNumber == 0) || (totalTime != 0))
+  if ((LHR_currentLevel.levelNumber == 0) || (totalTime != 0))
   {
-    SFG_LOG("Updating save totals.");
+    LHR_LOG("Updating save totals.");
   
-    totalTime += SFG_currentLevel.completionTime10sOfS;
+    totalTime += LHR_currentLevel.completionTime10sOfS;
 
     for (uint8_t i = 0; i < 4; ++i)
     {
-      SFG_game.save[6 + i] = totalTime % 256;
+      LHR_game.save[6 + i] = totalTime % 256;
       totalTime /= 256;
     }
 
-    SFG_game.save[10] += SFG_currentLevel.monstersDead % 256;
-    SFG_game.save[11] += SFG_currentLevel.monstersDead / 256;
+    LHR_game.save[10] += LHR_currentLevel.monstersDead % 256;
+    LHR_game.save[11] += LHR_currentLevel.monstersDead / 256;
   }
 
-  SFG_game.save[2] = SFG_player.health;
-  SFG_game.save[3] = SFG_player.ammo[0];
-  SFG_game.save[4] = SFG_player.ammo[1];
-  SFG_game.save[5] = SFG_player.ammo[2];
+  LHR_game.save[2] = LHR_player.health;
+  LHR_game.save[3] = LHR_player.ammo[0];
+  LHR_game.save[4] = LHR_player.ammo[1];
+  LHR_game.save[5] = LHR_player.ammo[2];
 }
 
-static inline uint8_t SFG_RCLUnitToZBuffer(RCL_Unit x)
+static inline uint8_t LHR_RCLUnitToZBuffer(RCL_Unit x)
 {
   x /= (RCL_UNITS_PER_SQUARE / 8);
 
@@ -730,204 +730,204 @@ static inline uint8_t SFG_RCLUnitToZBuffer(RCL_Unit x)
   return okay * (x + 1) - 1;
 }
 
-const uint8_t *SFG_getMonsterSprite(
+const uint8_t *LHR_getMonsterSprite(
   uint8_t monsterType, uint8_t state, uint8_t frame)
 {
   uint8_t index = 
-    state == SFG_MONSTER_STATE_DEAD ? 18 : 17;
+    state == LHR_MONSTER_STATE_DEAD ? 18 : 17;
   // ^ makes the compiled binary smaller compared to returning pointers directly
 
-  if ((state != SFG_MONSTER_STATE_DYING) && (state != SFG_MONSTER_STATE_DEAD))
+  if ((state != LHR_MONSTER_STATE_DYING) && (state != LHR_MONSTER_STATE_DEAD))
     switch (monsterType)
     {
-      case SFG_LEVEL_ELEMENT_MONSTER_SPIDER:
+      case LHR_LEVEL_ELEMENT_MONSTER_SPIDER:
         switch (state)
         {
-          case SFG_MONSTER_STATE_ATTACKING: index = 1; break;
-          case SFG_MONSTER_STATE_IDLE: index = 0; break;
+          case LHR_MONSTER_STATE_ATTACKING: index = 1; break;
+          case LHR_MONSTER_STATE_IDLE: index = 0; break;
           default: index = frame ? 0 : 2; break;
         }
         break;
 
-      case SFG_LEVEL_ELEMENT_MONSTER_WARRIOR:
-        index = state != SFG_MONSTER_STATE_ATTACKING ? 6 : 7;
+      case LHR_LEVEL_ELEMENT_MONSTER_WARRIOR:
+        index = state != LHR_MONSTER_STATE_ATTACKING ? 6 : 7;
         break;
 
-      case SFG_LEVEL_ELEMENT_MONSTER_DESTROYER:
+      case LHR_LEVEL_ELEMENT_MONSTER_DESTROYER:
         switch (state)
         {
-          case SFG_MONSTER_STATE_ATTACKING: index = 4; break;
-          case SFG_MONSTER_STATE_IDLE: index = 3; break;
+          case LHR_MONSTER_STATE_ATTACKING: index = 4; break;
+          case LHR_MONSTER_STATE_IDLE: index = 3; break;
           default: index = frame ? 3 : 5; break;
         }
         break;
 
-      case SFG_LEVEL_ELEMENT_MONSTER_PLASMABOT:
-        index = state != SFG_MONSTER_STATE_ATTACKING ? 8 : 9;
+      case LHR_LEVEL_ELEMENT_MONSTER_PLASMABOT:
+        index = state != LHR_MONSTER_STATE_ATTACKING ? 8 : 9;
         break;
 
-      case SFG_LEVEL_ELEMENT_MONSTER_ENDER:
+      case LHR_LEVEL_ELEMENT_MONSTER_ENDER:
         switch (state)
         {
-          case SFG_MONSTER_STATE_ATTACKING: index = 12; break;
-          case SFG_MONSTER_STATE_IDLE: index = 10; break;
+          case LHR_MONSTER_STATE_ATTACKING: index = 12; break;
+          case LHR_MONSTER_STATE_IDLE: index = 10; break;
           default: index = frame ? 10 : 11; break;
         }
         break;
 
-      case SFG_LEVEL_ELEMENT_MONSTER_TURRET:
+      case LHR_LEVEL_ELEMENT_MONSTER_TURRET:
         switch (state)
         {
-          case SFG_MONSTER_STATE_ATTACKING: index = 15; break;
-          case SFG_MONSTER_STATE_IDLE: index = 13; break;
+          case LHR_MONSTER_STATE_ATTACKING: index = 15; break;
+          case LHR_MONSTER_STATE_IDLE: index = 13; break;
           default: index = frame ? 13 : 14; break;
         }
         break;
 
-      case SFG_LEVEL_ELEMENT_MONSTER_EXPLODER:
+      case LHR_LEVEL_ELEMENT_MONSTER_EXPLODER:
       default:
         index = 16; 
         break;
     }
   
-  return SFG_monsterSprites + index * SFG_TEXTURE_STORE_SIZE;
+  return LHR_monsterSprites + index * LHR_TEXTURE_STORE_SIZE;
 }
 
 /**
   Says whether given key is currently pressed (down). This should be preferred
-  to SFG_keyPressed().
+  to LHR_keyPressed().
 */
-uint8_t SFG_keyIsDown(uint8_t key)
+uint8_t LHR_keyIsDown(uint8_t key)
 {
-  return SFG_game.keyStates[key] != 0;
+  return LHR_game.keyStates[key] != 0;
 }
 
 /**
   Says whether given key has been pressed in the current frame.
 */
-uint8_t SFG_keyJustPressed(uint8_t key)
+uint8_t LHR_keyJustPressed(uint8_t key)
 {
-  return (SFG_game.keyStates[key]) == 1;
+  return (LHR_game.keyStates[key]) == 1;
 }
 
 /**
   Says whether a key is being repeated after being held for certain time.
 */
-uint8_t SFG_keyRepeated(uint8_t key)
+uint8_t LHR_keyRepeated(uint8_t key)
 {
   return
-    ((SFG_game.keyStates[key] >= SFG_KEY_REPEAT_DELAY_FRAMES) ||
-    (SFG_game.keyStates[key] == 255)) &&
-    (SFG_game.frame % SFG_KEY_REPEAT_PERIOD_FRAMES == 0);
+    ((LHR_game.keyStates[key] >= LHR_KEY_REPEAT_DELAY_FRAMES) ||
+    (LHR_game.keyStates[key] == 255)) &&
+    (LHR_game.frame % LHR_KEY_REPEAT_PERIOD_FRAMES == 0);
 }
 
-uint16_t SFG_keyRegisters(uint8_t key)
+uint16_t LHR_keyRegisters(uint8_t key)
 {
-  return SFG_keyJustPressed(key) || SFG_keyRepeated(key);
+  return LHR_keyJustPressed(key) || LHR_keyRepeated(key);
 }
 
-#if SFG_RESOLUTION_SCALEDOWN == 1
-  #define SFG_setGamePixel SFG_setPixel
+#if LHR_RESOLUTION_SCALEDOWN == 1
+  #define LHR_setGamePixel LHR_setPixel
 #else
 
 /**
   Sets the game pixel (a pixel that can potentially be bigger than the screen
   pixel).
 */
-static inline void SFG_setGamePixel(uint16_t x, uint16_t y, uint8_t colorIndex)
+static inline void LHR_setGamePixel(uint16_t x, uint16_t y, uint8_t colorIndex)
 {
-  uint16_t screenY = y * SFG_RESOLUTION_SCALEDOWN;
-  uint16_t screenX = x * SFG_RESOLUTION_SCALEDOWN;
+  uint16_t screenY = y * LHR_RESOLUTION_SCALEDOWN;
+  uint16_t screenX = x * LHR_RESOLUTION_SCALEDOWN;
 
-  for (uint16_t j = screenY; j < screenY + SFG_RESOLUTION_SCALEDOWN; ++j)
-    for (uint16_t i = screenX; i < screenX + SFG_RESOLUTION_SCALEDOWN; ++i)
-      SFG_setPixel(i,j,colorIndex);
+  for (uint16_t j = screenY; j < screenY + LHR_RESOLUTION_SCALEDOWN; ++j)
+    for (uint16_t i = screenX; i < screenX + LHR_RESOLUTION_SCALEDOWN; ++i)
+      LHR_setPixel(i,j,colorIndex);
 }
 #endif
 
-void SFG_recomputePLayerDirection(void)
+void LHR_recomputePLayerDirection(void)
 {
-  SFG_player.camera.direction =
-    RCL_wrap(SFG_player.camera.direction,RCL_UNITS_PER_SQUARE);
+  LHR_player.camera.direction =
+    RCL_wrap(LHR_player.camera.direction,RCL_UNITS_PER_SQUARE);
 
-  SFG_player.direction = RCL_angleToDirection(SFG_player.camera.direction);
+  LHR_player.direction = RCL_angleToDirection(LHR_player.camera.direction);
 
-  SFG_player.direction.x =
-    (SFG_player.direction.x * SFG_PLAYER_MOVE_UNITS_PER_FRAME)
+  LHR_player.direction.x =
+    (LHR_player.direction.x * LHR_PLAYER_MOVE_UNITS_PER_FRAME)
     / RCL_UNITS_PER_SQUARE;
 
-  SFG_player.direction.y =
-    (SFG_player.direction.y * SFG_PLAYER_MOVE_UNITS_PER_FRAME)
+  LHR_player.direction.y =
+    (LHR_player.direction.y * LHR_PLAYER_MOVE_UNITS_PER_FRAME)
     / RCL_UNITS_PER_SQUARE;
 
-  SFG_game.backgroundScroll =
-    ((SFG_player.camera.direction * 8) * SFG_GAME_RESOLUTION_Y)
+  LHR_game.backgroundScroll =
+    ((LHR_player.camera.direction * 8) * LHR_GAME_RESOLUTION_Y)
     / RCL_UNITS_PER_SQUARE; 
 }
 
-#if SFG_BACKGROUND_BLUR != 0
-uint8_t SFG_backgroundBlurIndex = 0;
+#if LHR_BACKGROUND_BLUR != 0
+uint8_t LHR_backgroundBlurIndex = 0;
 
-static const int8_t SFG_backgroundBlurOffsets[8] =
+static const int8_t LHR_backgroundBlurOffsets[8] =
   {
-    0  * SFG_BACKGROUND_BLUR,
-    16 * SFG_BACKGROUND_BLUR,
-    7  * SFG_BACKGROUND_BLUR,
-    17 * SFG_BACKGROUND_BLUR,
-    1  * SFG_BACKGROUND_BLUR,
-    4  * SFG_BACKGROUND_BLUR,
-    15 * SFG_BACKGROUND_BLUR,
-    9  * SFG_BACKGROUND_BLUR,
+    0  * LHR_BACKGROUND_BLUR,
+    16 * LHR_BACKGROUND_BLUR,
+    7  * LHR_BACKGROUND_BLUR,
+    17 * LHR_BACKGROUND_BLUR,
+    1  * LHR_BACKGROUND_BLUR,
+    4  * LHR_BACKGROUND_BLUR,
+    15 * LHR_BACKGROUND_BLUR,
+    9  * LHR_BACKGROUND_BLUR,
   };
 #endif
 
-static inline uint8_t SFG_fogValueDiminish(RCL_Unit depth)
+static inline uint8_t LHR_fogValueDiminish(RCL_Unit depth)
 {
-  return depth / SFG_FOG_DIMINISH_STEP;
+  return depth / LHR_FOG_DIMINISH_STEP;
 }
 
 static inline uint8_t
-  SFG_getTexelFull(uint8_t textureIndex,RCL_Unit u, RCL_Unit v)
+  LHR_getTexelFull(uint8_t textureIndex,RCL_Unit u, RCL_Unit v)
 {
   return
-    SFG_getTexel(
+    LHR_getTexel(
       textureIndex != 255 ?
-        SFG_currentLevel.textures[textureIndex] :
-          (SFG_wallTextures + SFG_currentLevel.levelPointer->doorTextureIndex
-          * SFG_TEXTURE_STORE_SIZE), 
-          u / (RCL_UNITS_PER_SQUARE / SFG_TEXTURE_SIZE), 
-          v / (RCL_UNITS_PER_SQUARE / SFG_TEXTURE_SIZE));
+        LHR_currentLevel.textures[textureIndex] :
+          (LHR_wallTextures + LHR_currentLevel.levelPointer->doorTextureIndex
+          * LHR_TEXTURE_STORE_SIZE), 
+          u / (RCL_UNITS_PER_SQUARE / LHR_TEXTURE_SIZE), 
+          v / (RCL_UNITS_PER_SQUARE / LHR_TEXTURE_SIZE));
 }
 
-static inline uint8_t SFG_getTexelAverage(uint8_t textureIndex)
+static inline uint8_t LHR_getTexelAverage(uint8_t textureIndex)
 {
   return
     textureIndex != 255 ?
-      SFG_game.textureAverageColors[
-        SFG_currentLevel.levelPointer->textureIndices[textureIndex]]
+      LHR_game.textureAverageColors[
+        LHR_currentLevel.levelPointer->textureIndices[textureIndex]]
       :
       (
-        SFG_game.textureAverageColors[
-          SFG_currentLevel.levelPointer->doorTextureIndex]
+        LHR_game.textureAverageColors[
+          LHR_currentLevel.levelPointer->doorTextureIndex]
         + 1 // to distinguish from normal walls
       );
 }
 
-void SFG_pixelFunc(RCL_PixelInfo *pixel)
+void LHR_pixelFunc(RCL_PixelInfo *pixel)
 { 
   uint8_t color;
   uint8_t shadow = 0;
 
   if (pixel->isHorizon && pixel->depth > RCL_UNITS_PER_SQUARE * 16)
   {
-    color = SFG_TRANSPARENT_COLOR;
+    color = LHR_TRANSPARENT_COLOR;
   }
   else if (pixel->isWall)
   {
     uint8_t textureIndex =
       pixel->isFloor ?
       (
-        ((pixel->hit.type & SFG_TILE_PROPERTY_MASK) != SFG_TILE_PROPERTY_DOOR) ?
+        ((pixel->hit.type & LHR_TILE_PROPERTY_MASK) != LHR_TILE_PROPERTY_DOOR) ?
         (pixel->hit.type & 0x7)
         :
         (
@@ -937,29 +937,29 @@ void SFG_pixelFunc(RCL_PixelInfo *pixel)
       ):
       ((pixel->hit.type & 0x38) >> 3); 
 
-#if SFG_TEXTURE_DISTANCE != 0
+#if LHR_TEXTURE_DISTANCE != 0
     RCL_Unit textureV = pixel->texCoords.y;
 
-    if ((pixel->hit.type & SFG_TILE_PROPERTY_MASK) ==
-      SFG_TILE_PROPERTY_SQUEEZER)
+    if ((pixel->hit.type & LHR_TILE_PROPERTY_MASK) ==
+      LHR_TILE_PROPERTY_SQUEEZER)
       textureV += pixel->wallHeight;
 #endif
 
     color =
-      textureIndex != SFG_TILE_TEXTURE_TRANSPARENT ?
+      textureIndex != LHR_TILE_TEXTURE_TRANSPARENT ?
       (
-#if SFG_TEXTURE_DISTANCE >= 65535
-      SFG_getTexelFull(textureIndex,pixel->texCoords.x,textureV)
-#elif SFG_TEXTURE_DISTANCE == 0 
-      SFG_getTexelAverage(textureIndex)
+#if LHR_TEXTURE_DISTANCE >= 65535
+      LHR_getTexelFull(textureIndex,pixel->texCoords.x,textureV)
+#elif LHR_TEXTURE_DISTANCE == 0 
+      LHR_getTexelAverage(textureIndex)
 #else
-      pixel->depth <= SFG_TEXTURE_DISTANCE ?
-        SFG_getTexelFull(textureIndex,pixel->texCoords.x,textureV) :
-        SFG_getTexelAverage(textureIndex)
+      pixel->depth <= LHR_TEXTURE_DISTANCE ?
+        LHR_getTexelFull(textureIndex,pixel->texCoords.x,textureV) :
+        LHR_getTexelAverage(textureIndex)
 #endif
       )
       :
-      SFG_TRANSPARENT_COLOR;
+      LHR_TRANSPARENT_COLOR;
 
     shadow = pixel->hit.direction >> 1;
   }
@@ -967,27 +967,27 @@ void SFG_pixelFunc(RCL_PixelInfo *pixel)
   {
     color = pixel->isFloor ?
       (
-#if SFG_DIFFERENT_FLOOR_CEILING_COLORS
-        2 + (pixel->height / SFG_WALL_HEIGHT_STEP) % 4
+#if LHR_DIFFERENT_FLOOR_CEILING_COLORS
+        2 + (pixel->height / LHR_WALL_HEIGHT_STEP) % 4
 #else
-        SFG_currentLevel.floorColor
+        LHR_currentLevel.floorColor
 #endif
       ) : 
-      (pixel->height < SFG_CEILING_MAX_HEIGHT ?
+      (pixel->height < LHR_CEILING_MAX_HEIGHT ?
         (
-#if SFG_DIFFERENT_FLOOR_CEILING_COLORS
-          18 + (pixel->height / SFG_WALL_HEIGHT_STEP) % 4
+#if LHR_DIFFERENT_FLOOR_CEILING_COLORS
+          18 + (pixel->height / LHR_WALL_HEIGHT_STEP) % 4
 #else
-          SFG_currentLevel.ceilingColor 
+          LHR_currentLevel.ceilingColor 
 #endif
         )
-        : SFG_TRANSPARENT_COLOR);
+        : LHR_TRANSPARENT_COLOR);
   }
 
-  if (color != SFG_TRANSPARENT_COLOR)
+  if (color != LHR_TRANSPARENT_COLOR)
   {
-#if SFG_DITHERED_SHADOW
-    uint8_t fogShadow = (pixel->depth * 8) / SFG_FOG_DIMINISH_STEP;
+#if LHR_DITHERED_SHADOW
+    uint8_t fogShadow = (pixel->depth * 8) / LHR_FOG_DIMINISH_STEP;
 
     uint8_t fogShadowPart = fogShadow & 0x07;
 
@@ -997,55 +997,55 @@ void SFG_pixelFunc(RCL_PixelInfo *pixel)
     uint8_t yMod2 = pixel->position.y & 0x01;
 
     shadow +=
-      fogShadow + SFG_ditheringPatterns[fogShadowPart * 8 + yMod2 * 4 + xMod4];
+      fogShadow + LHR_ditheringPatterns[fogShadowPart * 8 + yMod2 * 4 + xMod4];
 #else
-    shadow += SFG_fogValueDiminish(pixel->depth);
+    shadow += LHR_fogValueDiminish(pixel->depth);
 #endif
 
-#if SFG_ENABLE_FOG
+#if LHR_ENABLE_FOG
     color = palette_minusValue(color,shadow);
 #endif
   }
   else
   {
-#if SFG_DRAW_LEVEL_BACKGROUND
-    color = SFG_getTexel(SFG_backgroundImages + 
-        SFG_currentLevel.backgroundImage * SFG_TEXTURE_STORE_SIZE,
-      SFG_game.backgroundScaleMap[((pixel->position.x 
-  #if SFG_BACKGROUND_BLUR != 0
-        + SFG_backgroundBlurOffsets[SFG_backgroundBlurIndex]
+#if LHR_DRAW_LEVEL_BACKGROUND
+    color = LHR_getTexel(LHR_backgroundImages + 
+        LHR_currentLevel.backgroundImage * LHR_TEXTURE_STORE_SIZE,
+      LHR_game.backgroundScaleMap[((pixel->position.x 
+  #if LHR_BACKGROUND_BLUR != 0
+        + LHR_backgroundBlurOffsets[LHR_backgroundBlurIndex]
   #endif
-        ) * SFG_RAYCASTING_SUBSAMPLE + SFG_game.backgroundScroll) % SFG_GAME_RESOLUTION_Y], 
-      (SFG_game.backgroundScaleMap[(pixel->position.y          // ^ TODO: get rid of mod?
-  #if SFG_BACKGROUND_BLUR != 0
-        + SFG_backgroundBlurOffsets[(SFG_backgroundBlurIndex + 1) % 8]
+        ) * LHR_RAYCASTING_SUBSAMPLE + LHR_game.backgroundScroll) % LHR_GAME_RESOLUTION_Y], 
+      (LHR_game.backgroundScaleMap[(pixel->position.y          // ^ TODO: get rid of mod?
+  #if LHR_BACKGROUND_BLUR != 0
+        + LHR_backgroundBlurOffsets[(LHR_backgroundBlurIndex + 1) % 8]
   #endif
-        ) % SFG_GAME_RESOLUTION_Y])                                               
+        ) % LHR_GAME_RESOLUTION_Y])                                               
       );
 
-  #if SFG_BACKGROUND_BLUR != 0
-      SFG_backgroundBlurIndex = (SFG_backgroundBlurIndex + 1) % 8;
+  #if LHR_BACKGROUND_BLUR != 0
+      LHR_backgroundBlurIndex = (LHR_backgroundBlurIndex + 1) % 8;
   #endif
 #else
     color = 1;
 #endif
   }
 
-#if SFG_BRIGHTNESS > 0
-  color = palette_plusValue(color,SFG_BRIGHTNESS);
-#elif SFG_BRIGHTNESS < 0
-  color = palette_minusValue(color,-1 * SFG_BRIGHTNESS);
+#if LHR_BRIGHTNESS > 0
+  color = palette_plusValue(color,LHR_BRIGHTNESS);
+#elif LHR_BRIGHTNESS < 0
+  color = palette_minusValue(color,-1 * LHR_BRIGHTNESS);
 #endif
 
-#if SFG_RAYCASTING_SUBSAMPLE == 1
+#if LHR_RAYCASTING_SUBSAMPLE == 1
   // the other version will probably get optimized to this, but just in case
-  SFG_setGamePixel(pixel->position.x,pixel->position.y,color);
+  LHR_setGamePixel(pixel->position.x,pixel->position.y,color);
 #else
-  RCL_Unit screenX = pixel->position.x * SFG_RAYCASTING_SUBSAMPLE;
+  RCL_Unit screenX = pixel->position.x * LHR_RAYCASTING_SUBSAMPLE;
 
-  for (int_fast8_t i = 0; i < SFG_RAYCASTING_SUBSAMPLE; ++i)
+  for (int_fast8_t i = 0; i < LHR_RAYCASTING_SUBSAMPLE; ++i)
   {
-    SFG_setGamePixel(screenX,pixel->position.y,color);
+    LHR_setGamePixel(screenX,pixel->position.y,color);
     screenX++;
   }
 #endif
@@ -1055,7 +1055,7 @@ void SFG_pixelFunc(RCL_PixelInfo *pixel)
   Draws image on screen, with transparency. This is faster than sprite drawing.
   For performance sake drawing near screen edges is not pixel perfect.
 */
-void SFG_blitImage(
+void LHR_blitImage(
   const uint8_t *image,
   int16_t posX,
   int16_t posY,
@@ -1077,17 +1077,17 @@ void SFG_blitImage(
     u0 = (-1 * posX) / scale;
   }
 
-  posX += scale * SFG_TEXTURE_SIZE;
+  posX += scale * LHR_TEXTURE_SIZE;
 
-  uint16_t limitX = SFG_GAME_RESOLUTION_X - scale;
-  uint16_t limitY = SFG_GAME_RESOLUTION_Y - scale;
+  uint16_t limitX = LHR_GAME_RESOLUTION_X - scale;
+  uint16_t limitY = LHR_GAME_RESOLUTION_Y - scale;
 
   x1 = posX >= 0 ?
        (posX <= limitX ? posX : limitX)
        : 0;
 
-  if (x1 >= SFG_GAME_RESOLUTION_X)
-    x1 = SFG_GAME_RESOLUTION_X - 1;
+  if (x1 >= LHR_GAME_RESOLUTION_X)
+    x1 = LHR_GAME_RESOLUTION_X - 1;
 
   if (posY < 0)
   {
@@ -1095,12 +1095,12 @@ void SFG_blitImage(
     v0 = (-1 * posY) / scale;
   }
 
-  posY += scale * SFG_TEXTURE_SIZE;
+  posY += scale * LHR_TEXTURE_SIZE;
 
   y1 = posY >= 0 ? (posY <= limitY ? posY : limitY) : 0;
 
-  if (y1 >= SFG_GAME_RESOLUTION_Y)
-    y1 = SFG_GAME_RESOLUTION_Y - 1;
+  if (y1 >= LHR_GAME_RESOLUTION_Y)
+    y1 = LHR_GAME_RESOLUTION_Y - 1;
 
   uint8_t v = v0;
 
@@ -1110,9 +1110,9 @@ void SFG_blitImage(
 
     for (uint16_t x = x0; x < x1; x += scale)
     {
-      uint8_t color = SFG_getTexel(image,u,v);
+      uint8_t color = LHR_getTexel(image,u,v);
 
-      if (color != SFG_TRANSPARENT_COLOR)
+      if (color != LHR_TRANSPARENT_COLOR)
       {
         uint16_t sY = y;
 
@@ -1122,7 +1122,7 @@ void SFG_blitImage(
 
           for (uint8_t i = 0; i < scale; ++i)
           {
-            SFG_setGamePixel(sX,sY,color);
+            LHR_setGamePixel(sX,sY,color);
             sX++;
           }
           
@@ -1135,7 +1135,7 @@ void SFG_blitImage(
   }
 }
 
-void SFG_drawScaledSprite(
+void LHR_drawScaledSprite(
   const uint8_t *image,
   int16_t centerX,
   int16_t centerY,
@@ -1146,8 +1146,8 @@ void SFG_drawScaledSprite(
   if (size == 0)
     return;
 
-  if (size > SFG_MAX_SPRITE_SIZE)
-    size = SFG_MAX_SPRITE_SIZE;
+  if (size > LHR_MAX_SPRITE_SIZE)
+    size = LHR_MAX_SPRITE_SIZE;
 
   uint16_t halfSize = size / 2;
 
@@ -1169,8 +1169,8 @@ void SFG_drawScaledSprite(
 
   int16_t x1 = topLeftX + size - 1;
 
-  if (x1 >= SFG_GAME_RESOLUTION_X)
-    x1 = SFG_GAME_RESOLUTION_X - 1;
+  if (x1 >= LHR_GAME_RESOLUTION_X)
+    x1 = LHR_GAME_RESOLUTION_X - 1;
 
   int16_t y0, v0;
 
@@ -1187,8 +1187,8 @@ void SFG_drawScaledSprite(
 
   int16_t y1 = topLeftY + size - 1;
 
-  if (y1 >= SFG_GAME_RESOLUTION_Y)
-    y1 = SFG_GAME_RESOLUTION_Y - 1;
+  if (y1 >= LHR_GAME_RESOLUTION_Y)
+    y1 = LHR_GAME_RESOLUTION_Y - 1;
 
   if ((x0 > x1) || (y0 > y1) || (u0 >= size) || (v0 >= size)) // outside screen?
     return; 
@@ -1207,65 +1207,65 @@ void SFG_drawScaledSprite(
   int16_t precompTo = RCL_max(uMax,vMax);
 
   precompFrom = RCL_max(0,precompFrom);
-  precompTo = RCL_min(SFG_MAX_SPRITE_SIZE - 1,precompTo);
+  precompTo = RCL_min(LHR_MAX_SPRITE_SIZE - 1,precompTo);
 
   #define PRECOMP_SCALE 512
 
-  int16_t precompStepScaled = ((SFG_TEXTURE_SIZE) * PRECOMP_SCALE) / size;
+  int16_t precompStepScaled = ((LHR_TEXTURE_SIZE) * PRECOMP_SCALE) / size;
   int16_t precompPosScaled = precompFrom * precompStepScaled;
 
   for (int16_t i = precompFrom; i <= precompTo; ++i)
   {
-    SFG_game.spriteSamplingPoints[i] = precompPosScaled / PRECOMP_SCALE;
+    LHR_game.spriteSamplingPoints[i] = precompPosScaled / PRECOMP_SCALE;
     precompPosScaled += precompStepScaled;
   }
 
   #undef PRECOMP_SCALE
 
-  uint8_t zDistance = SFG_RCLUnitToZBuffer(distance);
+  uint8_t zDistance = LHR_RCLUnitToZBuffer(distance);
 
   for (int16_t x = x0, u = u0; x <= x1; ++x, ++u)
   {
-    if (SFG_game.zBuffer[x] >= zDistance)
+    if (LHR_game.zBuffer[x] >= zDistance)
     {
       int8_t columnTransparent = 1;
 
       for (int16_t y = y0, v = v0; y <= y1; ++y, ++v)
       {
         uint8_t color =
-          SFG_getTexel(image,SFG_game.spriteSamplingPoints[u],
-            SFG_game.spriteSamplingPoints[v]);
+          LHR_getTexel(image,LHR_game.spriteSamplingPoints[u],
+            LHR_game.spriteSamplingPoints[v]);
 
-        if (color != SFG_TRANSPARENT_COLOR)
+        if (color != LHR_TRANSPARENT_COLOR)
         {
-#if SFG_DIMINISH_SPRITES
+#if LHR_DIMINISH_SPRITES
           color = palette_minusValue(color,minusValue);
 #endif 
           columnTransparent = 0;
 
-          SFG_setGamePixel(x,y,color);
+          LHR_setGamePixel(x,y,color);
         }
       }
 
       if (!columnTransparent)
-        SFG_game.zBuffer[x] = zDistance;
+        LHR_game.zBuffer[x] = zDistance;
     }
   }
 }
 
-RCL_Unit SFG_texturesAt(int16_t x, int16_t y)
+RCL_Unit LHR_texturesAt(int16_t x, int16_t y)
 {
   uint8_t p;
 
-  SFG_TileDefinition tile =
-    SFG_getMapTile(SFG_currentLevel.levelPointer,x,y,&p);
+  LHR_TileDefinition tile =
+    LHR_getMapTile(LHR_currentLevel.levelPointer,x,y,&p);
 
   return
-    SFG_TILE_FLOOR_TEXTURE(tile) | (SFG_TILE_CEILING_TEXTURE(tile) << 3) | p;
+    LHR_TILE_FLOOR_TEXTURE(tile) | (LHR_TILE_CEILING_TEXTURE(tile) << 3) | p;
     // ^ store both textures (floor and ceiling) and properties in one number
 }
 
-RCL_Unit SFG_movingWallHeight
+RCL_Unit LHR_movingWallHeight
 (
   RCL_Unit low,
   RCL_Unit high,
@@ -1276,219 +1276,219 @@ RCL_Unit SFG_movingWallHeight
   RCL_Unit halfHeight = height / 2;
 
   RCL_Unit sinArg =
-    (time * ((SFG_MOVING_WALL_SPEED * RCL_UNITS_PER_SQUARE) / 1000)) / height;
+    (time * ((LHR_MOVING_WALL_SPEED * RCL_UNITS_PER_SQUARE) / 1000)) / height;
 
   return
     low + halfHeight + (RCL_sin(sinArg) * halfHeight) / RCL_UNITS_PER_SQUARE;
 }
 
-RCL_Unit SFG_floorHeightAt(int16_t x, int16_t y)
+RCL_Unit LHR_floorHeightAt(int16_t x, int16_t y)
 {
   uint8_t properties;
 
-  SFG_TileDefinition tile =
-    SFG_getMapTile(SFG_currentLevel.levelPointer,x,y,&properties);
+  LHR_TileDefinition tile =
+    LHR_getMapTile(LHR_currentLevel.levelPointer,x,y,&properties);
 
   RCL_Unit doorHeight = 0;
 
-  if (properties == SFG_TILE_PROPERTY_DOOR)
+  if (properties == LHR_TILE_PROPERTY_DOOR)
   {
-    for (uint8_t i = 0; i < SFG_currentLevel.doorRecordCount; ++i)
+    for (uint8_t i = 0; i < LHR_currentLevel.doorRecordCount; ++i)
     {
-      SFG_DoorRecord *door = &(SFG_currentLevel.doorRecords[i]);
+      LHR_DoorRecord *door = &(LHR_currentLevel.doorRecords[i]);
 
       if ((door->coords[0] == x) && (door->coords[1] == y))
       {
-        doorHeight = door->state & SFG_DOOR_VERTICAL_POSITION_MASK;
+        doorHeight = door->state & LHR_DOOR_VERTICAL_POSITION_MASK;
 
-        doorHeight = doorHeight != (0xff & SFG_DOOR_VERTICAL_POSITION_MASK)    ? 
-          doorHeight * SFG_DOOR_HEIGHT_STEP : RCL_UNITS_PER_SQUARE;
+        doorHeight = doorHeight != (0xff & LHR_DOOR_VERTICAL_POSITION_MASK)    ? 
+          doorHeight * LHR_DOOR_HEIGHT_STEP : RCL_UNITS_PER_SQUARE;
 
         break;
       }
     }
   }
-  else if (properties == SFG_TILE_PROPERTY_ELEVATOR)
+  else if (properties == LHR_TILE_PROPERTY_ELEVATOR)
   {
     RCL_Unit height =
-      SFG_TILE_FLOOR_HEIGHT(tile) * SFG_WALL_HEIGHT_STEP;
+      LHR_TILE_FLOOR_HEIGHT(tile) * LHR_WALL_HEIGHT_STEP;
 
-    return SFG_movingWallHeight(
+    return LHR_movingWallHeight(
       height,
-      height + SFG_TILE_CEILING_HEIGHT(tile) * SFG_WALL_HEIGHT_STEP,
-      SFG_game.frameTime - SFG_currentLevel.timeStart);
+      height + LHR_TILE_CEILING_HEIGHT(tile) * LHR_WALL_HEIGHT_STEP,
+      LHR_game.frameTime - LHR_currentLevel.timeStart);
   }
  
-  return SFG_TILE_FLOOR_HEIGHT(tile) * SFG_WALL_HEIGHT_STEP - doorHeight;
+  return LHR_TILE_FLOOR_HEIGHT(tile) * LHR_WALL_HEIGHT_STEP - doorHeight;
 }
 
 /**
-  Like SFG_floorCollisionHeightAt, but takes into account colliding items on
+  Like LHR_floorCollisionHeightAt, but takes into account colliding items on
   the map, so the squares that have these items are higher. The former function
   is for rendering, this one is for collision checking.
 */
-RCL_Unit SFG_floorCollisionHeightAt(int16_t x, int16_t y)
+RCL_Unit LHR_floorCollisionHeightAt(int16_t x, int16_t y)
 {
-  return SFG_floorHeightAt(x,y) +
-    SFG_getItemCollisionMapBit(x,y) * RCL_UNITS_PER_SQUARE; 
+  return LHR_floorHeightAt(x,y) +
+    LHR_getItemCollisionMapBit(x,y) * RCL_UNITS_PER_SQUARE; 
 }
 
-void SFG_getPlayerWeaponInfo(
+void LHR_getPlayerWeaponInfo(
   uint8_t *ammoType, uint8_t *projectileCount, uint8_t *canShoot)
 {
-  *ammoType = SFG_weaponAmmo(SFG_player.weapon);
+  *ammoType = LHR_weaponAmmo(LHR_player.weapon);
 
-  *projectileCount = SFG_GET_WEAPON_PROJECTILE_COUNT(SFG_player.weapon);
+  *projectileCount = LHR_GET_WEAPON_PROJECTILE_COUNT(LHR_player.weapon);
 
-#if SFG_INFINITE_AMMO
+#if LHR_INFINITE_AMMO
   *canShoot = 1;
 #else
   *canShoot = 
-    ((*ammoType == SFG_AMMO_NONE) || 
-     (SFG_player.ammo[*ammoType] >= *projectileCount) ||
-     (SFG_game.cheatState & 0x80));
+    ((*ammoType == LHR_AMMO_NONE) || 
+     (LHR_player.ammo[*ammoType] >= *projectileCount) ||
+     (LHR_game.cheatState & 0x80));
 #endif
 }
 
-void SFG_playerRotateWeapon(uint8_t next)
+void LHR_playerRotateWeapon(uint8_t next)
 {
-  uint8_t initialWeapon = SFG_player.weapon;
+  uint8_t initialWeapon = LHR_player.weapon;
   int8_t increment = next ? 1 : -1;
 
   while (1)
   {
-    SFG_player.weapon =
-      (SFG_WEAPONS_TOTAL + SFG_player.weapon + increment) % SFG_WEAPONS_TOTAL;
+    LHR_player.weapon =
+      (LHR_WEAPONS_TOTAL + LHR_player.weapon + increment) % LHR_WEAPONS_TOTAL;
 
-    if (SFG_player.weapon == initialWeapon)
+    if (LHR_player.weapon == initialWeapon)
       break;
 
     uint8_t ammo, projectileCount, canShoot;
 
-    SFG_getPlayerWeaponInfo(&ammo,&projectileCount,&canShoot);
+    LHR_getPlayerWeaponInfo(&ammo,&projectileCount,&canShoot);
  
     if (canShoot)
       break;
   }
 }
 
-void SFG_initPlayer(void)
+void LHR_initPlayer(void)
 {
-  RCL_initCamera(&SFG_player.camera);
+  RCL_initCamera(&LHR_player.camera);
 
-  SFG_player.camera.resolution.x =
-    SFG_GAME_RESOLUTION_X / SFG_RAYCASTING_SUBSAMPLE;
+  LHR_player.camera.resolution.x =
+    LHR_GAME_RESOLUTION_X / LHR_RAYCASTING_SUBSAMPLE;
 
-  SFG_player.camera.resolution.y = SFG_GAME_RESOLUTION_Y - SFG_HUD_BAR_HEIGHT;
+  LHR_player.camera.resolution.y = LHR_GAME_RESOLUTION_Y - LHR_HUD_BAR_HEIGHT;
 
-  SFG_player.camera.position.x = RCL_UNITS_PER_SQUARE / 2 +
-    SFG_currentLevel.levelPointer->playerStart[0] *  RCL_UNITS_PER_SQUARE;
+  LHR_player.camera.position.x = RCL_UNITS_PER_SQUARE / 2 +
+    LHR_currentLevel.levelPointer->playerStart[0] *  RCL_UNITS_PER_SQUARE;
 
-  SFG_player.camera.position.y = RCL_UNITS_PER_SQUARE / 2 +
-    SFG_currentLevel.levelPointer->playerStart[1] *  RCL_UNITS_PER_SQUARE;
+  LHR_player.camera.position.y = RCL_UNITS_PER_SQUARE / 2 +
+    LHR_currentLevel.levelPointer->playerStart[1] *  RCL_UNITS_PER_SQUARE;
 
-  SFG_player.squarePosition[0] =
-    SFG_player.camera.position.x / RCL_UNITS_PER_SQUARE;
+  LHR_player.squarePosition[0] =
+    LHR_player.camera.position.x / RCL_UNITS_PER_SQUARE;
 
-  SFG_player.squarePosition[1] =
-    SFG_player.camera.position.y / RCL_UNITS_PER_SQUARE;
+  LHR_player.squarePosition[1] =
+    LHR_player.camera.position.y / RCL_UNITS_PER_SQUARE;
   
-  SFG_player.camera.height = SFG_floorHeightAt( 
-      SFG_currentLevel.levelPointer->playerStart[0],
-      SFG_currentLevel.levelPointer->playerStart[1]) +
+  LHR_player.camera.height = LHR_floorHeightAt( 
+      LHR_currentLevel.levelPointer->playerStart[0],
+      LHR_currentLevel.levelPointer->playerStart[1]) +
       RCL_CAMERA_COLL_HEIGHT_BELOW;
 
-  SFG_player.camera.direction = SFG_currentLevel.levelPointer->playerStart[2] *
+  LHR_player.camera.direction = LHR_currentLevel.levelPointer->playerStart[2] *
     (RCL_UNITS_PER_SQUARE / 256);
 
-  SFG_recomputePLayerDirection(); 
+  LHR_recomputePLayerDirection(); 
 
-  SFG_player.previousVerticalSpeed = 0;
+  LHR_player.previousVerticalSpeed = 0;
 
-  SFG_player.headBobFrame = 0;
+  LHR_player.headBobFrame = 0;
 
-  SFG_player.weapon = SFG_WEAPON_KNIFE;
+  LHR_player.weapon = LHR_WEAPON_KNIFE;
 
-  SFG_player.weaponCooldownFrames = 0;
-  SFG_player.lastHurtFrame = SFG_game.frame;
-  SFG_player.lastItemTakenFrame = SFG_game.frame;
+  LHR_player.weaponCooldownFrames = 0;
+  LHR_player.lastHurtFrame = LHR_game.frame;
+  LHR_player.lastItemTakenFrame = LHR_game.frame;
 
-  SFG_player.health = SFG_PLAYER_START_HEALTH;
+  LHR_player.health = LHR_PLAYER_START_HEALTH;
 
-  SFG_player.previousWeaponDirection = 0;
+  LHR_player.previousWeaponDirection = 0;
 
-  SFG_player.cards = 
-#if SFG_UNLOCK_DOOR
+  LHR_player.cards = 
+#if LHR_UNLOCK_DOOR
   0x07;
 #else
   0;
 #endif
 
-  SFG_player.justTeleported = 0;
+  LHR_player.justTeleported = 0;
 
-  for (uint8_t i = 0; i < SFG_AMMO_TOTAL; ++i)
-    SFG_player.ammo[i] = 0;
+  for (uint8_t i = 0; i < LHR_AMMO_TOTAL; ++i)
+    LHR_player.ammo[i] = 0;
 }
 
-RCL_Unit SFG_ceilingHeightAt(int16_t x, int16_t y)
+RCL_Unit LHR_ceilingHeightAt(int16_t x, int16_t y)
 {
   uint8_t properties;
-  SFG_TileDefinition tile =
-    SFG_getMapTile(SFG_currentLevel.levelPointer,x,y,&properties);
+  LHR_TileDefinition tile =
+    LHR_getMapTile(LHR_currentLevel.levelPointer,x,y,&properties);
 
-  if (properties == SFG_TILE_PROPERTY_ELEVATOR)
-    return SFG_CEILING_MAX_HEIGHT;
+  if (properties == LHR_TILE_PROPERTY_ELEVATOR)
+    return LHR_CEILING_MAX_HEIGHT;
 
-  uint8_t height = SFG_TILE_CEILING_HEIGHT(tile);
+  uint8_t height = LHR_TILE_CEILING_HEIGHT(tile);
 
-  return properties != SFG_TILE_PROPERTY_SQUEEZER ?
+  return properties != LHR_TILE_PROPERTY_SQUEEZER ?
     (
-      height != SFG_TILE_CEILING_MAX_HEIGHT ?
-      ((SFG_TILE_FLOOR_HEIGHT(tile) + height) * SFG_WALL_HEIGHT_STEP) :
-      SFG_CEILING_MAX_HEIGHT
+      height != LHR_TILE_CEILING_MAX_HEIGHT ?
+      ((LHR_TILE_FLOOR_HEIGHT(tile) + height) * LHR_WALL_HEIGHT_STEP) :
+      LHR_CEILING_MAX_HEIGHT
     ) :
-    SFG_movingWallHeight(
-      SFG_TILE_FLOOR_HEIGHT(tile) * SFG_WALL_HEIGHT_STEP,
-      (SFG_TILE_CEILING_HEIGHT(tile) + SFG_TILE_FLOOR_HEIGHT(tile))
-         * SFG_WALL_HEIGHT_STEP,
-      SFG_game.frameTime - SFG_currentLevel.timeStart);
+    LHR_movingWallHeight(
+      LHR_TILE_FLOOR_HEIGHT(tile) * LHR_WALL_HEIGHT_STEP,
+      (LHR_TILE_CEILING_HEIGHT(tile) + LHR_TILE_FLOOR_HEIGHT(tile))
+         * LHR_WALL_HEIGHT_STEP,
+      LHR_game.frameTime - LHR_currentLevel.timeStart);
 }
 
 /**
   Gets sprite (image and sprite size) for given item.
 */
-void SFG_getItemSprite(
+void LHR_getItemSprite(
   uint8_t elementType, const uint8_t **sprite, uint8_t *spriteSize)
 {
   *spriteSize = 0;
-  *sprite = SFG_itemSprites + (elementType - 1) * SFG_TEXTURE_STORE_SIZE;
+  *sprite = LHR_itemSprites + (elementType - 1) * LHR_TEXTURE_STORE_SIZE;
 
   switch (elementType)
   {
-    case SFG_LEVEL_ELEMENT_TREE:
-    case SFG_LEVEL_ELEMENT_RUIN:
-    case SFG_LEVEL_ELEMENT_LAMP:
-    case SFG_LEVEL_ELEMENT_TELEPORTER:
+    case LHR_LEVEL_ELEMENT_TREE:
+    case LHR_LEVEL_ELEMENT_RUIN:
+    case LHR_LEVEL_ELEMENT_LAMP:
+    case LHR_LEVEL_ELEMENT_TELEPORTER:
       *spriteSize = 2;
       break;
 
-    case SFG_LEVEL_ELEMENT_TERMINAL:
+    case LHR_LEVEL_ELEMENT_TERMINAL:
       *spriteSize = 1;
       break;
 
-    case SFG_LEVEL_ELEMENT_FINISH:
-    case SFG_LEVEL_ELEMENT_COLUMN:
+    case LHR_LEVEL_ELEMENT_FINISH:
+    case LHR_LEVEL_ELEMENT_COLUMN:
       *spriteSize = 3;
       break;
 
-    case SFG_LEVEL_ELEMENT_CARD0:
-    case SFG_LEVEL_ELEMENT_CARD1:
-    case SFG_LEVEL_ELEMENT_CARD2:
-      *sprite = SFG_itemSprites + 
-        (SFG_LEVEL_ELEMENT_CARD0 - 1) * SFG_TEXTURE_STORE_SIZE;
+    case LHR_LEVEL_ELEMENT_CARD0:
+    case LHR_LEVEL_ELEMENT_CARD1:
+    case LHR_LEVEL_ELEMENT_CARD2:
+      *sprite = LHR_itemSprites + 
+        (LHR_LEVEL_ELEMENT_CARD0 - 1) * LHR_TEXTURE_STORE_SIZE;
       break;
 
-    case SFG_LEVEL_ELEMENT_BLOCKER:
+    case LHR_LEVEL_ELEMENT_BLOCKER:
       *sprite = 0;
       break;
 
@@ -1500,222 +1500,222 @@ void SFG_getItemSprite(
 /**
   Says whether given item type collides, i.e. stops player from moving.
 */
-uint8_t SFG_itemCollides(uint8_t elementType)
+uint8_t LHR_itemCollides(uint8_t elementType)
 {
   return 
-    elementType == SFG_LEVEL_ELEMENT_BARREL ||
-    elementType == SFG_LEVEL_ELEMENT_TREE ||
-    elementType == SFG_LEVEL_ELEMENT_TERMINAL ||
-    elementType == SFG_LEVEL_ELEMENT_COLUMN ||
-    elementType == SFG_LEVEL_ELEMENT_RUIN ||
-    elementType == SFG_LEVEL_ELEMENT_BLOCKER ||
-    elementType == SFG_LEVEL_ELEMENT_LAMP;
+    elementType == LHR_LEVEL_ELEMENT_BARREL ||
+    elementType == LHR_LEVEL_ELEMENT_TREE ||
+    elementType == LHR_LEVEL_ELEMENT_TERMINAL ||
+    elementType == LHR_LEVEL_ELEMENT_COLUMN ||
+    elementType == LHR_LEVEL_ELEMENT_RUIN ||
+    elementType == LHR_LEVEL_ELEMENT_BLOCKER ||
+    elementType == LHR_LEVEL_ELEMENT_LAMP;
 }
 
-void SFG_setGameState(uint8_t state)
+void LHR_setGameState(uint8_t state)
 {
-  SFG_LOG("changing game state");
-  SFG_game.state = state;
-  SFG_game.stateTime = 0;
+  LHR_LOG("changing game state");
+  LHR_game.state = state;
+  LHR_game.stateTime = 0;
 }
 
-void SFG_setAndInitLevel(uint8_t levelNumber)
+void LHR_setAndInitLevel(uint8_t levelNumber)
 {
-  SFG_LOG("setting and initializing level");
+  LHR_LOG("setting and initializing level");
 
-  const SFG_Level *level;
+  const LHR_Level *level;
 
-#if SFG_AVR
-  memcpy_P(&SFG_ramLevel,SFG_levels[levelNumber],sizeof(SFG_Level));
-  level = &SFG_ramLevel;
+#if LHR_AVR
+  memcpy_P(&LHR_ramLevel,LHR_levels[levelNumber],sizeof(LHR_Level));
+  level = &LHR_ramLevel;
 #else
-  level = SFG_levels[levelNumber];
+  level = LHR_levels[levelNumber];
 #endif
 
-  SFG_game.currentRandom = 0;
+  LHR_game.currentRandom = 0;
 
-  if (SFG_game.saved != SFG_CANT_SAVE)
-    SFG_game.saved = 0;
+  if (LHR_game.saved != LHR_CANT_SAVE)
+    LHR_game.saved = 0;
 
-  SFG_currentLevel.levelNumber = levelNumber;
-  SFG_currentLevel.monstersDead = 0;
-  SFG_currentLevel.backgroundImage = level->backgroundImage;
-  SFG_currentLevel.levelPointer = level;
-  SFG_currentLevel.bossCount = 0;
-  SFG_currentLevel.floorColor = level->floorColor;
-  SFG_currentLevel.ceilingColor = level->ceilingColor;
-  SFG_currentLevel.completionTime10sOfS = 0;
+  LHR_currentLevel.levelNumber = levelNumber;
+  LHR_currentLevel.monstersDead = 0;
+  LHR_currentLevel.backgroundImage = level->backgroundImage;
+  LHR_currentLevel.levelPointer = level;
+  LHR_currentLevel.bossCount = 0;
+  LHR_currentLevel.floorColor = level->floorColor;
+  LHR_currentLevel.ceilingColor = level->ceilingColor;
+  LHR_currentLevel.completionTime10sOfS = 0;
 
   for (uint8_t i = 0; i < 7; ++i)
-    SFG_currentLevel.textures[i] =
-      SFG_wallTextures + level->textureIndices[i] * SFG_TEXTURE_STORE_SIZE;
+    LHR_currentLevel.textures[i] =
+      LHR_wallTextures + level->textureIndices[i] * LHR_TEXTURE_STORE_SIZE;
 
-  SFG_LOG("initializing doors");
+  LHR_LOG("initializing doors");
 
-  SFG_currentLevel.checkedDoorIndex = 0;
-  SFG_currentLevel.doorRecordCount = 0;
-  SFG_currentLevel.projectileRecordCount = 0;
-  SFG_currentLevel.teleporterCount = 0;
-  SFG_currentLevel.mapRevealMask = 
-#if SFG_REVEAL_MAP
+  LHR_currentLevel.checkedDoorIndex = 0;
+  LHR_currentLevel.doorRecordCount = 0;
+  LHR_currentLevel.projectileRecordCount = 0;
+  LHR_currentLevel.teleporterCount = 0;
+  LHR_currentLevel.mapRevealMask = 
+#if LHR_REVEAL_MAP
     0xffff;
 #else
     0;
 #endif
 
-  for (uint8_t j = 0; j < SFG_MAP_SIZE; ++j)
+  for (uint8_t j = 0; j < LHR_MAP_SIZE; ++j)
   {
-    for (uint8_t i = 0; i < SFG_MAP_SIZE; ++i)
+    for (uint8_t i = 0; i < LHR_MAP_SIZE; ++i)
     {
       uint8_t properties;
      
-      SFG_getMapTile(level,i,j,&properties);
+      LHR_getMapTile(level,i,j,&properties);
 
-      if ((properties & SFG_TILE_PROPERTY_MASK) == SFG_TILE_PROPERTY_DOOR)
+      if ((properties & LHR_TILE_PROPERTY_MASK) == LHR_TILE_PROPERTY_DOOR)
       {
-        SFG_DoorRecord *d =
-          &(SFG_currentLevel.doorRecords[SFG_currentLevel.doorRecordCount]);
+        LHR_DoorRecord *d =
+          &(LHR_currentLevel.doorRecords[LHR_currentLevel.doorRecordCount]);
 
         d->coords[0] = i;
         d->coords[1] = j;
         d->state = 0x00;
 
-        SFG_currentLevel.doorRecordCount++;
+        LHR_currentLevel.doorRecordCount++;
       }
 
-      if (SFG_currentLevel.doorRecordCount >= SFG_MAX_DOORS)
+      if (LHR_currentLevel.doorRecordCount >= LHR_MAX_DOORS)
       {
-        SFG_LOG("warning: too many doors!");
+        LHR_LOG("warning: too many doors!");
         break;
       }
     }
 
-    if (SFG_currentLevel.doorRecordCount >= SFG_MAX_DOORS)
+    if (LHR_currentLevel.doorRecordCount >= LHR_MAX_DOORS)
       break;
   }
 
-  SFG_LOG("initializing level elements");
+  LHR_LOG("initializing level elements");
 
-  SFG_currentLevel.itemRecordCount = 0;
-  SFG_currentLevel.checkedItemIndex = 0;
+  LHR_currentLevel.itemRecordCount = 0;
+  LHR_currentLevel.checkedItemIndex = 0;
 
-  SFG_currentLevel.monsterRecordCount = 0;
-  SFG_currentLevel.checkedMonsterIndex = 0;
+  LHR_currentLevel.monsterRecordCount = 0;
+  LHR_currentLevel.checkedMonsterIndex = 0;
 
-  SFG_MonsterRecord *monster;
+  LHR_MonsterRecord *monster;
 
-  for (uint16_t i = 0; i < ((SFG_MAP_SIZE * SFG_MAP_SIZE) / 8); ++i)
-    SFG_currentLevel.itemCollisionMap[i] = 0;
+  for (uint16_t i = 0; i < ((LHR_MAP_SIZE * LHR_MAP_SIZE) / 8); ++i)
+    LHR_currentLevel.itemCollisionMap[i] = 0;
 
-  for (uint8_t i = 0; i < SFG_MAX_LEVEL_ELEMENTS; ++i)
+  for (uint8_t i = 0; i < LHR_MAX_LEVEL_ELEMENTS; ++i)
   {
-    const SFG_LevelElement *e = &(SFG_currentLevel.levelPointer->elements[i]);
+    const LHR_LevelElement *e = &(LHR_currentLevel.levelPointer->elements[i]);
 
-    if (e->type != SFG_LEVEL_ELEMENT_NONE)
+    if (e->type != LHR_LEVEL_ELEMENT_NONE)
     {
-      if (SFG_LEVEL_ELEMENT_TYPE_IS_MOSTER(e->type))
+      if (LHR_LEVEL_ELEMENT_TYPE_IS_MOSTER(e->type))
       {
         monster =
-        &(SFG_currentLevel.monsterRecords[SFG_currentLevel.monsterRecordCount]);
+        &(LHR_currentLevel.monsterRecords[LHR_currentLevel.monsterRecordCount]);
 
-        monster->stateType = (SFG_MONSTER_TYPE_TO_INDEX(e->type) << 4)
-          | SFG_MONSTER_STATE_INACTIVE;
+        monster->stateType = (LHR_MONSTER_TYPE_TO_INDEX(e->type) << 4)
+          | LHR_MONSTER_STATE_INACTIVE;
  
         monster->health =
-          SFG_GET_MONSTER_MAX_HEALTH(SFG_MONSTER_TYPE_TO_INDEX(e->type));
+          LHR_GET_MONSTER_MAX_HEALTH(LHR_MONSTER_TYPE_TO_INDEX(e->type));
 
         monster->coords[0] = e->coords[0] * 4 + 2;
         monster->coords[1] = e->coords[1] * 4 + 2;
 
-        SFG_currentLevel.monsterRecordCount++;
+        LHR_currentLevel.monsterRecordCount++;
 
-        if (e->type == SFG_LEVEL_ELEMENT_MONSTER_ENDER)
-          SFG_currentLevel.bossCount++;
+        if (e->type == LHR_LEVEL_ELEMENT_MONSTER_ENDER)
+          LHR_currentLevel.bossCount++;
       }
-      else if ((e->type < SFG_LEVEL_ELEMENT_LOCK0) ||
-        (e->type > SFG_LEVEL_ELEMENT_LOCK2))
+      else if ((e->type < LHR_LEVEL_ELEMENT_LOCK0) ||
+        (e->type > LHR_LEVEL_ELEMENT_LOCK2))
       {
-        SFG_currentLevel.itemRecords[SFG_currentLevel.itemRecordCount] = i;
-        SFG_currentLevel.itemRecordCount++;
+        LHR_currentLevel.itemRecords[LHR_currentLevel.itemRecordCount] = i;
+        LHR_currentLevel.itemRecordCount++;
 
-        if (e->type == SFG_LEVEL_ELEMENT_TELEPORTER)
-          SFG_currentLevel.teleporterCount++;
+        if (e->type == LHR_LEVEL_ELEMENT_TELEPORTER)
+          LHR_currentLevel.teleporterCount++;
 
-        if (SFG_itemCollides(e->type))
-          SFG_setItemCollisionMapBit(e->coords[0],e->coords[1],1);
+        if (LHR_itemCollides(e->type))
+          LHR_setItemCollisionMapBit(e->coords[0],e->coords[1],1);
       }
       else
       {
         uint8_t properties;
      
-        SFG_getMapTile(level,e->coords[0],e->coords[1],&properties);
+        LHR_getMapTile(level,e->coords[0],e->coords[1],&properties);
 
-        if ((properties & SFG_TILE_PROPERTY_MASK) == SFG_TILE_PROPERTY_DOOR)
+        if ((properties & LHR_TILE_PROPERTY_MASK) == LHR_TILE_PROPERTY_DOOR)
         {
           // find the door record and lock the door:
-          for (uint16_t j = 0; j < SFG_currentLevel.doorRecordCount; ++j)
+          for (uint16_t j = 0; j < LHR_currentLevel.doorRecordCount; ++j)
           {
-            SFG_DoorRecord *d = &(SFG_currentLevel.doorRecords[j]);
+            LHR_DoorRecord *d = &(LHR_currentLevel.doorRecords[j]);
 
             if (d->coords[0] == e->coords[0] && d->coords[1] == e->coords[1])
             {
-              d->state |= (e->type - SFG_LEVEL_ELEMENT_LOCK0 + 1) << 6;
+              d->state |= (e->type - LHR_LEVEL_ELEMENT_LOCK0 + 1) << 6;
               break;
             }
           }
         }
         else
         {
-          SFG_LOG("warning: lock not put on door tile!");
+          LHR_LOG("warning: lock not put on door tile!");
         }
       }
     }
   } 
 
-  SFG_currentLevel.timeStart = SFG_game.frameTime; 
-  SFG_currentLevel.frameStart = SFG_game.frame;
+  LHR_currentLevel.timeStart = LHR_game.frameTime; 
+  LHR_currentLevel.frameStart = LHR_game.frame;
 
-  SFG_game.spriteAnimationFrame = 0;
+  LHR_game.spriteAnimationFrame = 0;
 
-  SFG_initPlayer();
-  SFG_setGameState(SFG_GAME_STATE_LEVEL_START);
-  SFG_setMusic(SFG_MUSIC_NEXT);
-  SFG_processEvent(SFG_EVENT_LEVEL_STARTS,levelNumber);
+  LHR_initPlayer();
+  LHR_setGameState(LHR_GAME_STATE_LEVEL_START);
+  LHR_setMusic(LHR_MUSIC_NEXT);
+  LHR_processEvent(LHR_EVENT_LEVEL_STARTS,levelNumber);
 }
 
-void SFG_createDefaultSaveData(uint8_t *memory)
+void LHR_createDefaultSaveData(uint8_t *memory)
 {
-  for (uint16_t i = 0; i < SFG_SAVE_SIZE; ++i)
+  for (uint16_t i = 0; i < LHR_SAVE_SIZE; ++i)
     memory[i] = 0;
     
-  memory[1] = SFG_DEFAULT_SETTINGS;
+  memory[1] = LHR_DEFAULT_SETTINGS;
 }
 
-void SFG_init(void)
+void LHR_init(void)
 {
-  SFG_LOG("initializing game")
+  LHR_LOG("initializing game")
 
-  SFG_game.frame = 0;
-  SFG_game.frameTime = 0;
-  SFG_game.currentRandom = 0;
-  SFG_game.cheatState = 0;
-  SFG_game.continues = 1;
+  LHR_game.frame = 0;
+  LHR_game.frameTime = 0;
+  LHR_game.currentRandom = 0;
+  LHR_game.cheatState = 0;
+  LHR_game.continues = 1;
 
-  RCL_initRayConstraints(&SFG_game.rayConstraints);
-  SFG_game.rayConstraints.maxHits = SFG_RAYCASTING_MAX_HITS;
-  SFG_game.rayConstraints.maxSteps = SFG_RAYCASTING_MAX_STEPS;
+  RCL_initRayConstraints(&LHR_game.rayConstraints);
+  LHR_game.rayConstraints.maxHits = LHR_RAYCASTING_MAX_HITS;
+  LHR_game.rayConstraints.maxSteps = LHR_RAYCASTING_MAX_STEPS;
 
-  RCL_initRayConstraints(&SFG_game.visibilityRayConstraints);
-  SFG_game.visibilityRayConstraints.maxHits = 
-    SFG_RAYCASTING_VISIBILITY_MAX_HITS;
-  SFG_game.visibilityRayConstraints.maxSteps =
-    SFG_RAYCASTING_VISIBILITY_MAX_STEPS;
+  RCL_initRayConstraints(&LHR_game.visibilityRayConstraints);
+  LHR_game.visibilityRayConstraints.maxHits = 
+    LHR_RAYCASTING_VISIBILITY_MAX_HITS;
+  LHR_game.visibilityRayConstraints.maxSteps =
+    LHR_RAYCASTING_VISIBILITY_MAX_STEPS;
 
-  SFG_game.antiSpam = 0;
+  LHR_game.antiSpam = 0;
 
-  SFG_LOG("computing average texture colors")
+  LHR_LOG("computing average texture colors")
 
-  for (uint8_t i = 0; i < SFG_WALL_TEXTURE_COUNT; ++i)
+  for (uint8_t i = 0; i < LHR_WALL_TEXTURE_COUNT; ++i)
   {
     /** For simplicity, we round colors so that there is only 64 of them, and
       we count them up to 256. */
@@ -1725,11 +1725,11 @@ void SFG_init(void)
     for (uint8_t j = 0; j < 64; ++j)
       colorHistogram[j] = 0;
 
-    for (uint8_t y = 0; y < SFG_TEXTURE_SIZE; ++y)
-      for (uint8_t x = 0; x < SFG_TEXTURE_SIZE; ++x)
+    for (uint8_t y = 0; y < LHR_TEXTURE_SIZE; ++y)
+      for (uint8_t x = 0; x < LHR_TEXTURE_SIZE; ++x)
       {
         uint8_t color =
-          SFG_getTexel(SFG_wallTextures + i * SFG_TEXTURE_STORE_SIZE,x,y) / 4;
+          LHR_getTexel(LHR_wallTextures + i * LHR_TEXTURE_STORE_SIZE,x,y) / 4;
 
         colorHistogram[color] += 1;
 
@@ -1751,52 +1751,52 @@ void SFG_init(void)
         maxIndex = j;
     }
 
-    SFG_game.textureAverageColors[i] = maxIndex * 4;
+    LHR_game.textureAverageColors[i] = maxIndex * 4;
   }
 
-  for (uint16_t i = 0; i < SFG_GAME_RESOLUTION_Y; ++i)
-    SFG_game.backgroundScaleMap[i] =
-      (i * SFG_TEXTURE_SIZE) / SFG_GAME_RESOLUTION_Y;
+  for (uint16_t i = 0; i < LHR_GAME_RESOLUTION_Y; ++i)
+    LHR_game.backgroundScaleMap[i] =
+      (i * LHR_TEXTURE_SIZE) / LHR_GAME_RESOLUTION_Y;
 
-  for (uint8_t i = 0; i < SFG_KEY_COUNT; ++i)
-    SFG_game.keyStates[i] = 0;
+  for (uint8_t i = 0; i < LHR_KEY_COUNT; ++i)
+    LHR_game.keyStates[i] = 0;
 
-  SFG_currentLevel.levelPointer = 0;
-  SFG_game.backgroundScroll = 0;
-  SFG_game.selectedMenuItem = 0;
-  SFG_game.selectedLevel = 0;
-  SFG_game.storyType = SFG_STORY_GLOBAL_INTRO;
-  SFG_game.introTargetLevel = 0;
-  SFG_game.outroTargetLevel = 255;
-  SFG_game.settings = SFG_DEFAULT_SETTINGS;
-  SFG_game.saved = 0;
+  LHR_currentLevel.levelPointer = 0;
+  LHR_game.backgroundScroll = 0;
+  LHR_game.selectedMenuItem = 0;
+  LHR_game.selectedLevel = 0;
+  LHR_game.storyType = LHR_STORY_GLOBAL_INTRO;
+  LHR_game.introTargetLevel = 0;
+  LHR_game.outroTargetLevel = 255;
+  LHR_game.settings = LHR_DEFAULT_SETTINGS;
+  LHR_game.saved = 0;
 
-  SFG_createDefaultSaveData(SFG_game.save);
+  LHR_createDefaultSaveData(LHR_game.save);
 
-  SFG_gameLoad(); // attempt to load settings
+  LHR_gameLoad(); // attempt to load settings
 
-  if (SFG_game.saved != SFG_CANT_SAVE)
+  if (LHR_game.saved != LHR_CANT_SAVE)
   {
-    SFG_LOG("settings loaded");
-    SFG_game.settings = SFG_game.save[1]; 
+    LHR_LOG("settings loaded");
+    LHR_game.settings = LHR_game.save[1]; 
   }
   else
   {
-    SFG_LOG("saving/loading not possible");
-    SFG_game.save[0] = SFG_NUMBER_OF_LEVELS - 1; // revealed all levels
+    LHR_LOG("saving/loading not possible");
+    LHR_game.save[0] = LHR_NUMBER_OF_LEVELS - 1; // revealed all levels
   }
 
-#if SFG_ALL_LEVELS
-  SFG_game.save[0] = SFG_NUMBER_OF_LEVELS - 1;
+#if LHR_ALL_LEVELS
+  LHR_game.save[0] = LHR_NUMBER_OF_LEVELS - 1;
 #endif
 
-  SFG_setMusic((SFG_game.settings & 0x02) ?
-    SFG_MUSIC_TURN_ON : SFG_MUSIC_TURN_OFF);
+  LHR_setMusic((LHR_game.settings & 0x02) ?
+    LHR_MUSIC_TURN_ON : LHR_MUSIC_TURN_OFF);
 
-#if SFG_START_LEVEL == 0
-  SFG_setGameState(SFG_GAME_STATE_INIT);
+#if LHR_START_LEVEL == 0
+  LHR_setGameState(LHR_GAME_STATE_INIT);
 #else
-  SFG_setAndInitLevel(SFG_START_LEVEL - 1);
+  LHR_setAndInitLevel(LHR_START_LEVEL - 1);
 #endif
 }
 
@@ -1804,15 +1804,15 @@ void SFG_init(void)
   Adds new projectile to the current level, returns 1 if added, 0 if not (max
   count reached).
 */
-uint8_t SFG_createProjectile(SFG_ProjectileRecord projectile)
+uint8_t LHR_createProjectile(LHR_ProjectileRecord projectile)
 {
-  if (SFG_currentLevel.projectileRecordCount >= SFG_MAX_PROJECTILES)
+  if (LHR_currentLevel.projectileRecordCount >= LHR_MAX_PROJECTILES)
     return 0; 
 
-  SFG_currentLevel.projectileRecords[SFG_currentLevel.projectileRecordCount] =
+  LHR_currentLevel.projectileRecords[LHR_currentLevel.projectileRecordCount] =
     projectile;
   
-  SFG_currentLevel.projectileRecordCount++;
+  LHR_currentLevel.projectileRecordCount++;
 
   return 1;
 }
@@ -1820,9 +1820,9 @@ uint8_t SFG_createProjectile(SFG_ProjectileRecord projectile)
 /**
   Launches projectile of given type from given position in given direction
   (has to be normalized), with given offset (so as to not collide with the
-  shooting entity). Returns the same value as SFG_createProjectile.
+  shooting entity). Returns the same value as LHR_createProjectile.
 */
-uint8_t SFG_launchProjectile(
+uint8_t LHR_launchProjectile(
   uint8_t type,   
   RCL_Vector2D shootFrom,
   RCL_Unit shootFromHeight,
@@ -1831,14 +1831,14 @@ uint8_t SFG_launchProjectile(
   RCL_Unit offsetDistance
   )
 {
-  if (type == SFG_PROJECTILE_NONE)
+  if (type == LHR_PROJECTILE_NONE)
     return 0;
 
-  SFG_ProjectileRecord p;
+  LHR_ProjectileRecord p;
 
   p.type = type;
   p.doubleFramesToLive = 
-    RCL_nonZero(SFG_GET_PROJECTILE_FRAMES_TO_LIVE(type) / 2);
+    RCL_nonZero(LHR_GET_PROJECTILE_FRAMES_TO_LIVE(type) / 2);
   
   p.position[0] =
     shootFrom.x + (direction.x * offsetDistance) / RCL_UNITS_PER_SQUARE;
@@ -1847,19 +1847,19 @@ uint8_t SFG_launchProjectile(
   p.position[2] = shootFromHeight;
 
   p.direction[0] = 
-    (direction.x * SFG_GET_PROJECTILE_SPEED_UPF(type)) / RCL_UNITS_PER_SQUARE;
+    (direction.x * LHR_GET_PROJECTILE_SPEED_UPF(type)) / RCL_UNITS_PER_SQUARE;
   p.direction[1] =
-    (direction.y * SFG_GET_PROJECTILE_SPEED_UPF(type)) / RCL_UNITS_PER_SQUARE;
+    (direction.y * LHR_GET_PROJECTILE_SPEED_UPF(type)) / RCL_UNITS_PER_SQUARE;
   p.direction[2] = verticalSpeed;
 
-  return SFG_createProjectile(p);
+  return LHR_createProjectile(p);
 }
 
 /**
   Pushes a given position away from a center by given distance, with collisions.
   Returns 1 if push away happened, otherwise 0.
 */
-uint8_t SFG_pushAway(
+uint8_t LHR_pushAway(
   RCL_Unit pos[3],
   RCL_Unit centerX,
   RCL_Unit centerY,
@@ -1892,8 +1892,8 @@ uint8_t SFG_pushAway(
   c.position.y = pos[1];
   c.height = pos[2];
 
-  RCL_moveCameraWithCollision(&c,offset,0,SFG_floorCollisionHeightAt,
-    SFG_ceilingHeightAt,1,1);
+  RCL_moveCameraWithCollision(&c,offset,0,LHR_floorCollisionHeightAt,
+    LHR_ceilingHeightAt,1,1);
 
   pos[0] = c.position.x;
   pos[1] = c.position.y;
@@ -1902,22 +1902,22 @@ uint8_t SFG_pushAway(
   return 1;
 }
 
-uint8_t SFG_pushPlayerAway(
+uint8_t LHR_pushPlayerAway(
   RCL_Unit centerX, RCL_Unit centerY, RCL_Unit distance)
 {
   RCL_Unit p[3];
 
-  p[0] = SFG_player.camera.position.x; 
-  p[1] = SFG_player.camera.position.y; 
-  p[2] = SFG_player.camera.height; 
+  p[0] = LHR_player.camera.position.x; 
+  p[1] = LHR_player.camera.position.y; 
+  p[2] = LHR_player.camera.height; 
 
-  uint8_t result = SFG_pushAway(p,centerX,centerY,
-    SFG_player.camera.direction - RCL_UNITS_PER_SQUARE / 2,
+  uint8_t result = LHR_pushAway(p,centerX,centerY,
+    LHR_player.camera.direction - RCL_UNITS_PER_SQUARE / 2,
     distance);
 
-  SFG_player.camera.position.x = p[0]; 
-  SFG_player.camera.position.y = p[1]; 
-  SFG_player.camera.height = p[2];
+  LHR_player.camera.position.x = p[0]; 
+  LHR_player.camera.position.y = p[1]; 
+  LHR_player.camera.height = p[2];
 
   return result;
 }
@@ -1927,7 +1927,7 @@ uint8_t SFG_pushPlayerAway(
   the collision already does happen and only resolves it. Returns adjusted move
   offset.
 */
-RCL_Vector2D SFG_resolveCollisionWithElement(
+RCL_Vector2D LHR_resolveCollisionWithElement(
   RCL_Vector2D position, RCL_Vector2D moveOffset, RCL_Vector2D elementPos)
 {
   RCL_Unit dx = RCL_abs(elementPos.x - position.x);
@@ -1955,54 +1955,54 @@ RCL_Vector2D SFG_resolveCollisionWithElement(
 /**
   Adds or subtracts player's health during the playing state due to taking
   damage (negative value) or getting healed. Negative value will be corrected by
-  SFG_PLAYER_DAMAGE_MULTIPLIER in this function.
+  LHR_PLAYER_DAMAGE_MULTIPLIER in this function.
 */
-void SFG_playerChangeHealth(int8_t healthAdd)
+void LHR_playerChangeHealth(int8_t healthAdd)
 {          
-  if (SFG_game.state != SFG_GAME_STATE_PLAYING)
+  if (LHR_game.state != LHR_GAME_STATE_PLAYING)
     return; // don't hurt during level starting phase
 
   if (healthAdd < 0)
   {
-    if (SFG_game.cheatState & 0x80) // invincible?
+    if (LHR_game.cheatState & 0x80) // invincible?
       return;
 
     healthAdd =
       RCL_min(-1,
-      (((RCL_Unit) healthAdd) * SFG_PLAYER_DAMAGE_MULTIPLIER) /
+      (((RCL_Unit) healthAdd) * LHR_PLAYER_DAMAGE_MULTIPLIER) /
       RCL_UNITS_PER_SQUARE);
 
-    SFG_player.lastHurtFrame = SFG_game.frame;
-    SFG_processEvent(SFG_EVENT_VIBRATE,0);
-    SFG_processEvent(SFG_EVENT_PLAYER_HURT,-1 * healthAdd);
+    LHR_player.lastHurtFrame = LHR_game.frame;
+    LHR_processEvent(LHR_EVENT_VIBRATE,0);
+    LHR_processEvent(LHR_EVENT_PLAYER_HURT,-1 * healthAdd);
   }
 
-  int16_t health = SFG_player.health;
+  int16_t health = LHR_player.health;
   health += healthAdd;
-  health = RCL_clamp(health,0,SFG_PLAYER_MAX_HEALTH);
+  health = RCL_clamp(health,0,LHR_PLAYER_MAX_HEALTH);
 
-  SFG_player.health = health;
+  LHR_player.health = health;
 }
 
-uint8_t SFG_distantSoundVolume(RCL_Unit x, RCL_Unit y, RCL_Unit z)
+uint8_t LHR_distantSoundVolume(RCL_Unit x, RCL_Unit y, RCL_Unit z)
 {
-  RCL_Unit distance = SFG_taxicabDistance(x,y,z,
-                        SFG_player.camera.position.x,
-                        SFG_player.camera.position.y,
-                        SFG_player.camera.height);
+  RCL_Unit distance = LHR_taxicabDistance(x,y,z,
+                        LHR_player.camera.position.x,
+                        LHR_player.camera.position.y,
+                        LHR_player.camera.height);
 
-  if (distance >= SFG_SFX_MAX_DISTANCE)
+  if (distance >= LHR_SFX_MAX_DISTANCE)
     return 0;
 
-  uint32_t result = 255 - (distance * 255) / SFG_SFX_MAX_DISTANCE;
+  uint32_t result = 255 - (distance * 255) / LHR_SFX_MAX_DISTANCE;
 
   return (result * result) / 256;
 }
 
 /**
-  Same as SFG_playerChangeHealth but for monsters.
+  Same as LHR_playerChangeHealth but for monsters.
 */
-void SFG_monsterChangeHealth(SFG_MonsterRecord *monster, int8_t healthAdd)
+void LHR_monsterChangeHealth(LHR_MonsterRecord *monster, int8_t healthAdd)
 {
   int16_t health = monster->health;
 
@@ -2014,50 +2014,50 @@ void SFG_monsterChangeHealth(SFG_MonsterRecord *monster, int8_t healthAdd)
   {
     // play hurt sound
     
-    uint8_t volume = SFG_distantSoundVolume( 
-      SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]),
-      SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]),
-      SFG_floorHeightAt(
-        SFG_MONSTER_COORD_TO_SQUARES(monster->coords[0]),
-        SFG_MONSTER_COORD_TO_SQUARES(monster->coords[1])));
+    uint8_t volume = LHR_distantSoundVolume( 
+      LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]),
+      LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]),
+      LHR_floorHeightAt(
+        LHR_MONSTER_COORD_TO_SQUARES(monster->coords[0]),
+        LHR_MONSTER_COORD_TO_SQUARES(monster->coords[1])));
     
-      SFG_playGameSound(5,volume);
+      LHR_playGameSound(5,volume);
     
     if (monster->health == 0)
-      SFG_playGameSound(2,volume);
+      LHR_playGameSound(2,volume);
   }
 }
 
-void SFG_removeItem(uint8_t index)
+void LHR_removeItem(uint8_t index)
 {
-  SFG_LOG("removing item");
+  LHR_LOG("removing item");
 
-  for (uint16_t j = index; j < SFG_currentLevel.itemRecordCount - 1; ++j)
-    SFG_currentLevel.itemRecords[j] =
-      SFG_currentLevel.itemRecords[j + 1];
+  for (uint16_t j = index; j < LHR_currentLevel.itemRecordCount - 1; ++j)
+    LHR_currentLevel.itemRecords[j] =
+      LHR_currentLevel.itemRecords[j + 1];
 
-  SFG_currentLevel.itemRecordCount--; 
+  LHR_currentLevel.itemRecordCount--; 
 }
 
 /**
   Checks a 3D point visibility from player's position (WITHOUT considering
   facing direction).
 */
-static inline uint8_t SFG_spriteIsVisible(RCL_Vector2D pos, RCL_Unit height)
+static inline uint8_t LHR_spriteIsVisible(RCL_Vector2D pos, RCL_Unit height)
 {
   return
     RCL_castRay3D(
-      SFG_player.camera.position,
-      SFG_player.camera.height,
+      LHR_player.camera.position,
+      LHR_player.camera.height,
       pos,
       height,
-      SFG_floorHeightAt,
-      SFG_ceilingHeightAt,
-      SFG_game.visibilityRayConstraints
+      LHR_floorHeightAt,
+      LHR_ceilingHeightAt,
+      LHR_game.visibilityRayConstraints
     ) == RCL_UNITS_PER_SQUARE;
 }
 
-RCL_Unit SFG_directionTangent(RCL_Unit dirX, RCL_Unit dirY, RCL_Unit dirZ)
+RCL_Unit LHR_directionTangent(RCL_Unit dirX, RCL_Unit dirY, RCL_Unit dirZ)
 {
   RCL_Vector2D v;
 
@@ -2070,43 +2070,43 @@ RCL_Unit SFG_directionTangent(RCL_Unit dirX, RCL_Unit dirY, RCL_Unit dirZ)
 /**
   Returns a tangent in RCL_Unit of vertical autoaim, given current game state.
 */
-RCL_Unit SFG_autoaimVertically(void)
+RCL_Unit LHR_autoaimVertically(void)
 {
-  for (uint16_t i = 0; i < SFG_currentLevel.monsterRecordCount; ++i)
+  for (uint16_t i = 0; i < LHR_currentLevel.monsterRecordCount; ++i)
   {
-    SFG_MonsterRecord m = SFG_currentLevel.monsterRecords[i];
+    LHR_MonsterRecord m = LHR_currentLevel.monsterRecords[i];
     
-    uint8_t state = SFG_MR_STATE(m);
+    uint8_t state = LHR_MR_STATE(m);
  
-    if (state == SFG_MONSTER_STATE_INACTIVE ||
-        state == SFG_MONSTER_STATE_DEAD)
+    if (state == LHR_MONSTER_STATE_INACTIVE ||
+        state == LHR_MONSTER_STATE_DEAD)
       continue;
 
     RCL_Vector2D worldPosition, toMonster;
 
-    worldPosition.x = SFG_MONSTER_COORD_TO_RCL_UNITS(m.coords[0]);
-    worldPosition.y = SFG_MONSTER_COORD_TO_RCL_UNITS(m.coords[1]);
+    worldPosition.x = LHR_MONSTER_COORD_TO_RCL_UNITS(m.coords[0]);
+    worldPosition.y = LHR_MONSTER_COORD_TO_RCL_UNITS(m.coords[1]);
     
-    toMonster.x = worldPosition.x - SFG_player.camera.position.x;
-    toMonster.y = worldPosition.y - SFG_player.camera.position.y;
+    toMonster.x = worldPosition.x - LHR_player.camera.position.x;
+    toMonster.y = worldPosition.y - LHR_player.camera.position.y;
 
     if (RCL_abs(
-         RCL_vectorsAngleCos(SFG_player.direction,toMonster) 
-         - RCL_UNITS_PER_SQUARE) < SFG_VERTICAL_AUTOAIM_ANGLE_THRESHOLD)
+         RCL_vectorsAngleCos(LHR_player.direction,toMonster) 
+         - RCL_UNITS_PER_SQUARE) < LHR_VERTICAL_AUTOAIM_ANGLE_THRESHOLD)
     {
-      uint8_t spriteSize = SFG_GET_MONSTER_SPRITE_SIZE(
-        SFG_MONSTER_TYPE_TO_INDEX(SFG_MR_TYPE(m)));
+      uint8_t spriteSize = LHR_GET_MONSTER_SPRITE_SIZE(
+        LHR_MONSTER_TYPE_TO_INDEX(LHR_MR_TYPE(m)));
         
       RCL_Unit worldHeight = 
-        SFG_floorHeightAt(
-          SFG_MONSTER_COORD_TO_SQUARES(m.coords[0]),
-          SFG_MONSTER_COORD_TO_SQUARES(m.coords[1]))
+        LHR_floorHeightAt(
+          LHR_MONSTER_COORD_TO_SQUARES(m.coords[0]),
+          LHR_MONSTER_COORD_TO_SQUARES(m.coords[1]))
           + 
-          SFG_SPRITE_SIZE_TO_HEIGHT_ABOVE_GROUND(spriteSize);
+          LHR_SPRITE_SIZE_TO_HEIGHT_ABOVE_GROUND(spriteSize);
         
-      if (SFG_spriteIsVisible(worldPosition,worldHeight))
-        return SFG_directionTangent(toMonster.x,toMonster.y,
-               worldHeight - (SFG_player.camera.height));
+      if (LHR_spriteIsVisible(worldPosition,worldHeight))
+        return LHR_directionTangent(toMonster.x,toMonster.y,
+               worldHeight - (LHR_player.camera.height));
     }
   }
 
@@ -2117,43 +2117,43 @@ RCL_Unit SFG_autoaimVertically(void)
   Helper function, returns a pointer to level element representing item with
   given index, but only if the item is active (otherwise 0 is returned).
 */
-static inline const SFG_LevelElement *SFG_getActiveItemElement(uint8_t index)
+static inline const LHR_LevelElement *LHR_getActiveItemElement(uint8_t index)
 {
-  SFG_ItemRecord item = SFG_currentLevel.itemRecords[index];
+  LHR_ItemRecord item = LHR_currentLevel.itemRecords[index];
 
-  if ((item & SFG_ITEM_RECORD_ACTIVE_MASK) == 0)
+  if ((item & LHR_ITEM_RECORD_ACTIVE_MASK) == 0)
     return 0;
 
-  return &(SFG_currentLevel.levelPointer->elements[item &
-           ~SFG_ITEM_RECORD_ACTIVE_MASK]);
+  return &(LHR_currentLevel.levelPointer->elements[item &
+           ~LHR_ITEM_RECORD_ACTIVE_MASK]);
 }
 
-static inline const SFG_LevelElement *SFG_getLevelElement(uint8_t index)
+static inline const LHR_LevelElement *LHR_getLevelElement(uint8_t index)
 {
-  SFG_ItemRecord item = SFG_currentLevel.itemRecords[index];
+  LHR_ItemRecord item = LHR_currentLevel.itemRecords[index];
 
-  return &(SFG_currentLevel.levelPointer->elements[item &
-           ~SFG_ITEM_RECORD_ACTIVE_MASK]);
+  return &(LHR_currentLevel.levelPointer->elements[item &
+           ~LHR_ITEM_RECORD_ACTIVE_MASK]);
 }
   
-void SFG_createExplosion(RCL_Unit, RCL_Unit, RCL_Unit); // forward decl
+void LHR_createExplosion(RCL_Unit, RCL_Unit, RCL_Unit); // forward decl
 
-void SFG_explodeBarrel(uint8_t itemIndex, RCL_Unit x, RCL_Unit y, RCL_Unit z)
+void LHR_explodeBarrel(uint8_t itemIndex, RCL_Unit x, RCL_Unit y, RCL_Unit z)
 {
-  const SFG_LevelElement *e = SFG_getLevelElement(itemIndex);
-  SFG_setItemCollisionMapBit(e->coords[0],e->coords[1],0);
-  SFG_removeItem(itemIndex);
-  SFG_createExplosion(x,y,z);
+  const LHR_LevelElement *e = LHR_getLevelElement(itemIndex);
+  LHR_setItemCollisionMapBit(e->coords[0],e->coords[1],0);
+  LHR_removeItem(itemIndex);
+  LHR_createExplosion(x,y,z);
 }
 
-void SFG_createExplosion(RCL_Unit x, RCL_Unit y, RCL_Unit z)
+void LHR_createExplosion(RCL_Unit x, RCL_Unit y, RCL_Unit z)
 {
-  SFG_ProjectileRecord explosion;
+  LHR_ProjectileRecord explosion;
 
-  SFG_playGameSound(2,SFG_distantSoundVolume(x,y,z));
-  SFG_processEvent(SFG_EVENT_EXPLOSION,0);
+  LHR_playGameSound(2,LHR_distantSoundVolume(x,y,z));
+  LHR_processEvent(LHR_EVENT_EXPLOSION,0);
 
-  explosion.type = SFG_PROJECTILE_EXPLOSION;
+  explosion.type = LHR_PROJECTILE_EXPLOSION;
 
   explosion.position[0] = x;
   explosion.position[1] = y;
@@ -2164,59 +2164,59 @@ void SFG_createExplosion(RCL_Unit x, RCL_Unit y, RCL_Unit z)
   explosion.direction[2] = 0;
 
   explosion.doubleFramesToLive = RCL_nonZero(
-    SFG_GET_PROJECTILE_FRAMES_TO_LIVE(SFG_PROJECTILE_EXPLOSION) / 2);
+    LHR_GET_PROJECTILE_FRAMES_TO_LIVE(LHR_PROJECTILE_EXPLOSION) / 2);
 
-  SFG_createProjectile(explosion);
+  LHR_createProjectile(explosion);
 
-  uint8_t damage = SFG_getDamageValue(SFG_WEAPON_FIRE_TYPE_FIREBALL);
+  uint8_t damage = LHR_getDamageValue(LHR_WEAPON_FIRE_TYPE_FIREBALL);
 
-  if (SFG_taxicabDistance(x,y,z,SFG_player.camera.position.x,
-    SFG_player.camera.position.y,SFG_player.camera.height)
-    <= SFG_EXPLOSION_RADIUS)
+  if (LHR_taxicabDistance(x,y,z,LHR_player.camera.position.x,
+    LHR_player.camera.position.y,LHR_player.camera.height)
+    <= LHR_EXPLOSION_RADIUS)
   {
-    SFG_playerChangeHealth(-1 * damage);
-    SFG_pushPlayerAway(x,y,SFG_EXPLOSION_PUSH_AWAY_DISTANCE);
+    LHR_playerChangeHealth(-1 * damage);
+    LHR_pushPlayerAway(x,y,LHR_EXPLOSION_PUSH_AWAY_DISTANCE);
   }
 
-  for (uint16_t i = 0; i < SFG_currentLevel.monsterRecordCount; ++i)
+  for (uint16_t i = 0; i < LHR_currentLevel.monsterRecordCount; ++i)
   {
-    SFG_MonsterRecord *monster = &(SFG_currentLevel.monsterRecords[i]);
+    LHR_MonsterRecord *monster = &(LHR_currentLevel.monsterRecords[i]);
 
-    uint16_t state = SFG_MR_STATE(*monster); 
+    uint16_t state = LHR_MR_STATE(*monster); 
 
-    if ((state == SFG_MONSTER_STATE_INACTIVE) ||
-        (state == SFG_MONSTER_STATE_DEAD))
+    if ((state == LHR_MONSTER_STATE_INACTIVE) ||
+        (state == LHR_MONSTER_STATE_DEAD))
       continue; 
 
     RCL_Unit monsterHeight =
-      SFG_floorHeightAt(
-        SFG_MONSTER_COORD_TO_SQUARES(monster->coords[0]),
-        SFG_MONSTER_COORD_TO_SQUARES(monster->coords[1]))
+      LHR_floorHeightAt(
+        LHR_MONSTER_COORD_TO_SQUARES(monster->coords[0]),
+        LHR_MONSTER_COORD_TO_SQUARES(monster->coords[1]))
         + RCL_UNITS_PER_SQUARE / 2;
 
-    if (SFG_taxicabDistance(
-      SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]),
-      SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]),monsterHeight,
-      x,y,z) <= SFG_EXPLOSION_RADIUS)
+    if (LHR_taxicabDistance(
+      LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]),
+      LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]),monsterHeight,
+      x,y,z) <= LHR_EXPLOSION_RADIUS)
     {
-      SFG_monsterChangeHealth(monster,
-        -1 * SFG_getDamageValue(SFG_WEAPON_FIRE_TYPE_FIREBALL));
+      LHR_monsterChangeHealth(monster,
+        -1 * LHR_getDamageValue(LHR_WEAPON_FIRE_TYPE_FIREBALL));
     }
   }
 
   // explode nearby barrels
 
-  if (damage >= SFG_BARREL_EXPLOSION_DAMAGE_THRESHOLD)
-    for (uint16_t i = 0; i < SFG_currentLevel.itemRecordCount; ++i)
+  if (damage >= LHR_BARREL_EXPLOSION_DAMAGE_THRESHOLD)
+    for (uint16_t i = 0; i < LHR_currentLevel.itemRecordCount; ++i)
     {
-      SFG_ItemRecord item = SFG_currentLevel.itemRecords[i];
+      LHR_ItemRecord item = LHR_currentLevel.itemRecords[i];
 
       /* We DON'T check just active barrels but all, otherwise it looks weird
          that out of sight barrels in a line didn't explode.*/
 
-      SFG_LevelElement element = SFG_ITEM_RECORD_LEVEL_ELEMENT(item);
+      LHR_LevelElement element = LHR_ITEM_RECORD_LEVEL_ELEMENT(item);
 
-      if (element.type != SFG_LEVEL_ELEMENT_BARREL)
+      if (element.type != LHR_LEVEL_ELEMENT_BARREL)
         continue;
 
       RCL_Unit elementX =
@@ -2226,22 +2226,22 @@ void SFG_createExplosion(RCL_Unit x, RCL_Unit y, RCL_Unit z)
         element.coords[1] * RCL_UNITS_PER_SQUARE + RCL_UNITS_PER_SQUARE / 2;
 
       RCL_Unit elementHeight =
-        SFG_floorHeightAt(element.coords[0],element.coords[1]);
+        LHR_floorHeightAt(element.coords[0],element.coords[1]);
 
-      if (SFG_taxicabDistance(
-        x,y,z,elementX,elementY,elementHeight) <= SFG_EXPLOSION_RADIUS)
+      if (LHR_taxicabDistance(
+        x,y,z,elementX,elementY,elementHeight) <= LHR_EXPLOSION_RADIUS)
       {
-        SFG_explodeBarrel(i,elementX,elementY,elementHeight);
+        LHR_explodeBarrel(i,elementX,elementY,elementHeight);
         i--;
       }
     }
 }
 
-void SFG_createDust(RCL_Unit x, RCL_Unit y, RCL_Unit z)
+void LHR_createDust(RCL_Unit x, RCL_Unit y, RCL_Unit z)
 {
-  SFG_ProjectileRecord dust;
+  LHR_ProjectileRecord dust;
 
-  dust.type = SFG_PROJECTILE_DUST;
+  dust.type = LHR_PROJECTILE_DUST;
 
   dust.position[0] = x;
   dust.position[1] = y;
@@ -2252,28 +2252,28 @@ void SFG_createDust(RCL_Unit x, RCL_Unit y, RCL_Unit z)
   dust.direction[2] = 0;
 
   dust.doubleFramesToLive =
-    RCL_nonZero(SFG_GET_PROJECTILE_FRAMES_TO_LIVE(SFG_PROJECTILE_DUST) / 2);
+    RCL_nonZero(LHR_GET_PROJECTILE_FRAMES_TO_LIVE(LHR_PROJECTILE_DUST) / 2);
 
-  SFG_createProjectile(dust);
+  LHR_createProjectile(dust);
 }
 
-void SFG_getMonsterWorldPosition(SFG_MonsterRecord *monster, RCL_Unit *x,
+void LHR_getMonsterWorldPosition(LHR_MonsterRecord *monster, RCL_Unit *x,
   RCL_Unit *y, RCL_Unit *z)
 {
-  *x = SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]);
-  *y = SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]);
-  *z = SFG_floorHeightAt(
-         SFG_MONSTER_COORD_TO_SQUARES(monster->coords[0]),
-         SFG_MONSTER_COORD_TO_SQUARES(monster->coords[1]))
+  *x = LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]);
+  *y = LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]);
+  *z = LHR_floorHeightAt(
+         LHR_MONSTER_COORD_TO_SQUARES(monster->coords[0]),
+         LHR_MONSTER_COORD_TO_SQUARES(monster->coords[1]))
        + RCL_UNITS_PER_SQUARE / 2;
 }
 
-void SFG_monsterPerformAI(SFG_MonsterRecord *monster)
+void LHR_monsterPerformAI(LHR_MonsterRecord *monster)
 {
-  uint8_t state = SFG_MR_STATE(*monster);
-  uint8_t type = SFG_MR_TYPE(*monster);
-  uint8_t monsterNumber = SFG_MONSTER_TYPE_TO_INDEX(type);
-  uint8_t attackType = SFG_GET_MONSTER_ATTACK_TYPE(monsterNumber);
+  uint8_t state = LHR_MR_STATE(*monster);
+  uint8_t type = LHR_MR_TYPE(*monster);
+  uint8_t monsterNumber = LHR_MONSTER_TYPE_TO_INDEX(type);
+  uint8_t attackType = LHR_GET_MONSTER_ATTACK_TYPE(monsterNumber);
 
   int8_t coordAdd[2];
 
@@ -2281,178 +2281,178 @@ void SFG_monsterPerformAI(SFG_MonsterRecord *monster)
   coordAdd[1] = 0;
 
   uint8_t notRanged =
-    (attackType == SFG_MONSTER_ATTACK_MELEE) || 
-    (attackType == SFG_MONSTER_ATTACK_EXPLODE); 
+    (attackType == LHR_MONSTER_ATTACK_MELEE) || 
+    (attackType == LHR_MONSTER_ATTACK_EXPLODE); 
 
   uint8_t monsterSquare[2];
    /* because of some insanely retarded C++ compilers that error on narrowing
       conversion between { } we init this way: */
-  monsterSquare[0] = SFG_MONSTER_COORD_TO_SQUARES(monster->coords[0]);
-  monsterSquare[1] = SFG_MONSTER_COORD_TO_SQUARES(monster->coords[1]);
+  monsterSquare[0] = LHR_MONSTER_COORD_TO_SQUARES(monster->coords[0]);
+  monsterSquare[1] = LHR_MONSTER_COORD_TO_SQUARES(monster->coords[1]);
 
   RCL_Unit currentHeight =
-    SFG_floorCollisionHeightAt(monsterSquare[0],monsterSquare[1]);
+    LHR_floorCollisionHeightAt(monsterSquare[0],monsterSquare[1]);
 
   if ( // ranged monsters: sometimes randomly attack
        !notRanged &&
-       (SFG_random() < 
-       SFG_GET_MONSTER_AGGRESSIVITY(SFG_MONSTER_TYPE_TO_INDEX(type)))
+       (LHR_random() < 
+       LHR_GET_MONSTER_AGGRESSIVITY(LHR_MONSTER_TYPE_TO_INDEX(type)))
      )
   { 
     RCL_Vector2D pos;
-    pos.x = SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]);
-    pos.y = SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]);
+    pos.x = LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]);
+    pos.y = LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]);
 
-    if (SFG_random() % 4 != 0 &&
-      SFG_spriteIsVisible(pos,currentHeight + // only if player is visible
-        SFG_SPRITE_SIZE_TO_HEIGHT_ABOVE_GROUND(
-        SFG_GET_MONSTER_SPRITE_SIZE(
-        SFG_MONSTER_TYPE_TO_INDEX(type)))))
+    if (LHR_random() % 4 != 0 &&
+      LHR_spriteIsVisible(pos,currentHeight + // only if player is visible
+        LHR_SPRITE_SIZE_TO_HEIGHT_ABOVE_GROUND(
+        LHR_GET_MONSTER_SPRITE_SIZE(
+        LHR_MONSTER_TYPE_TO_INDEX(type)))))
     {
       // ranged attack
  
-      state = SFG_MONSTER_STATE_ATTACKING;
+      state = LHR_MONSTER_STATE_ATTACKING;
 
       RCL_Vector2D dir;
 
-      dir.x = SFG_player.camera.position.x - pos.x
-        - 128 * SFG_MONSTER_AIM_RANDOMNESS + 
-        SFG_random() * SFG_MONSTER_AIM_RANDOMNESS;
+      dir.x = LHR_player.camera.position.x - pos.x
+        - 128 * LHR_MONSTER_AIM_RANDOMNESS + 
+        LHR_random() * LHR_MONSTER_AIM_RANDOMNESS;
 
-      dir.y = SFG_player.camera.position.y - pos.y
-        - 128 * SFG_MONSTER_AIM_RANDOMNESS + 
-        SFG_random() * SFG_MONSTER_AIM_RANDOMNESS;
+      dir.y = LHR_player.camera.position.y - pos.y
+        - 128 * LHR_MONSTER_AIM_RANDOMNESS + 
+        LHR_random() * LHR_MONSTER_AIM_RANDOMNESS;
 
       uint8_t projectile;  
 
-      switch (SFG_GET_MONSTER_ATTACK_TYPE(monsterNumber))
+      switch (LHR_GET_MONSTER_ATTACK_TYPE(monsterNumber))
       {
-        case SFG_MONSTER_ATTACK_FIREBALL:
-          projectile = SFG_PROJECTILE_FIREBALL; 
+        case LHR_MONSTER_ATTACK_FIREBALL:
+          projectile = LHR_PROJECTILE_FIREBALL; 
           break;
 
-        case SFG_MONSTER_ATTACK_BULLET:
-          projectile = SFG_PROJECTILE_BULLET; 
+        case LHR_MONSTER_ATTACK_BULLET:
+          projectile = LHR_PROJECTILE_BULLET; 
           break;
 
-        case SFG_MONSTER_ATTACK_PLASMA:
-          projectile = SFG_PROJECTILE_PLASMA;
+        case LHR_MONSTER_ATTACK_PLASMA:
+          projectile = LHR_PROJECTILE_PLASMA;
           break;
 
-        case SFG_MONSTER_ATTACK_FIREBALL_BULLET:
-          projectile = (SFG_random() < 128) ?
-            SFG_PROJECTILE_FIREBALL : 
-            SFG_PROJECTILE_BULLET;
+        case LHR_MONSTER_ATTACK_FIREBALL_BULLET:
+          projectile = (LHR_random() < 128) ?
+            LHR_PROJECTILE_FIREBALL : 
+            LHR_PROJECTILE_BULLET;
           break;
 
-        case SFG_MONSTER_ATTACK_FIREBALL_PLASMA:
-          projectile = (SFG_random() < 128) ?
-            SFG_PROJECTILE_FIREBALL : 
-            SFG_PROJECTILE_PLASMA;
+        case LHR_MONSTER_ATTACK_FIREBALL_PLASMA:
+          projectile = (LHR_random() < 128) ?
+            LHR_PROJECTILE_FIREBALL : 
+            LHR_PROJECTILE_PLASMA;
           break;
 
         default:
-          projectile = SFG_PROJECTILE_NONE; 
+          projectile = LHR_PROJECTILE_NONE; 
           break;
       }
 
-      if (projectile == SFG_PROJECTILE_BULLET)
-        SFG_playGameSound(0,
-          SFG_distantSoundVolume( 
-            SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]),
-            SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]),
+      if (projectile == LHR_PROJECTILE_BULLET)
+        LHR_playGameSound(0,
+          LHR_distantSoundVolume( 
+            LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]),
+            LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]),
             currentHeight)
           );
 
       RCL_Unit middleHeight = currentHeight +
-        SFG_SPRITE_SIZE_TO_HEIGHT_ABOVE_GROUND(SFG_GET_MONSTER_SPRITE_SIZE(
-        SFG_MONSTER_TYPE_TO_INDEX(SFG_MR_TYPE(*monster))));
+        LHR_SPRITE_SIZE_TO_HEIGHT_ABOVE_GROUND(LHR_GET_MONSTER_SPRITE_SIZE(
+        LHR_MONSTER_TYPE_TO_INDEX(LHR_MR_TYPE(*monster))));
 
       RCL_Unit verticalSpeed = (
-        ((projectile != SFG_PROJECTILE_NONE) ? 
-        SFG_GET_PROJECTILE_SPEED_UPF(projectile) : 0) * 
-        SFG_directionTangent(dir.x,dir.y,SFG_player.camera.height -
+        ((projectile != LHR_PROJECTILE_NONE) ? 
+        LHR_GET_PROJECTILE_SPEED_UPF(projectile) : 0) * 
+        LHR_directionTangent(dir.x,dir.y,LHR_player.camera.height -
         middleHeight)) / RCL_UNITS_PER_SQUARE;
       
       dir = RCL_normalize(dir);
 
-      SFG_launchProjectile(
+      LHR_launchProjectile(
         projectile,
         pos,
         middleHeight,
         dir,
         verticalSpeed,
-        SFG_PROJECTILE_SPAWN_OFFSET
+        LHR_PROJECTILE_SPAWN_OFFSET
       );
     } // if visible
     else
-      state = SFG_MONSTER_STATE_IDLE;
+      state = LHR_MONSTER_STATE_IDLE;
   }
-  else if (state == SFG_MONSTER_STATE_IDLE)
+  else if (state == LHR_MONSTER_STATE_IDLE)
   {
     if (notRanged)
     {
       // non-ranged monsters: walk towards player
 
       RCL_Unit pX, pY, pZ;
-      SFG_getMonsterWorldPosition(monster,&pX,&pY,&pZ);
+      LHR_getMonsterWorldPosition(monster,&pX,&pY,&pZ);
 
       uint8_t isClose = // close to player?
-        SFG_taxicabDistance(pX,pY,pZ,
-          SFG_player.camera.position.x,
-          SFG_player.camera.position.y,
-          SFG_player.camera.height) <= SFG_MELEE_RANGE;
+        LHR_taxicabDistance(pX,pY,pZ,
+          LHR_player.camera.position.x,
+          LHR_player.camera.position.y,
+          LHR_player.camera.height) <= LHR_MELEE_RANGE;
 
       if (!isClose)
       {
         // walk towards player
 
-        if (monsterSquare[0] > SFG_player.squarePosition[0])
+        if (monsterSquare[0] > LHR_player.squarePosition[0])
         {
-          if (monsterSquare[1] > SFG_player.squarePosition[1])
-            state = SFG_MONSTER_STATE_GOING_NW;
-          else if (monsterSquare[1] < SFG_player.squarePosition[1])
-            state = SFG_MONSTER_STATE_GOING_SW;
+          if (monsterSquare[1] > LHR_player.squarePosition[1])
+            state = LHR_MONSTER_STATE_GOING_NW;
+          else if (monsterSquare[1] < LHR_player.squarePosition[1])
+            state = LHR_MONSTER_STATE_GOING_SW;
           else
-            state = SFG_MONSTER_STATE_GOING_W;
+            state = LHR_MONSTER_STATE_GOING_W;
         }
-        else if (monsterSquare[0] < SFG_player.squarePosition[0])
+        else if (monsterSquare[0] < LHR_player.squarePosition[0])
         {
-          if (monsterSquare[1] > SFG_player.squarePosition[1])
-            state = SFG_MONSTER_STATE_GOING_NE;
-          else if (monsterSquare[1] < SFG_player.squarePosition[1])
-            state = SFG_MONSTER_STATE_GOING_SE;
+          if (monsterSquare[1] > LHR_player.squarePosition[1])
+            state = LHR_MONSTER_STATE_GOING_NE;
+          else if (monsterSquare[1] < LHR_player.squarePosition[1])
+            state = LHR_MONSTER_STATE_GOING_SE;
           else
-            state = SFG_MONSTER_STATE_GOING_E;
+            state = LHR_MONSTER_STATE_GOING_E;
         }
         else
         {
-          if (monsterSquare[1] > SFG_player.squarePosition[1])
-            state = SFG_MONSTER_STATE_GOING_N;
-          else if (monsterSquare[1] < SFG_player.squarePosition[1])
-            state = SFG_MONSTER_STATE_GOING_S;
+          if (monsterSquare[1] > LHR_player.squarePosition[1])
+            state = LHR_MONSTER_STATE_GOING_N;
+          else if (monsterSquare[1] < LHR_player.squarePosition[1])
+            state = LHR_MONSTER_STATE_GOING_S;
         }
       }
       else // is close
       {
         // melee, close-up attack
 
-        if (attackType == SFG_MONSTER_ATTACK_MELEE)
+        if (attackType == LHR_MONSTER_ATTACK_MELEE)
         {
           // melee attack
 
-          state = SFG_MONSTER_STATE_ATTACKING;
+          state = LHR_MONSTER_STATE_ATTACKING;
 
-          SFG_playerChangeHealth(
-            -1 * SFG_getDamageValue(SFG_WEAPON_FIRE_TYPE_MELEE)); 
+          LHR_playerChangeHealth(
+            -1 * LHR_getDamageValue(LHR_WEAPON_FIRE_TYPE_MELEE)); 
               
-          SFG_playGameSound(3,255);
+          LHR_playGameSound(3,255);
         }
-        else // SFG_MONSTER_ATTACK_EXPLODE
+        else // LHR_MONSTER_ATTACK_EXPLODE
         {
           // explode
 
-          SFG_createExplosion(pX,pY,pZ);
+          LHR_createExplosion(pX,pY,pZ);
           monster->health = 0;
         }
       }
@@ -2461,60 +2461,60 @@ void SFG_monsterPerformAI(SFG_MonsterRecord *monster)
     {
       // choose walk direction randomly
 
-      switch (SFG_random() % 8)
+      switch (LHR_random() % 8)
       {
-        case 0: state = SFG_MONSTER_STATE_GOING_E; break;
-        case 1: state = SFG_MONSTER_STATE_GOING_W; break;
-        case 2: state = SFG_MONSTER_STATE_GOING_N; break;
-        case 3: state = SFG_MONSTER_STATE_GOING_S; break;
-        case 4: state = SFG_MONSTER_STATE_GOING_NE; break;
-        case 5: state = SFG_MONSTER_STATE_GOING_NW; break;
-        case 6: state = SFG_MONSTER_STATE_GOING_SE; break;
-        case 7: state = SFG_MONSTER_STATE_GOING_SW; break;
+        case 0: state = LHR_MONSTER_STATE_GOING_E; break;
+        case 1: state = LHR_MONSTER_STATE_GOING_W; break;
+        case 2: state = LHR_MONSTER_STATE_GOING_N; break;
+        case 3: state = LHR_MONSTER_STATE_GOING_S; break;
+        case 4: state = LHR_MONSTER_STATE_GOING_NE; break;
+        case 5: state = LHR_MONSTER_STATE_GOING_NW; break;
+        case 6: state = LHR_MONSTER_STATE_GOING_SE; break;
+        case 7: state = LHR_MONSTER_STATE_GOING_SW; break;
         default: break;
       }
     }
   }
-  else if (state == SFG_MONSTER_STATE_ATTACKING)
+  else if (state == LHR_MONSTER_STATE_ATTACKING)
   {
-    state = SFG_MONSTER_STATE_IDLE;
+    state = LHR_MONSTER_STATE_IDLE;
   }
   else
   {
     int8_t add = 1;
 
-    if (attackType == SFG_MONSTER_ATTACK_MELEE)
+    if (attackType == LHR_MONSTER_ATTACK_MELEE)
       add = 2;
-    else if (attackType == SFG_MONSTER_ATTACK_EXPLODE)
+    else if (attackType == LHR_MONSTER_ATTACK_EXPLODE)
       add = 3;
 
-    if (state == SFG_MONSTER_STATE_GOING_E ||
-        state == SFG_MONSTER_STATE_GOING_NE ||
-        state == SFG_MONSTER_STATE_GOING_SE)
+    if (state == LHR_MONSTER_STATE_GOING_E ||
+        state == LHR_MONSTER_STATE_GOING_NE ||
+        state == LHR_MONSTER_STATE_GOING_SE)
       coordAdd[0] = add;
-    else if (state == SFG_MONSTER_STATE_GOING_W ||
-        state == SFG_MONSTER_STATE_GOING_SW ||
-        state == SFG_MONSTER_STATE_GOING_NW)
+    else if (state == LHR_MONSTER_STATE_GOING_W ||
+        state == LHR_MONSTER_STATE_GOING_SW ||
+        state == LHR_MONSTER_STATE_GOING_NW)
       coordAdd[0] = -1 * add;
 
-    if (state == SFG_MONSTER_STATE_GOING_N ||
-        state == SFG_MONSTER_STATE_GOING_NE ||
-        state == SFG_MONSTER_STATE_GOING_NW)
+    if (state == LHR_MONSTER_STATE_GOING_N ||
+        state == LHR_MONSTER_STATE_GOING_NE ||
+        state == LHR_MONSTER_STATE_GOING_NW)
       coordAdd[1] = -1 * add;
-    else if (state == SFG_MONSTER_STATE_GOING_S ||
-        state == SFG_MONSTER_STATE_GOING_SE ||
-        state == SFG_MONSTER_STATE_GOING_SW)
+    else if (state == LHR_MONSTER_STATE_GOING_S ||
+        state == LHR_MONSTER_STATE_GOING_SE ||
+        state == LHR_MONSTER_STATE_GOING_SW)
       coordAdd[1] = add;
 
-    if ((coordAdd[0] != 0 || coordAdd[1] != 0) && SFG_random() <
-        SFG_MONSTER_SOUND_PROBABILITY)
-      SFG_playGameSound(5,
-          SFG_distantSoundVolume( 
-          SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]),
-          SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]),
+    if ((coordAdd[0] != 0 || coordAdd[1] != 0) && LHR_random() <
+        LHR_MONSTER_SOUND_PROBABILITY)
+      LHR_playGameSound(5,
+          LHR_distantSoundVolume( 
+          LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]),
+          LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]),
           currentHeight) / 2);
 
-    state = SFG_MONSTER_STATE_IDLE;
+    state = LHR_MONSTER_STATE_IDLE;
   }
 
   int16_t newPos[2];
@@ -2539,18 +2539,18 @@ void SFG_monsterPerformAI(SFG_MonsterRecord *monster)
       newPos[0] = monster->coords[0] + (i != 1) * coordAdd[0];
 
       RCL_Unit newHeight =
-        SFG_floorCollisionHeightAt(
-          SFG_MONSTER_COORD_TO_SQUARES(newPos[0]),
-          SFG_MONSTER_COORD_TO_SQUARES(newPos[1]));
+        LHR_floorCollisionHeightAt(
+          LHR_MONSTER_COORD_TO_SQUARES(newPos[0]),
+          LHR_MONSTER_COORD_TO_SQUARES(newPos[1]));
 
       collision =
         RCL_abs(currentHeight - newHeight) > RCL_CAMERA_COLL_STEP_HEIGHT;
 
       if (!collision)
-        collision = (SFG_ceilingHeightAt(
-          SFG_MONSTER_COORD_TO_SQUARES(newPos[0]),
-          SFG_MONSTER_COORD_TO_SQUARES(newPos[1])) - newHeight) <
-          SFG_MONSTER_COLLISION_HEIGHT;
+        collision = (LHR_ceilingHeightAt(
+          LHR_MONSTER_COORD_TO_SQUARES(newPos[0]),
+          LHR_MONSTER_COORD_TO_SQUARES(newPos[1])) - newHeight) <
+          LHR_MONSTER_COLLISION_HEIGHT;
 
       if (collision)
         break;
@@ -2561,7 +2561,7 @@ void SFG_monsterPerformAI(SFG_MonsterRecord *monster)
 
   if (collision)
   {
-    state = SFG_MONSTER_STATE_IDLE;
+    state = LHR_MONSTER_STATE_IDLE;
     // ^ will force the monster to choose random direction in the next update
  
     newPos[0] = monster->coords[0];
@@ -2573,7 +2573,7 @@ void SFG_monsterPerformAI(SFG_MonsterRecord *monster)
   monster->coords[1] = newPos[1];;
 }
 
-static inline uint8_t SFG_elementCollides(
+static inline uint8_t LHR_elementCollides(
   RCL_Unit pointX,
   RCL_Unit pointY,
   RCL_Unit pointZ,
@@ -2583,22 +2583,22 @@ static inline uint8_t SFG_elementCollides(
 )
 {
   return
-    SFG_taxicabDistance(pointX,pointY,pointZ,elementX,elementY,elementHeight)
-    <= SFG_ELEMENT_COLLISION_RADIUS;
+    LHR_taxicabDistance(pointX,pointY,pointZ,elementX,elementY,elementHeight)
+    <= LHR_ELEMENT_COLLISION_RADIUS;
 }
 
 /**
   Checks collision of a projectile with level element at given position.
 */
-uint8_t SFG_projectileCollides(SFG_ProjectileRecord *projectile,
+uint8_t LHR_projectileCollides(LHR_ProjectileRecord *projectile,
   RCL_Unit x, RCL_Unit y, RCL_Unit z)
 {
-  if (!SFG_elementCollides(x,y,z,
+  if (!LHR_elementCollides(x,y,z,
     projectile->position[0],projectile->position[1],projectile->position[2]))
     return 0;
 
-  if ((projectile->type == SFG_PROJECTILE_EXPLOSION) ||
-      (projectile->type == SFG_PROJECTILE_DUST))
+  if ((projectile->type == LHR_PROJECTILE_EXPLOSION) ||
+      (projectile->type == LHR_PROJECTILE_DUST))
     return 0;
 
   /* For directional projectiles we only register a collision if its direction
@@ -2620,25 +2620,25 @@ uint8_t SFG_projectileCollides(SFG_ProjectileRecord *projectile,
   Updates a frame of the currently loaded level, i.e. enemies, projectiles,
   animations etc., with the exception of player.
 */
-void SFG_updateLevel(void)
+void LHR_updateLevel(void)
 {
   // update projectiles:
 
   uint8_t subtractFrames =
-    ((SFG_game.frame - SFG_currentLevel.frameStart) & 0x01) ? 1 : 0;
+    ((LHR_game.frame - LHR_currentLevel.frameStart) & 0x01) ? 1 : 0;
     /* ^ only subtract frames to live every other frame because a maximum of
        256 frames would be too few */
 
-  for (int8_t i = 0; i < SFG_currentLevel.projectileRecordCount; ++i)
+  for (int8_t i = 0; i < LHR_currentLevel.projectileRecordCount; ++i)
   { // ^ has to be signed
-    SFG_ProjectileRecord *p = &(SFG_currentLevel.projectileRecords[i]);
+    LHR_ProjectileRecord *p = &(LHR_currentLevel.projectileRecords[i]);
 
     uint8_t attackType = 255;
 
-    if (p->type == SFG_PROJECTILE_BULLET)
-      attackType = SFG_WEAPON_FIRE_TYPE_BULLET;
-    else if (p->type == SFG_PROJECTILE_PLASMA)
-      attackType = SFG_WEAPON_FIRE_TYPE_PLASMA;
+    if (p->type == LHR_PROJECTILE_BULLET)
+      attackType = LHR_WEAPON_FIRE_TYPE_BULLET;
+    else if (p->type == LHR_PROJECTILE_PLASMA)
+      attackType = LHR_WEAPON_FIRE_TYPE_PLASMA;
 
     RCL_Unit pos[3] = {0,0,0}; /* we have to convert from uint16_t because of
                                   under/overflows */
@@ -2651,7 +2651,7 @@ void SFG_updateLevel(void)
 
       if ( // projectile outside map?
         (pos[j] < 0) ||
-        (pos[j] >= (SFG_MAP_SIZE * RCL_UNITS_PER_SQUARE)))
+        (pos[j] >= (LHR_MAP_SIZE * RCL_UNITS_PER_SQUARE)))
       {
         eliminate = 1;
         break;
@@ -2663,29 +2663,29 @@ void SFG_updateLevel(void)
       eliminate = 1;
     }
     else if (
-      (p->type != SFG_PROJECTILE_EXPLOSION) &&
-      (p->type != SFG_PROJECTILE_DUST))
+      (p->type != LHR_PROJECTILE_EXPLOSION) &&
+      (p->type != LHR_PROJECTILE_DUST))
     {
-      if (SFG_projectileCollides( // collides with player?
+      if (LHR_projectileCollides( // collides with player?
             p,
-            SFG_player.camera.position.x,
-            SFG_player.camera.position.y,
-            SFG_player.camera.height))
+            LHR_player.camera.position.x,
+            LHR_player.camera.position.y,
+            LHR_player.camera.height))
         {
           eliminate = 1;
 
-          SFG_playerChangeHealth(-1 * SFG_getDamageValue(attackType));
+          LHR_playerChangeHealth(-1 * LHR_getDamageValue(attackType));
         }
 
-      /* Check collision with the map (we don't use SFG_floorCollisionHeightAt
+      /* Check collision with the map (we don't use LHR_floorCollisionHeightAt
          because collisions with items have to be done differently for
          projectiles). */
 
       if (!eliminate &&
-          ((SFG_floorHeightAt(pos[0] / RCL_UNITS_PER_SQUARE,pos[1] / 
+          ((LHR_floorHeightAt(pos[0] / RCL_UNITS_PER_SQUARE,pos[1] / 
             RCL_UNITS_PER_SQUARE) >= pos[2])
           ||
-          (SFG_ceilingHeightAt(pos[0] / RCL_UNITS_PER_SQUARE,pos[1] /
+          (LHR_ceilingHeightAt(pos[0] / RCL_UNITS_PER_SQUARE,pos[1] /
             RCL_UNITS_PER_SQUARE) <= pos[2]))
         )
         eliminate = 1;
@@ -2693,50 +2693,50 @@ void SFG_updateLevel(void)
       // check collision with active level elements
 
       if (!eliminate) // monsters 
-        for (uint16_t j = 0; j < SFG_currentLevel.monsterRecordCount; ++j)
+        for (uint16_t j = 0; j < LHR_currentLevel.monsterRecordCount; ++j)
         {
-          SFG_MonsterRecord *m = &(SFG_currentLevel.monsterRecords[j]);
+          LHR_MonsterRecord *m = &(LHR_currentLevel.monsterRecords[j]);
 
-          uint8_t state = SFG_MR_STATE(*m);
+          uint8_t state = LHR_MR_STATE(*m);
 
-          if ((state != SFG_MONSTER_STATE_INACTIVE) &&
-              (state != SFG_MONSTER_STATE_DEAD))
+          if ((state != LHR_MONSTER_STATE_INACTIVE) &&
+              (state != LHR_MONSTER_STATE_DEAD))
           {
-            if (SFG_projectileCollides(p,
-                  SFG_MONSTER_COORD_TO_RCL_UNITS(m->coords[0]),
-                  SFG_MONSTER_COORD_TO_RCL_UNITS(m->coords[1]),
-                  SFG_floorHeightAt(
-                    SFG_MONSTER_COORD_TO_SQUARES(m->coords[0]),
-                    SFG_MONSTER_COORD_TO_SQUARES(m->coords[1]))
+            if (LHR_projectileCollides(p,
+                  LHR_MONSTER_COORD_TO_RCL_UNITS(m->coords[0]),
+                  LHR_MONSTER_COORD_TO_RCL_UNITS(m->coords[1]),
+                  LHR_floorHeightAt(
+                    LHR_MONSTER_COORD_TO_SQUARES(m->coords[0]),
+                    LHR_MONSTER_COORD_TO_SQUARES(m->coords[1]))
                    ))
             {
               eliminate = 1;
-              SFG_monsterChangeHealth(m,-1 * SFG_getDamageValue(attackType));
+              LHR_monsterChangeHealth(m,-1 * LHR_getDamageValue(attackType));
               break;
             }
           }
         }
 
       if (!eliminate) // items (can't check itemCollisionMap because of barrels)
-        for (uint16_t j = 0; j < SFG_currentLevel.itemRecordCount; ++j)
+        for (uint16_t j = 0; j < LHR_currentLevel.itemRecordCount; ++j)
         {
-          const SFG_LevelElement *e = SFG_getActiveItemElement(j);
+          const LHR_LevelElement *e = LHR_getActiveItemElement(j);
 
-          if (e != 0 && SFG_itemCollides(e->type))
+          if (e != 0 && LHR_itemCollides(e->type))
           {
-            RCL_Unit x = SFG_ELEMENT_COORD_TO_RCL_UNITS(e->coords[0]);
-            RCL_Unit y = SFG_ELEMENT_COORD_TO_RCL_UNITS(e->coords[1]);
-            RCL_Unit z = SFG_floorHeightAt(e->coords[0],e->coords[1]);
+            RCL_Unit x = LHR_ELEMENT_COORD_TO_RCL_UNITS(e->coords[0]);
+            RCL_Unit y = LHR_ELEMENT_COORD_TO_RCL_UNITS(e->coords[1]);
+            RCL_Unit z = LHR_floorHeightAt(e->coords[0],e->coords[1]);
 
-            if (SFG_projectileCollides(p,x,y,z))
+            if (LHR_projectileCollides(p,x,y,z))
             {
               if (
-                   (e->type == SFG_LEVEL_ELEMENT_BARREL) &&
-                   (SFG_getDamageValue(attackType) >= 
-                     SFG_BARREL_EXPLOSION_DAMAGE_THRESHOLD)
+                   (e->type == LHR_LEVEL_ELEMENT_BARREL) &&
+                   (LHR_getDamageValue(attackType) >= 
+                     LHR_BARREL_EXPLOSION_DAMAGE_THRESHOLD)
                  )
               {
-                SFG_explodeBarrel(j,x,y,z);
+                LHR_explodeBarrel(j,x,y,z);
               }
 
               eliminate = 1;
@@ -2748,20 +2748,20 @@ void SFG_updateLevel(void)
 
     if (eliminate)
     {
-      if (p->type == SFG_PROJECTILE_FIREBALL)
-        SFG_createExplosion(p->position[0],p->position[1],p->position[2]);
-      else if (p->type == SFG_PROJECTILE_BULLET)
-        SFG_createDust(p->position[0],p->position[1],p->position[2]);
-      else if (p->type == SFG_PROJECTILE_PLASMA)
-        SFG_playGameSound(4,SFG_distantSoundVolume(pos[0],pos[1],pos[2]));
+      if (p->type == LHR_PROJECTILE_FIREBALL)
+        LHR_createExplosion(p->position[0],p->position[1],p->position[2]);
+      else if (p->type == LHR_PROJECTILE_BULLET)
+        LHR_createDust(p->position[0],p->position[1],p->position[2]);
+      else if (p->type == LHR_PROJECTILE_PLASMA)
+        LHR_playGameSound(4,LHR_distantSoundVolume(pos[0],pos[1],pos[2]));
 
       // remove the projectile
 
-      for (uint8_t j = i; j < SFG_currentLevel.projectileRecordCount - 1; ++j)
-        SFG_currentLevel.projectileRecords[j] =
-          SFG_currentLevel.projectileRecords[j + 1];
+      for (uint8_t j = i; j < LHR_currentLevel.projectileRecordCount - 1; ++j)
+        LHR_currentLevel.projectileRecords[j] =
+          LHR_currentLevel.projectileRecords[j + 1];
 
-      SFG_currentLevel.projectileRecordCount--;
+      LHR_currentLevel.projectileRecordCount--;
 
       i--;
     }
@@ -2776,213 +2776,213 @@ void SFG_updateLevel(void)
   }
 
   // handle door:
-  if (SFG_currentLevel.doorRecordCount > 0) // has to be here
+  if (LHR_currentLevel.doorRecordCount > 0) // has to be here
   {
     /* Check door on whether a player is standing nearby. For performance
        reasons we only check a few doors and move to others in the next
        frame. */
    
-    if (SFG_currentLevel.checkedDoorIndex == 0)
+    if (LHR_currentLevel.checkedDoorIndex == 0)
     {
-      uint8_t count = SFG_player.cards >> 6;
+      uint8_t count = LHR_player.cards >> 6;
 
-      SFG_player.cards = (count <= 1) ?
-        (SFG_player.cards & 0x07) :
-        ((SFG_player.cards & 0x7f) | ((count - 1) << 6));
+      LHR_player.cards = (count <= 1) ?
+        (LHR_player.cards & 0x07) :
+        ((LHR_player.cards & 0x7f) | ((count - 1) << 6));
     }
  
     for (uint16_t i = 0;
-         i < RCL_min(SFG_ELEMENT_DISTANCES_CHECKED_PER_FRAME,
-           SFG_currentLevel.doorRecordCount);
+         i < RCL_min(LHR_ELEMENT_DISTANCES_CHECKED_PER_FRAME,
+           LHR_currentLevel.doorRecordCount);
          ++i) 
     {
-      SFG_DoorRecord *door =
-        &(SFG_currentLevel.doorRecords[SFG_currentLevel.checkedDoorIndex]);
+      LHR_DoorRecord *door =
+        &(LHR_currentLevel.doorRecords[LHR_currentLevel.checkedDoorIndex]);
 
-      uint8_t upDownState = door->state & SFG_DOOR_UP_DOWN_MASK;
+      uint8_t upDownState = door->state & LHR_DOOR_UP_DOWN_MASK;
 
       uint8_t newUpDownState = 0;
       
-      uint8_t lock = SFG_DOOR_LOCK(door->state);
+      uint8_t lock = LHR_DOOR_LOCK(door->state);
 
       if ( // player near door?
-        (door->coords[0] >= (SFG_player.squarePosition[0] - 1)) &&
-        (door->coords[0] <= (SFG_player.squarePosition[0] + 1)) &&
-        (door->coords[1] >= (SFG_player.squarePosition[1] - 1)) &&
-        (door->coords[1] <= (SFG_player.squarePosition[1] + 1)))
+        (door->coords[0] >= (LHR_player.squarePosition[0] - 1)) &&
+        (door->coords[0] <= (LHR_player.squarePosition[0] + 1)) &&
+        (door->coords[1] >= (LHR_player.squarePosition[1] - 1)) &&
+        (door->coords[1] <= (LHR_player.squarePosition[1] + 1)))
       {
         if (lock == 0)
         {
-          newUpDownState = SFG_DOOR_UP_DOWN_MASK;    
+          newUpDownState = LHR_DOOR_UP_DOWN_MASK;    
         }
         else
         {
           lock = 1 << (lock - 1);
 
-          if (SFG_player.cards & lock) // player has the card?
-            newUpDownState = SFG_DOOR_UP_DOWN_MASK;
+          if (LHR_player.cards & lock) // player has the card?
+            newUpDownState = LHR_DOOR_UP_DOWN_MASK;
           else
-            SFG_player.cards = 
-              (SFG_player.cards & 0x07) | (lock << 3) | (2 << 6);
+            LHR_player.cards = 
+              (LHR_player.cards & 0x07) | (lock << 3) | (2 << 6);
         }
       }
 
       if (upDownState != newUpDownState)
-        SFG_playGameSound(1,255);
+        LHR_playGameSound(1,255);
 
-      door->state = (door->state & ~SFG_DOOR_UP_DOWN_MASK) | newUpDownState;
+      door->state = (door->state & ~LHR_DOOR_UP_DOWN_MASK) | newUpDownState;
 
-      SFG_currentLevel.checkedDoorIndex++;
+      LHR_currentLevel.checkedDoorIndex++;
 
-      if (SFG_currentLevel.checkedDoorIndex >= SFG_currentLevel.doorRecordCount)
-        SFG_currentLevel.checkedDoorIndex = 0;
+      if (LHR_currentLevel.checkedDoorIndex >= LHR_currentLevel.doorRecordCount)
+        LHR_currentLevel.checkedDoorIndex = 0;
     }
 
     // move door up/down:
-    for (uint32_t i = 0; i < SFG_currentLevel.doorRecordCount; ++i)
+    for (uint32_t i = 0; i < LHR_currentLevel.doorRecordCount; ++i)
     {
-      SFG_DoorRecord *door = &(SFG_currentLevel.doorRecords[i]);
+      LHR_DoorRecord *door = &(LHR_currentLevel.doorRecords[i]);
 
-      int8_t height = door->state & SFG_DOOR_VERTICAL_POSITION_MASK;
+      int8_t height = door->state & LHR_DOOR_VERTICAL_POSITION_MASK;
 
-      height = (door->state & SFG_DOOR_UP_DOWN_MASK) ?
-            RCL_min(0x1f,height + SFG_DOOR_INCREMENT_PER_FRAME) :
-            RCL_max(0x00,height - SFG_DOOR_INCREMENT_PER_FRAME);
+      height = (door->state & LHR_DOOR_UP_DOWN_MASK) ?
+            RCL_min(0x1f,height + LHR_DOOR_INCREMENT_PER_FRAME) :
+            RCL_max(0x00,height - LHR_DOOR_INCREMENT_PER_FRAME);
 
-      door->state = (door->state & ~SFG_DOOR_VERTICAL_POSITION_MASK) | height;
+      door->state = (door->state & ~LHR_DOOR_VERTICAL_POSITION_MASK) | height;
     }
   }
 
   // handle items, in a similar manner to door:
-  if (SFG_currentLevel.itemRecordCount > 0) // has to be here
+  if (LHR_currentLevel.itemRecordCount > 0) // has to be here
   {
     // check item distances:
 
     for (uint16_t i = 0;
-         i < RCL_min(SFG_ELEMENT_DISTANCES_CHECKED_PER_FRAME,
-           SFG_currentLevel.itemRecordCount);
+         i < RCL_min(LHR_ELEMENT_DISTANCES_CHECKED_PER_FRAME,
+           LHR_currentLevel.itemRecordCount);
          ++i) 
     {
-      SFG_ItemRecord item =
-        SFG_currentLevel.itemRecords[SFG_currentLevel.checkedItemIndex];
+      LHR_ItemRecord item =
+        LHR_currentLevel.itemRecords[LHR_currentLevel.checkedItemIndex];
 
-      item &= ~SFG_ITEM_RECORD_ACTIVE_MASK;
+      item &= ~LHR_ITEM_RECORD_ACTIVE_MASK;
 
-      SFG_LevelElement e =
-        SFG_currentLevel.levelPointer->elements[item];
+      LHR_LevelElement e =
+        LHR_currentLevel.levelPointer->elements[item];
 
       if (
-        SFG_isInActiveDistanceFromPlayer(
+        LHR_isInActiveDistanceFromPlayer(
           e.coords[0] * RCL_UNITS_PER_SQUARE + RCL_UNITS_PER_SQUARE / 2,
           e.coords[1] * RCL_UNITS_PER_SQUARE + RCL_UNITS_PER_SQUARE / 2,
-          SFG_floorHeightAt(e.coords[0],e.coords[1]) + RCL_UNITS_PER_SQUARE / 2)
+          LHR_floorHeightAt(e.coords[0],e.coords[1]) + RCL_UNITS_PER_SQUARE / 2)
         )
-        item |= SFG_ITEM_RECORD_ACTIVE_MASK;
+        item |= LHR_ITEM_RECORD_ACTIVE_MASK;
 
-      SFG_currentLevel.itemRecords[SFG_currentLevel.checkedItemIndex] = item;
+      LHR_currentLevel.itemRecords[LHR_currentLevel.checkedItemIndex] = item;
 
-      SFG_currentLevel.checkedItemIndex++;
+      LHR_currentLevel.checkedItemIndex++;
 
-      if (SFG_currentLevel.checkedItemIndex >= SFG_currentLevel.itemRecordCount)
-        SFG_currentLevel.checkedItemIndex = 0;
+      if (LHR_currentLevel.checkedItemIndex >= LHR_currentLevel.itemRecordCount)
+        LHR_currentLevel.checkedItemIndex = 0;
     }
   }
 
   // similarly handle monsters:
-  if (SFG_currentLevel.monsterRecordCount > 0) // has to be here
+  if (LHR_currentLevel.monsterRecordCount > 0) // has to be here
   {
     // check monster distances:
 
     for (uint16_t i = 0;
-         i < RCL_min(SFG_ELEMENT_DISTANCES_CHECKED_PER_FRAME,
-           SFG_currentLevel.monsterRecordCount);
+         i < RCL_min(LHR_ELEMENT_DISTANCES_CHECKED_PER_FRAME,
+           LHR_currentLevel.monsterRecordCount);
          ++i) 
     {
-      SFG_MonsterRecord *monster =
-      &(SFG_currentLevel.monsterRecords[SFG_currentLevel.checkedMonsterIndex]);
+      LHR_MonsterRecord *monster =
+      &(LHR_currentLevel.monsterRecords[LHR_currentLevel.checkedMonsterIndex]);
 
       if ( // far away from the player?
-        !SFG_isInActiveDistanceFromPlayer(
-          SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]),
-          SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]),
-          SFG_floorHeightAt(
-            SFG_MONSTER_COORD_TO_SQUARES(monster->coords[0]),
-            SFG_MONSTER_COORD_TO_SQUARES(monster->coords[1]))
+        !LHR_isInActiveDistanceFromPlayer(
+          LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]),
+          LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]),
+          LHR_floorHeightAt(
+            LHR_MONSTER_COORD_TO_SQUARES(monster->coords[0]),
+            LHR_MONSTER_COORD_TO_SQUARES(monster->coords[1]))
             + RCL_UNITS_PER_SQUARE / 2
           )
         )
       {
         monster->stateType = 
-           (monster->stateType & SFG_MONSTER_MASK_TYPE) |
-           SFG_MONSTER_STATE_INACTIVE;
+           (monster->stateType & LHR_MONSTER_MASK_TYPE) |
+           LHR_MONSTER_STATE_INACTIVE;
       }
-      else if (SFG_MR_STATE(*monster) == SFG_MONSTER_STATE_INACTIVE)
+      else if (LHR_MR_STATE(*monster) == LHR_MONSTER_STATE_INACTIVE)
       {
         monster->stateType = 
-          (monster->stateType & SFG_MONSTER_MASK_TYPE) |
+          (monster->stateType & LHR_MONSTER_MASK_TYPE) |
           (monster->health != 0 ? 
-            SFG_MONSTER_STATE_IDLE : SFG_MONSTER_STATE_DEAD);
+            LHR_MONSTER_STATE_IDLE : LHR_MONSTER_STATE_DEAD);
       }
 
-      SFG_currentLevel.checkedMonsterIndex++;
+      LHR_currentLevel.checkedMonsterIndex++;
 
-      if (SFG_currentLevel.checkedMonsterIndex >=
-        SFG_currentLevel.monsterRecordCount)
-        SFG_currentLevel.checkedMonsterIndex = 0;
+      if (LHR_currentLevel.checkedMonsterIndex >=
+        LHR_currentLevel.monsterRecordCount)
+        LHR_currentLevel.checkedMonsterIndex = 0;
     }
   }
 
   // update AI and handle dead monsters:
-  if ((SFG_game.frame - SFG_currentLevel.frameStart) %
-      SFG_AI_UPDATE_FRAME_INTERVAL == 0)
+  if ((LHR_game.frame - LHR_currentLevel.frameStart) %
+      LHR_AI_UPDATE_FRAME_INTERVAL == 0)
   {
-    for (uint16_t i = 0; i < SFG_currentLevel.monsterRecordCount; ++i)
+    for (uint16_t i = 0; i < LHR_currentLevel.monsterRecordCount; ++i)
     {
-      SFG_MonsterRecord *monster = &(SFG_currentLevel.monsterRecords[i]);
-      uint8_t state = SFG_MR_STATE(*monster);
+      LHR_MonsterRecord *monster = &(LHR_currentLevel.monsterRecords[i]);
+      uint8_t state = LHR_MR_STATE(*monster);
 
-      if ((state == SFG_MONSTER_STATE_INACTIVE) || 
-          (state == SFG_MONSTER_STATE_DEAD))
+      if ((state == LHR_MONSTER_STATE_INACTIVE) || 
+          (state == LHR_MONSTER_STATE_DEAD))
         continue;
 
-      if (state == SFG_MONSTER_STATE_DYING)
+      if (state == LHR_MONSTER_STATE_DYING)
       {
         monster->stateType =
-          (monster->stateType & 0xf0) | SFG_MONSTER_STATE_DEAD;
+          (monster->stateType & 0xf0) | LHR_MONSTER_STATE_DEAD;
       }
       else if (monster->health == 0)
       {
-        monster->stateType = (monster->stateType & SFG_MONSTER_MASK_TYPE) |
-          SFG_MONSTER_STATE_DYING;
+        monster->stateType = (monster->stateType & LHR_MONSTER_MASK_TYPE) |
+          LHR_MONSTER_STATE_DYING;
 
-        if (SFG_MR_TYPE(*monster) == SFG_LEVEL_ELEMENT_MONSTER_ENDER)
+        if (LHR_MR_TYPE(*monster) == LHR_LEVEL_ELEMENT_MONSTER_ENDER)
         {
-          SFG_currentLevel.bossCount--;
+          LHR_currentLevel.bossCount--;
 
           // last boss killed gives player a key card
 
-          if (SFG_currentLevel.bossCount == 0)
+          if (LHR_currentLevel.bossCount == 0)
           {
-            SFG_LOG("boss killed, giving player a card");
-            SFG_player.cards |= 0x04;
+            LHR_LOG("boss killed, giving player a card");
+            LHR_player.cards |= 0x04;
           }
         }
 
-        SFG_processEvent(SFG_EVENT_MONSTER_DIES,SFG_MR_TYPE(*monster));
+        LHR_processEvent(LHR_EVENT_MONSTER_DIES,LHR_MR_TYPE(*monster));
 
-        if (SFG_MR_TYPE(*monster) == SFG_LEVEL_ELEMENT_MONSTER_EXPLODER)
-          SFG_createExplosion(
-            SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]),
-            SFG_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]),
-            SFG_floorCollisionHeightAt(
-              SFG_MONSTER_COORD_TO_SQUARES(monster->coords[0]),
-              SFG_MONSTER_COORD_TO_SQUARES(monster->coords[0])) +
+        if (LHR_MR_TYPE(*monster) == LHR_LEVEL_ELEMENT_MONSTER_EXPLODER)
+          LHR_createExplosion(
+            LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[0]),
+            LHR_MONSTER_COORD_TO_RCL_UNITS(monster->coords[1]),
+            LHR_floorCollisionHeightAt(
+              LHR_MONSTER_COORD_TO_SQUARES(monster->coords[0]),
+              LHR_MONSTER_COORD_TO_SQUARES(monster->coords[0])) +
             RCL_UNITS_PER_SQUARE / 2);
       }
       else
       {
-#if SFG_PREVIEW_MODE == 0
-        SFG_monsterPerformAI(monster);
+#if LHR_PREVIEW_MODE == 0
+        LHR_monsterPerformAI(monster);
 #endif
       }
     }
@@ -2992,7 +2992,7 @@ void SFG_updateLevel(void)
 /**
   Maps square position on the map to a bit in map reveal mask.
 */
-static inline uint16_t SFG_getMapRevealBit(uint8_t squareX, uint8_t squareY)
+static inline uint16_t LHR_getMapRevealBit(uint8_t squareX, uint8_t squareY)
 {
   return 1 << ((squareY / 16) * 4 + squareX / 16);
 }
@@ -3000,7 +3000,7 @@ static inline uint16_t SFG_getMapRevealBit(uint8_t squareX, uint8_t squareY)
 /**
   Draws text on screen using the bitmap font stored in assets.
 */
-void SFG_drawText(
+void LHR_drawText(
   const char *text,
   uint16_t x,
   uint16_t y,
@@ -3026,14 +3026,14 @@ void SFG_drawText(
   while (pos < maxLength && text[pos] != 0) // for each character
   {
     uint16_t character = 
-      //SFG_PROGRAM_MEMORY_U8(SFG_font + SFG_charToFontIndex(text[pos]));
-      SFG_font[SFG_charToFontIndex(text[pos])];
+      //LHR_PROGRAM_MEMORY_U8(LHR_font + LHR_charToFontIndex(text[pos]));
+      LHR_font[LHR_charToFontIndex(text[pos])];
 
-    for (uint8_t i = 0; i < SFG_FONT_CHARACTER_SIZE; ++i) // for each line
+    for (uint8_t i = 0; i < LHR_FONT_CHARACTER_SIZE; ++i) // for each line
     {
       currentY = y;
 
-      for (uint8_t j = 0; j < SFG_FONT_CHARACTER_SIZE; ++j) // for each row
+      for (uint8_t j = 0; j < LHR_FONT_CHARACTER_SIZE; ++j) // for each row
       {
         if (character & 0x8000)
           for (uint8_t k = 0; k < size; ++k)
@@ -3042,9 +3042,9 @@ void SFG_drawText(
               uint16_t drawX = currentX + k;
               uint16_t drawY = currentY + l;
 
-              if (drawX < SFG_GAME_RESOLUTION_X &&
-                drawY < SFG_GAME_RESOLUTION_Y)
-                SFG_setGamePixel(drawX,drawY,color);
+              if (drawX < LHR_GAME_RESOLUTION_X &&
+                drawY < LHR_GAME_RESOLUTION_Y)
+                LHR_setGamePixel(drawX,drawY,color);
             }
 
         currentY += size;
@@ -3059,21 +3059,21 @@ void SFG_drawText(
     if (currentX > limitX)
     {
       currentX = x;
-      y += (SFG_FONT_CHARACTER_SIZE + 1) * size;
+      y += (LHR_FONT_CHARACTER_SIZE + 1) * size;
     }
 
     pos++;    
   }
 }
 
-void SFG_drawLevelStartOverlay(void)
+void LHR_drawLevelStartOverlay(void)
 {
-  uint8_t stage = (SFG_game.stateTime * 4) / SFG_LEVEL_START_DURATION;
+  uint8_t stage = (LHR_game.stateTime * 4) / LHR_LEVEL_START_DURATION;
 
   // fade in:
 
-  for (uint16_t y = 0; y < SFG_GAME_RESOLUTION_Y; ++y)
-    for (uint16_t x = 0; x < SFG_GAME_RESOLUTION_X; ++x)
+  for (uint16_t y = 0; y < LHR_GAME_RESOLUTION_Y; ++y)
+    for (uint16_t x = 0; x < LHR_GAME_RESOLUTION_X; ++x)
     {
       uint8_t draw = 0;
 
@@ -3087,56 +3087,56 @@ void SFG_drawLevelStartOverlay(void)
       }
 
       if (draw)
-        SFG_setGamePixel(x,y,0);
+        LHR_setGamePixel(x,y,0);
     }
 
-  if (SFG_game.saved == 1)
-    SFG_drawText(SFG_TEXT_SAVED,SFG_HUD_MARGIN,SFG_HUD_MARGIN,
-      SFG_FONT_SIZE_MEDIUM,7,255,0);
+  if (LHR_game.saved == 1)
+    LHR_drawText(LHR_TEXT_SAVED,LHR_HUD_MARGIN,LHR_HUD_MARGIN,
+      LHR_FONT_SIZE_MEDIUM,7,255,0);
 }
 
 /**
   Sets player's height to match the floor height below him.
 */
-void SFG_updatePlayerHeight(void)
+void LHR_updatePlayerHeight(void)
 {
-  SFG_player.camera.height =
-    SFG_floorCollisionHeightAt(
-      SFG_player.squarePosition[0],SFG_player.squarePosition[1]) +
+  LHR_player.camera.height =
+    LHR_floorCollisionHeightAt(
+      LHR_player.squarePosition[0],LHR_player.squarePosition[1]) +
       RCL_CAMERA_COLL_HEIGHT_BELOW;
 }
 
-void SFG_winLevel(void)
+void LHR_winLevel(void)
 {
-  SFG_levelEnds();
-  SFG_setGameState(SFG_GAME_STATE_WIN);
-  SFG_playGameSound(2,255); 
-  SFG_processEvent(SFG_EVENT_VIBRATE,0);
-  SFG_processEvent(SFG_EVENT_LEVEL_WON,SFG_currentLevel.levelNumber + 1);
+  LHR_levelEnds();
+  LHR_setGameState(LHR_GAME_STATE_WIN);
+  LHR_playGameSound(2,255); 
+  LHR_processEvent(LHR_EVENT_VIBRATE,0);
+  LHR_processEvent(LHR_EVENT_LEVEL_WON,LHR_currentLevel.levelNumber + 1);
 }
 
 /**
-  Part of SFG_gameStep() for SFG_GAME_STATE_PLAYING.
+  Part of LHR_gameStep() for LHR_GAME_STATE_PLAYING.
 */
-void SFG_gameStepPlaying(void)
+void LHR_gameStepPlaying(void)
 {
-#if SFG_QUICK_WIN
-  if (SFG_game.stateTime > 500)
-    SFG_winLevel();
+#if LHR_QUICK_WIN
+  if (LHR_game.stateTime > 500)
+    LHR_winLevel();
 #endif
 
   if (
-    (SFG_keyIsDown(SFG_KEY_C) && SFG_keyIsDown(SFG_KEY_DOWN)) ||
-    SFG_keyIsDown(SFG_KEY_MENU))
+    (LHR_keyIsDown(LHR_KEY_C) && LHR_keyIsDown(LHR_KEY_DOWN)) ||
+    LHR_keyIsDown(LHR_KEY_MENU))
   {
-    SFG_setGameState(SFG_GAME_STATE_MENU);
-    SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
+    LHR_setGameState(LHR_GAME_STATE_MENU);
+    LHR_playGameSound(3,LHR_MENU_CLICK_VOLUME);
     return;
   }
 
-  SFG_updateLevel();
+  LHR_updateLevel();
 
-  int8_t recomputeDirection = SFG_currentLevel.frameStart == SFG_game.frame;
+  int8_t recomputeDirection = LHR_currentLevel.frameStart == LHR_game.frame;
 
   RCL_Vector2D moveOffset;
 
@@ -3145,103 +3145,103 @@ void SFG_gameStepPlaying(void)
 
   int8_t strafe = 0;
 
-  uint8_t currentWeapon = SFG_player.weapon;
+  uint8_t currentWeapon = LHR_player.weapon;
 
-#if SFG_HEADBOB_ENABLED
+#if LHR_HEADBOB_ENABLED
   int8_t bobbing = 0;
 #endif
 
   int8_t shearing = 0;
 
-  if (SFG_player.weaponCooldownFrames > 0)
-    SFG_player.weaponCooldownFrames--;
+  if (LHR_player.weaponCooldownFrames > 0)
+    LHR_player.weaponCooldownFrames--;
 
-  if (SFG_keyJustPressed(SFG_KEY_TOGGLE_FREELOOK))
-    SFG_game.settings = (SFG_game.settings & 0x04) ?
-      (SFG_game.settings & ~0x0c) : (SFG_game.settings | 0x0c);
+  if (LHR_keyJustPressed(LHR_KEY_TOGGLE_FREELOOK))
+    LHR_game.settings = (LHR_game.settings & 0x04) ?
+      (LHR_game.settings & ~0x0c) : (LHR_game.settings | 0x0c);
 
-  int8_t canSwitchWeapon = SFG_player.weaponCooldownFrames == 0;
+  int8_t canSwitchWeapon = LHR_player.weaponCooldownFrames == 0;
 
-  if (SFG_keyJustPressed(SFG_KEY_NEXT_WEAPON) && canSwitchWeapon)
-    SFG_playerRotateWeapon(1);
-  else if (SFG_keyJustPressed(SFG_KEY_PREVIOUS_WEAPON) && canSwitchWeapon)
-    SFG_playerRotateWeapon(0);
-  else if (SFG_keyJustPressed(SFG_KEY_CYCLE_WEAPON) &&
-    SFG_player.previousWeaponDirection)
-    SFG_playerRotateWeapon(SFG_player.previousWeaponDirection > 0);
+  if (LHR_keyJustPressed(LHR_KEY_NEXT_WEAPON) && canSwitchWeapon)
+    LHR_playerRotateWeapon(1);
+  else if (LHR_keyJustPressed(LHR_KEY_PREVIOUS_WEAPON) && canSwitchWeapon)
+    LHR_playerRotateWeapon(0);
+  else if (LHR_keyJustPressed(LHR_KEY_CYCLE_WEAPON) &&
+    LHR_player.previousWeaponDirection)
+    LHR_playerRotateWeapon(LHR_player.previousWeaponDirection > 0);
 
-  uint8_t shearingOn = SFG_game.settings & 0x04;
+  uint8_t shearingOn = LHR_game.settings & 0x04;
 
-  if (SFG_keyIsDown(SFG_KEY_B))
+  if (LHR_keyIsDown(LHR_KEY_B))
   {
     if (shearingOn)                      // B + U/D: shearing (if on)
     {
-      if (SFG_keyIsDown(SFG_KEY_UP))
+      if (LHR_keyIsDown(LHR_KEY_UP))
       {
-        SFG_player.camera.shear =
-          RCL_min(SFG_CAMERA_MAX_SHEAR_PIXELS,
-                  SFG_player.camera.shear + SFG_CAMERA_SHEAR_STEP_PER_FRAME);
+        LHR_player.camera.shear =
+          RCL_min(LHR_CAMERA_MAX_SHEAR_PIXELS,
+                  LHR_player.camera.shear + LHR_CAMERA_SHEAR_STEP_PER_FRAME);
 
         shearing = 1;
       }
-      else if (SFG_keyIsDown(SFG_KEY_DOWN))
+      else if (LHR_keyIsDown(LHR_KEY_DOWN))
       {
-        SFG_player.camera.shear =
-          RCL_max(-1 * SFG_CAMERA_MAX_SHEAR_PIXELS,
-                  SFG_player.camera.shear - SFG_CAMERA_SHEAR_STEP_PER_FRAME);
+        LHR_player.camera.shear =
+          RCL_max(-1 * LHR_CAMERA_MAX_SHEAR_PIXELS,
+                  LHR_player.camera.shear - LHR_CAMERA_SHEAR_STEP_PER_FRAME);
 
         shearing = 1;
       }
     }
 
-    if (!SFG_keyIsDown(SFG_KEY_C))
+    if (!LHR_keyIsDown(LHR_KEY_C))
     {                                    // B + L/R: strafing
-      if (SFG_keyIsDown(SFG_KEY_LEFT))
+      if (LHR_keyIsDown(LHR_KEY_LEFT))
         strafe = -1;
-      else if (SFG_keyIsDown(SFG_KEY_RIGHT))
+      else if (LHR_keyIsDown(LHR_KEY_RIGHT))
         strafe = 1;
     }
   }
 
-  if (SFG_keyIsDown(SFG_KEY_C))          // C + A/B/L/R: weapon switching
+  if (LHR_keyIsDown(LHR_KEY_C))          // C + A/B/L/R: weapon switching
   {
-    if ((SFG_keyJustPressed(SFG_KEY_LEFT) || SFG_keyJustPressed(SFG_KEY_A)) &&
+    if ((LHR_keyJustPressed(LHR_KEY_LEFT) || LHR_keyJustPressed(LHR_KEY_A)) &&
       canSwitchWeapon)
-      SFG_playerRotateWeapon(0);
+      LHR_playerRotateWeapon(0);
     else if (
-      (SFG_keyJustPressed(SFG_KEY_RIGHT) || SFG_keyJustPressed(SFG_KEY_B)) &&
+      (LHR_keyJustPressed(LHR_KEY_RIGHT) || LHR_keyJustPressed(LHR_KEY_B)) &&
       canSwitchWeapon)
-      SFG_playerRotateWeapon(1);
+      LHR_playerRotateWeapon(1);
   }
-  else if (!SFG_keyIsDown(SFG_KEY_B))    // L/R: turning
+  else if (!LHR_keyIsDown(LHR_KEY_B))    // L/R: turning
   {
-    if (SFG_keyIsDown(SFG_KEY_LEFT))
+    if (LHR_keyIsDown(LHR_KEY_LEFT))
     {
-      SFG_player.camera.direction -= SFG_PLAYER_TURN_UNITS_PER_FRAME;
+      LHR_player.camera.direction -= LHR_PLAYER_TURN_UNITS_PER_FRAME;
       recomputeDirection = 1;
     }
-    else if (SFG_keyIsDown(SFG_KEY_RIGHT))
+    else if (LHR_keyIsDown(LHR_KEY_RIGHT))
     {
-      SFG_player.camera.direction += SFG_PLAYER_TURN_UNITS_PER_FRAME;
+      LHR_player.camera.direction += LHR_PLAYER_TURN_UNITS_PER_FRAME;
       recomputeDirection = 1;
     } 
   }
 
-  if (!SFG_keyIsDown(SFG_KEY_B) || !shearingOn)     // U/D: movement
+  if (!LHR_keyIsDown(LHR_KEY_B) || !shearingOn)     // U/D: movement
   {
-    if (SFG_keyIsDown(SFG_KEY_UP))
+    if (LHR_keyIsDown(LHR_KEY_UP))
     {
-      moveOffset.x += SFG_player.direction.x;
-      moveOffset.y += SFG_player.direction.y;
-#if SFG_HEADBOB_ENABLED
+      moveOffset.x += LHR_player.direction.x;
+      moveOffset.y += LHR_player.direction.y;
+#if LHR_HEADBOB_ENABLED
       bobbing = 1;
 #endif
     }
-    else if (SFG_keyIsDown(SFG_KEY_DOWN))
+    else if (LHR_keyIsDown(LHR_KEY_DOWN))
     {
-      moveOffset.x -= SFG_player.direction.x;
-      moveOffset.y -= SFG_player.direction.y;
-#if SFG_HEADBOB_ENABLED
+      moveOffset.x -= LHR_player.direction.x;
+      moveOffset.y -= LHR_player.direction.y;
+#if LHR_HEADBOB_ENABLED
       bobbing = 1;
 #endif
     }
@@ -3249,38 +3249,38 @@ void SFG_gameStepPlaying(void)
 
   int16_t mouseX = 0, mouseY = 0;
 
-  SFG_getMouseOffset(&mouseX,&mouseY);
+  LHR_getMouseOffset(&mouseX,&mouseY);
 
   if (mouseX != 0)                                  // mouse turning
   {
-    SFG_player.camera.direction += 
-      (mouseX * SFG_MOUSE_SENSITIVITY_HORIZONTAL) / 128;
+    LHR_player.camera.direction += 
+      (mouseX * LHR_MOUSE_SENSITIVITY_HORIZONTAL) / 128;
 
     recomputeDirection = 1;
   }
 
   if ((mouseY != 0) && shearingOn)                  // mouse shearing
-    SFG_player.camera.shear =
+    LHR_player.camera.shear =
       RCL_max(RCL_min(
-        SFG_player.camera.shear - 
-        (mouseY * SFG_MOUSE_SENSITIVITY_VERTICAL) / 128,
-        SFG_CAMERA_MAX_SHEAR_PIXELS),
-        -1 * SFG_CAMERA_MAX_SHEAR_PIXELS);
+        LHR_player.camera.shear - 
+        (mouseY * LHR_MOUSE_SENSITIVITY_VERTICAL) / 128,
+        LHR_CAMERA_MAX_SHEAR_PIXELS),
+        -1 * LHR_CAMERA_MAX_SHEAR_PIXELS);
 
   if (recomputeDirection)
-    SFG_recomputePLayerDirection();
+    LHR_recomputePLayerDirection();
 
-  if (SFG_keyIsDown(SFG_KEY_STRAFE_LEFT))
+  if (LHR_keyIsDown(LHR_KEY_STRAFE_LEFT))
     strafe = -1;
-  else if (SFG_keyIsDown(SFG_KEY_STRAFE_RIGHT))
+  else if (LHR_keyIsDown(LHR_KEY_STRAFE_RIGHT))
     strafe = 1;
 
   if (strafe != 0)
   {
     uint8_t normalize = (moveOffset.x != 0) || (moveOffset.y != 0);
 
-    moveOffset.x += strafe * SFG_player.direction.y;
-    moveOffset.y -= strafe * SFG_player.direction.x;
+    moveOffset.x += strafe * LHR_player.direction.y;
+    moveOffset.y -= strafe * LHR_player.direction.x;
 
     if (normalize)
     {
@@ -3288,54 +3288,54 @@ void SFG_gameStepPlaying(void)
 
       moveOffset = RCL_normalize(moveOffset);
 
-      moveOffset.x = (moveOffset.x * SFG_PLAYER_MOVE_UNITS_PER_FRAME)
+      moveOffset.x = (moveOffset.x * LHR_PLAYER_MOVE_UNITS_PER_FRAME)
         / RCL_UNITS_PER_SQUARE;
 
-      moveOffset.y = (moveOffset.y * SFG_PLAYER_MOVE_UNITS_PER_FRAME)
+      moveOffset.y = (moveOffset.y * LHR_PLAYER_MOVE_UNITS_PER_FRAME)
         / RCL_UNITS_PER_SQUARE;
     }
   }
 
-#if SFG_PREVIEW_MODE
-  if (SFG_keyIsDown(SFG_KEY_B))
-    SFG_player.verticalSpeed = SFG_PLAYER_MOVE_UNITS_PER_FRAME;
-  else if (SFG_keyIsDown(SFG_KEY_C))
-    SFG_player.verticalSpeed = -1 * SFG_PLAYER_MOVE_UNITS_PER_FRAME;
+#if LHR_PREVIEW_MODE
+  if (LHR_keyIsDown(LHR_KEY_B))
+    LHR_player.verticalSpeed = LHR_PLAYER_MOVE_UNITS_PER_FRAME;
+  else if (LHR_keyIsDown(LHR_KEY_C))
+    LHR_player.verticalSpeed = -1 * LHR_PLAYER_MOVE_UNITS_PER_FRAME;
   else
-    SFG_player.verticalSpeed = 0;
+    LHR_player.verticalSpeed = 0;
 #else
   RCL_Unit verticalOffset = 
     (  
       (
-        SFG_keyIsDown(SFG_KEY_JUMP) ||
-        (SFG_keyIsDown(SFG_KEY_UP) && SFG_keyIsDown(SFG_KEY_C))
+        LHR_keyIsDown(LHR_KEY_JUMP) ||
+        (LHR_keyIsDown(LHR_KEY_UP) && LHR_keyIsDown(LHR_KEY_C))
       ) &&
-      (SFG_player.verticalSpeed == 0) &&
-      (SFG_player.previousVerticalSpeed == 0)) ?
-    SFG_PLAYER_JUMP_OFFSET_PER_FRAME : // jump
-    (SFG_player.verticalSpeed - SFG_GRAVITY_SPEED_INCREASE_PER_FRAME);
+      (LHR_player.verticalSpeed == 0) &&
+      (LHR_player.previousVerticalSpeed == 0)) ?
+    LHR_PLAYER_JUMP_OFFSET_PER_FRAME : // jump
+    (LHR_player.verticalSpeed - LHR_GRAVITY_SPEED_INCREASE_PER_FRAME);
 #endif
 
-  if (!shearing && SFG_player.camera.shear != 0 && !(SFG_game.settings & 0x08))
+  if (!shearing && LHR_player.camera.shear != 0 && !(LHR_game.settings & 0x08))
   {
     // gradually shear back to zero
 
-    SFG_player.camera.shear =
-      (SFG_player.camera.shear > 0) ?
-      RCL_max(0,SFG_player.camera.shear - SFG_CAMERA_SHEAR_STEP_PER_FRAME) :
-      RCL_min(0,SFG_player.camera.shear + SFG_CAMERA_SHEAR_STEP_PER_FRAME);
+    LHR_player.camera.shear =
+      (LHR_player.camera.shear > 0) ?
+      RCL_max(0,LHR_player.camera.shear - LHR_CAMERA_SHEAR_STEP_PER_FRAME) :
+      RCL_min(0,LHR_player.camera.shear + LHR_CAMERA_SHEAR_STEP_PER_FRAME);
   }
 
-#if SFG_HEADBOB_ENABLED && !SFG_PREVIEW_MODE
+#if LHR_HEADBOB_ENABLED && !LHR_PREVIEW_MODE
   if (bobbing)
   {
-    SFG_player.headBobFrame += SFG_HEADBOB_FRAME_INCREASE_PER_FRAME; 
+    LHR_player.headBobFrame += LHR_HEADBOB_FRAME_INCREASE_PER_FRAME; 
   }
-  else if (SFG_player.headBobFrame != 0)
+  else if (LHR_player.headBobFrame != 0)
   {
     // smoothly stop bobbing
 
-    uint8_t quadrant = (SFG_player.headBobFrame % RCL_UNITS_PER_SQUARE) /
+    uint8_t quadrant = (LHR_player.headBobFrame % RCL_UNITS_PER_SQUARE) /
       (RCL_UNITS_PER_SQUARE / 4);
 
     /* When in quadrant in which sin is going away from zero, switch to the
@@ -3343,56 +3343,56 @@ void SFG_gameStepPlaying(void)
        zero immediately. */
 
     if (quadrant % 2 == 0)
-      SFG_player.headBobFrame =
+      LHR_player.headBobFrame =
         ((quadrant + 1) * RCL_UNITS_PER_SQUARE / 4) +
-        (RCL_UNITS_PER_SQUARE / 4 - SFG_player.headBobFrame %
+        (RCL_UNITS_PER_SQUARE / 4 - LHR_player.headBobFrame %
         (RCL_UNITS_PER_SQUARE / 4));
 
-    RCL_Unit currentFrame = SFG_player.headBobFrame;
-    RCL_Unit nextFrame = SFG_player.headBobFrame + 16;
+    RCL_Unit currentFrame = LHR_player.headBobFrame;
+    RCL_Unit nextFrame = LHR_player.headBobFrame + 16;
 
     // only stop bobbing when we pass a frame at which sin crosses zero
-    SFG_player.headBobFrame =
+    LHR_player.headBobFrame =
       (currentFrame / (RCL_UNITS_PER_SQUARE / 2) ==
        nextFrame / (RCL_UNITS_PER_SQUARE / 2)) ?
        nextFrame : 0;
   }
 #endif
 
-  RCL_Unit previousHeight = SFG_player.camera.height;
+  RCL_Unit previousHeight = LHR_player.camera.height;
 
   // handle player collision with level elements:
 
   // monsters:
-  for (uint16_t i = 0; i < SFG_currentLevel.monsterRecordCount; ++i)
+  for (uint16_t i = 0; i < LHR_currentLevel.monsterRecordCount; ++i)
   {
-    SFG_MonsterRecord *m = &(SFG_currentLevel.monsterRecords[i]);
+    LHR_MonsterRecord *m = &(LHR_currentLevel.monsterRecords[i]);
 
-    uint8_t state = SFG_MR_STATE(*m);
+    uint8_t state = LHR_MR_STATE(*m);
 
-    if (state == SFG_MONSTER_STATE_INACTIVE || state == SFG_MONSTER_STATE_DEAD)
+    if (state == LHR_MONSTER_STATE_INACTIVE || state == LHR_MONSTER_STATE_DEAD)
       continue;
 
     RCL_Vector2D mPos;
 
-    mPos.x = SFG_MONSTER_COORD_TO_RCL_UNITS(m->coords[0]);
-    mPos.y = SFG_MONSTER_COORD_TO_RCL_UNITS(m->coords[1]);
+    mPos.x = LHR_MONSTER_COORD_TO_RCL_UNITS(m->coords[0]);
+    mPos.y = LHR_MONSTER_COORD_TO_RCL_UNITS(m->coords[1]);
 
     if (
-         SFG_elementCollides(
-           SFG_player.camera.position.x,
-           SFG_player.camera.position.y,
-           SFG_player.camera.height,
+         LHR_elementCollides(
+           LHR_player.camera.position.x,
+           LHR_player.camera.position.y,
+           LHR_player.camera.height,
            mPos.x,
            mPos.y,
-           SFG_floorHeightAt(
-               SFG_MONSTER_COORD_TO_SQUARES(m->coords[0]),
-               SFG_MONSTER_COORD_TO_SQUARES(m->coords[1]))
+           LHR_floorHeightAt(
+               LHR_MONSTER_COORD_TO_SQUARES(m->coords[0]),
+               LHR_MONSTER_COORD_TO_SQUARES(m->coords[1]))
          )
        )
     {
-      moveOffset = SFG_resolveCollisionWithElement(
-        SFG_player.camera.position,moveOffset,mPos);
+      moveOffset = LHR_resolveCollisionWithElement(
+        LHR_player.camera.position,moveOffset,mPos);
     }
   }
 
@@ -3400,37 +3400,37 @@ void SFG_gameStepPlaying(void)
 
   /* item collisions with player (only those that don't stop player's movement,
      as those are handled differently, via itemCollisionMap): */
-  for (int16_t i = 0; i < SFG_currentLevel.itemRecordCount; ++i)
+  for (int16_t i = 0; i < LHR_currentLevel.itemRecordCount; ++i)
     // ^ has to be int16_t (signed)
   {
-    if (!(SFG_currentLevel.itemRecords[i] & SFG_ITEM_RECORD_ACTIVE_MASK))
+    if (!(LHR_currentLevel.itemRecords[i] & LHR_ITEM_RECORD_ACTIVE_MASK))
       continue;
 
-    const SFG_LevelElement *e = SFG_getActiveItemElement(i);
+    const LHR_LevelElement *e = LHR_getActiveItemElement(i);
 
     if (e != 0)
     {
       RCL_Vector2D ePos;
 
-      ePos.x = SFG_ELEMENT_COORD_TO_RCL_UNITS(e->coords[0]);
-      ePos.y = SFG_ELEMENT_COORD_TO_RCL_UNITS(e->coords[1]);
+      ePos.x = LHR_ELEMENT_COORD_TO_RCL_UNITS(e->coords[0]);
+      ePos.y = LHR_ELEMENT_COORD_TO_RCL_UNITS(e->coords[1]);
 
-      if (!SFG_itemCollides(e->type) &&
-          SFG_elementCollides(
-            SFG_player.camera.position.x,
-            SFG_player.camera.position.y,
-            SFG_player.camera.height,
+      if (!LHR_itemCollides(e->type) &&
+          LHR_elementCollides(
+            LHR_player.camera.position.x,
+            LHR_player.camera.position.y,
+            LHR_player.camera.height,
             ePos.x,
             ePos.y,
-            SFG_floorHeightAt(e->coords[0],e->coords[1]))
+            LHR_floorHeightAt(e->coords[0],e->coords[1]))
          )
       {
         uint8_t eliminate = 1;
 
         uint8_t onlyKnife = 1;
 
-        for (uint8_t j = 0; j < SFG_AMMO_TOTAL; ++j)
-          if (SFG_player.ammo[j] != 0)
+        for (uint8_t j = 0; j < LHR_AMMO_TOTAL; ++j)
+          if (LHR_player.ammo[j] != 0)
           {
             onlyKnife = 0;
             break;
@@ -3438,50 +3438,50 @@ void SFG_gameStepPlaying(void)
 
         switch (e->type)
         {
-          case SFG_LEVEL_ELEMENT_HEALTH:
-            if (SFG_player.health < SFG_PLAYER_MAX_HEALTH)
-              SFG_playerChangeHealth(SFG_HEALTH_KIT_VALUE);
+          case LHR_LEVEL_ELEMENT_HEALTH:
+            if (LHR_player.health < LHR_PLAYER_MAX_HEALTH)
+              LHR_playerChangeHealth(LHR_HEALTH_KIT_VALUE);
             else
               eliminate = 0;
             break;
 
 #define addAmmo(type) \
-  if (SFG_player.ammo[SFG_AMMO_##type] < SFG_AMMO_MAX_##type) \
+  if (LHR_player.ammo[LHR_AMMO_##type] < LHR_AMMO_MAX_##type) \
   {\
-    SFG_player.ammo[SFG_AMMO_##type] = RCL_min(SFG_AMMO_MAX_##type,\
-      SFG_player.ammo[SFG_AMMO_##type] + SFG_AMMO_INCREASE_##type);\
-    if (onlyKnife) SFG_playerRotateWeapon(1); \
+    LHR_player.ammo[LHR_AMMO_##type] = RCL_min(LHR_AMMO_MAX_##type,\
+      LHR_player.ammo[LHR_AMMO_##type] + LHR_AMMO_INCREASE_##type);\
+    if (onlyKnife) LHR_playerRotateWeapon(1); \
   }\
   else\
     eliminate = 0;
 
-          case SFG_LEVEL_ELEMENT_BULLETS:
+          case LHR_LEVEL_ELEMENT_BULLETS:
             addAmmo(BULLETS)
             break;
 
-          case SFG_LEVEL_ELEMENT_ROCKETS:
+          case LHR_LEVEL_ELEMENT_ROCKETS:
             addAmmo(ROCKETS)
             break;
 
-          case SFG_LEVEL_ELEMENT_PLASMA:
+          case LHR_LEVEL_ELEMENT_PLASMA:
             addAmmo(PLASMA)
             break;
 
 #undef addAmmo
 
-          case SFG_LEVEL_ELEMENT_CARD0:
-          case SFG_LEVEL_ELEMENT_CARD1:
-          case SFG_LEVEL_ELEMENT_CARD2:
-            SFG_player.cards |= 1 << (e->type - SFG_LEVEL_ELEMENT_CARD0);
+          case LHR_LEVEL_ELEMENT_CARD0:
+          case LHR_LEVEL_ELEMENT_CARD1:
+          case LHR_LEVEL_ELEMENT_CARD2:
+            LHR_player.cards |= 1 << (e->type - LHR_LEVEL_ELEMENT_CARD0);
             break;
 
-          case SFG_LEVEL_ELEMENT_TELEPORTER:
+          case LHR_LEVEL_ELEMENT_TELEPORTER:
             collidesWithTeleporter = 1;
             eliminate = 0;
             break;
 
-          case SFG_LEVEL_ELEMENT_FINISH:
-            SFG_winLevel();
+          case LHR_LEVEL_ELEMENT_FINISH:
+            LHR_winLevel();
             eliminate = 0;
             break;
 
@@ -3492,54 +3492,54 @@ void SFG_gameStepPlaying(void)
 
         if (eliminate) // take the item
         {
-#if !SFG_PREVIEW_MODE
-          SFG_removeItem(i);
-          SFG_player.lastItemTakenFrame = SFG_game.frame;
+#if !LHR_PREVIEW_MODE
+          LHR_removeItem(i);
+          LHR_player.lastItemTakenFrame = LHR_game.frame;
           i--;
-          SFG_playGameSound(3,255);
-          SFG_processEvent(SFG_EVENT_PLAYER_TAKES_ITEM,e->type);
+          LHR_playGameSound(3,255);
+          LHR_processEvent(LHR_EVENT_PLAYER_TAKES_ITEM,e->type);
 #endif
         }
         else if (
-          e->type == SFG_LEVEL_ELEMENT_TELEPORTER &&
-          SFG_currentLevel.teleporterCount > 1 &&
-          !SFG_player.justTeleported)
+          e->type == LHR_LEVEL_ELEMENT_TELEPORTER &&
+          LHR_currentLevel.teleporterCount > 1 &&
+          !LHR_player.justTeleported)
         {
           // teleport to random destination teleporter
 
           uint8_t teleporterNumber =
-            SFG_random() % (SFG_currentLevel.teleporterCount - 1) + 1;
+            LHR_random() % (LHR_currentLevel.teleporterCount - 1) + 1;
 
-          for (uint16_t j = 0; j < SFG_currentLevel.itemRecordCount; ++j)
+          for (uint16_t j = 0; j < LHR_currentLevel.itemRecordCount; ++j)
           {
-            SFG_LevelElement e2 = 
-              SFG_currentLevel.levelPointer->elements
-                [SFG_currentLevel.itemRecords[j] &
-                ~SFG_ITEM_RECORD_ACTIVE_MASK];
+            LHR_LevelElement e2 = 
+              LHR_currentLevel.levelPointer->elements
+                [LHR_currentLevel.itemRecords[j] &
+                ~LHR_ITEM_RECORD_ACTIVE_MASK];
 
-            if ((e2.type == SFG_LEVEL_ELEMENT_TELEPORTER) && (j != i))
+            if ((e2.type == LHR_LEVEL_ELEMENT_TELEPORTER) && (j != i))
               teleporterNumber--;
 
             if (teleporterNumber == 0)
             {
-              SFG_player.camera.position.x =
-                SFG_ELEMENT_COORD_TO_RCL_UNITS(e2.coords[0]);
+              LHR_player.camera.position.x =
+                LHR_ELEMENT_COORD_TO_RCL_UNITS(e2.coords[0]);
 
-              SFG_player.camera.position.y =
-                SFG_ELEMENT_COORD_TO_RCL_UNITS(e2.coords[1]);
+              LHR_player.camera.position.y =
+                LHR_ELEMENT_COORD_TO_RCL_UNITS(e2.coords[1]);
 
-              SFG_player.camera.height =
-                SFG_floorHeightAt(e2.coords[0],e2.coords[1]) +
+              LHR_player.camera.height =
+                LHR_floorHeightAt(e2.coords[0],e2.coords[1]) +
                 RCL_CAMERA_COLL_HEIGHT_BELOW;
 
-              SFG_currentLevel.itemRecords[j] |= SFG_ITEM_RECORD_ACTIVE_MASK;
+              LHR_currentLevel.itemRecords[j] |= LHR_ITEM_RECORD_ACTIVE_MASK;
               /* ^ we have to make the new teleporter immediately active so
                  that it will immediately collide */
 
-              SFG_player.justTeleported = 1;
+              LHR_player.justTeleported = 1;
 
-              SFG_playGameSound(4,255);
-              SFG_processEvent(SFG_EVENT_PLAYER_TELEPORTS,0);
+              LHR_playGameSound(4,255);
+              LHR_processEvent(LHR_EVENT_PLAYER_TELEPORTS,0);
 
               break;
             } // if teleporterNumber == 0
@@ -3550,37 +3550,37 @@ void SFG_gameStepPlaying(void)
   } // for, item collision check
 
   if (!collidesWithTeleporter)
-    SFG_player.justTeleported = 0;
+    LHR_player.justTeleported = 0;
 
-#if SFG_PREVIEW_MODE
-  SFG_player.camera.position.x +=
-    SFG_PREVIEW_MODE_SPEED_MULTIPLIER * moveOffset.x;
+#if LHR_PREVIEW_MODE
+  LHR_player.camera.position.x +=
+    LHR_PREVIEW_MODE_SPEED_MULTIPLIER * moveOffset.x;
 
-  SFG_player.camera.position.y +=
-    SFG_PREVIEW_MODE_SPEED_MULTIPLIER * moveOffset.y;
+  LHR_player.camera.position.y +=
+    LHR_PREVIEW_MODE_SPEED_MULTIPLIER * moveOffset.y;
 
-  SFG_player.camera.height += 
-    SFG_PREVIEW_MODE_SPEED_MULTIPLIER * SFG_player.verticalSpeed;
+  LHR_player.camera.height += 
+    LHR_PREVIEW_MODE_SPEED_MULTIPLIER * LHR_player.verticalSpeed;
 #else
-  RCL_moveCameraWithCollision(&(SFG_player.camera),moveOffset,
-    verticalOffset,SFG_floorCollisionHeightAt,SFG_ceilingHeightAt,1,1);
+  RCL_moveCameraWithCollision(&(LHR_player.camera),moveOffset,
+    verticalOffset,LHR_floorCollisionHeightAt,LHR_ceilingHeightAt,1,1);
 
-  SFG_player.previousVerticalSpeed = SFG_player.verticalSpeed;
+  LHR_player.previousVerticalSpeed = LHR_player.verticalSpeed;
 
-  RCL_Unit limit = RCL_max(RCL_max(0,verticalOffset),SFG_player.verticalSpeed);
+  RCL_Unit limit = RCL_max(RCL_max(0,verticalOffset),LHR_player.verticalSpeed);
   
-  SFG_player.verticalSpeed =
-    RCL_min(limit,SFG_player.camera.height - previousHeight);
+  LHR_player.verticalSpeed =
+    RCL_min(limit,LHR_player.camera.height - previousHeight);
   /* ^ By "limit" we assure height increase caused by climbing a step doesn't
      add vertical velocity. */
 #endif
 
-#if SFG_PREVIEW_MODE == 0
+#if LHR_PREVIEW_MODE == 0
   if (
-    SFG_keyIsDown(SFG_KEY_A) &&
-    !SFG_keyIsDown(SFG_KEY_C) &&
-    (SFG_player.weaponCooldownFrames == 0) &&
-    (SFG_game.stateTime > 400) // don't immediately shoot if returning from menu
+    LHR_keyIsDown(LHR_KEY_A) &&
+    !LHR_keyIsDown(LHR_KEY_C) &&
+    (LHR_player.weaponCooldownFrames == 0) &&
+    (LHR_game.stateTime > 400) // don't immediately shoot if returning from menu
     )
   {
     /* Player attack/shoot/fire, this has to be done AFTER the player is moved,
@@ -3588,46 +3588,46 @@ void SFG_gameStepPlaying(void)
 
     uint8_t ammo, projectileCount, canShoot;
 
-    SFG_getPlayerWeaponInfo(&ammo,&projectileCount,&canShoot);
+    LHR_getPlayerWeaponInfo(&ammo,&projectileCount,&canShoot);
 
     if (canShoot)
     {
       uint8_t sound;
 
-      switch (SFG_player.weapon)
+      switch (LHR_player.weapon)
       {
-        case SFG_WEAPON_KNIFE:           sound = 255; break;
-        case SFG_WEAPON_ROCKET_LAUNCHER: 
-        case SFG_WEAPON_SHOTGUN:         sound = 2; break; 
-        case SFG_WEAPON_PLASMAGUN:
-        case SFG_WEAPON_SOLUTION:        sound = 4; break;
+        case LHR_WEAPON_KNIFE:           sound = 255; break;
+        case LHR_WEAPON_ROCKET_LAUNCHER: 
+        case LHR_WEAPON_SHOTGUN:         sound = 2; break; 
+        case LHR_WEAPON_PLASMAGUN:
+        case LHR_WEAPON_SOLUTION:        sound = 4; break;
         default:                         sound = 0; break;
       }
 
       if (sound != 255)
-        SFG_playGameSound(sound,255);
+        LHR_playGameSound(sound,255);
 
-      if (ammo != SFG_AMMO_NONE)
-        SFG_player.ammo[ammo] -= projectileCount;
+      if (ammo != LHR_AMMO_NONE)
+        LHR_player.ammo[ammo] -= projectileCount;
 
       uint8_t projectile;
 
-      switch (SFG_GET_WEAPON_FIRE_TYPE(SFG_player.weapon))
+      switch (LHR_GET_WEAPON_FIRE_TYPE(LHR_player.weapon))
       {
-        case SFG_WEAPON_FIRE_TYPE_PLASMA:
-          projectile = SFG_PROJECTILE_PLASMA;
+        case LHR_WEAPON_FIRE_TYPE_PLASMA:
+          projectile = LHR_PROJECTILE_PLASMA;
           break;
 
-        case SFG_WEAPON_FIRE_TYPE_FIREBALL:
-          projectile = SFG_PROJECTILE_FIREBALL;
+        case LHR_WEAPON_FIRE_TYPE_FIREBALL:
+          projectile = LHR_PROJECTILE_FIREBALL;
           break;
 
-        case SFG_WEAPON_FIRE_TYPE_BULLET:
-          projectile = SFG_PROJECTILE_BULLET;
+        case LHR_WEAPON_FIRE_TYPE_BULLET:
+          projectile = LHR_PROJECTILE_BULLET;
           break;
 
-        case SFG_WEAPON_FIRE_TYPE_MELEE:
-          projectile = SFG_PROJECTILE_NONE;
+        case LHR_WEAPON_FIRE_TYPE_MELEE:
+          projectile = LHR_PROJECTILE_NONE;
           break;
 
         default:
@@ -3635,33 +3635,33 @@ void SFG_gameStepPlaying(void)
           break;
       }
           
-      if (projectile != SFG_PROJECTILE_NONE)
+      if (projectile != LHR_PROJECTILE_NONE)
       {
-        uint16_t angleAdd = SFG_PROJECTILE_SPREAD_ANGLE / (projectileCount + 1);
+        uint16_t angleAdd = LHR_PROJECTILE_SPREAD_ANGLE / (projectileCount + 1);
 
         RCL_Unit direction =
-          (SFG_player.camera.direction - SFG_PROJECTILE_SPREAD_ANGLE / 2) 
+          (LHR_player.camera.direction - LHR_PROJECTILE_SPREAD_ANGLE / 2) 
           + angleAdd;
           
-        RCL_Unit projectileSpeed = SFG_GET_PROJECTILE_SPEED_UPF(projectile);
+        RCL_Unit projectileSpeed = LHR_GET_PROJECTILE_SPEED_UPF(projectile);
         
         /* Vertical speed will be either determined by autoaim (if shearing is
            off) or the camera shear value. */
-        RCL_Unit verticalSpeed = (SFG_game.settings & 0x04) ?
-          (SFG_player.camera.shear * projectileSpeed * 2) / // only approximate
-            SFG_CAMERA_MAX_SHEAR_PIXELS
+        RCL_Unit verticalSpeed = (LHR_game.settings & 0x04) ?
+          (LHR_player.camera.shear * projectileSpeed * 2) / // only approximate
+            LHR_CAMERA_MAX_SHEAR_PIXELS
           :
-          (projectileSpeed * SFG_autoaimVertically()) / RCL_UNITS_PER_SQUARE;
+          (projectileSpeed * LHR_autoaimVertically()) / RCL_UNITS_PER_SQUARE;
 
         for (uint8_t i = 0; i < projectileCount; ++i)
         {
-          SFG_launchProjectile(
+          LHR_launchProjectile(
             projectile,
-            SFG_player.camera.position,
-            SFG_player.camera.height,
+            LHR_player.camera.position,
+            LHR_player.camera.height,
             RCL_angleToDirection(direction),
             verticalSpeed,  
-            SFG_PROJECTILE_SPAWN_OFFSET
+            LHR_PROJECTILE_SPAWN_OFFSET
             );
 
           direction += angleAdd;
@@ -3671,117 +3671,117 @@ void SFG_gameStepPlaying(void)
       {
         // player's melee attack
 
-        for (uint16_t i = 0; i < SFG_currentLevel.monsterRecordCount; ++i)
+        for (uint16_t i = 0; i < LHR_currentLevel.monsterRecordCount; ++i)
         {
-          SFG_MonsterRecord *m = &(SFG_currentLevel.monsterRecords[i]);
+          LHR_MonsterRecord *m = &(LHR_currentLevel.monsterRecords[i]);
 
-          uint8_t state = SFG_MR_STATE(*m);
+          uint8_t state = LHR_MR_STATE(*m);
 
-          if ((state == SFG_MONSTER_STATE_INACTIVE) || 
-              (state == SFG_MONSTER_STATE_DEAD))
+          if ((state == LHR_MONSTER_STATE_INACTIVE) || 
+              (state == LHR_MONSTER_STATE_DEAD))
             continue;
 
           RCL_Unit pX, pY, pZ;
-          SFG_getMonsterWorldPosition(m,&pX,&pY,&pZ);
+          LHR_getMonsterWorldPosition(m,&pX,&pY,&pZ);
 
-          if (SFG_taxicabDistance(pX,pY,pZ,
-              SFG_player.camera.position.x,
-              SFG_player.camera.position.y,
-              SFG_player.camera.height) > SFG_MELEE_RANGE)
+          if (LHR_taxicabDistance(pX,pY,pZ,
+              LHR_player.camera.position.x,
+              LHR_player.camera.position.y,
+              LHR_player.camera.height) > LHR_MELEE_RANGE)
             continue;
    
           RCL_Vector2D toMonster;
 
-          toMonster.x = pX - SFG_player.camera.position.x;
-          toMonster.y = pY - SFG_player.camera.position.y;
+          toMonster.x = pX - LHR_player.camera.position.x;
+          toMonster.y = pY - LHR_player.camera.position.y;
 
-          if (RCL_vectorsAngleCos(SFG_player.direction,toMonster) >=
-              (RCL_UNITS_PER_SQUARE - SFG_PLAYER_MELEE_ANGLE))
+          if (RCL_vectorsAngleCos(LHR_player.direction,toMonster) >=
+              (RCL_UNITS_PER_SQUARE - LHR_PLAYER_MELEE_ANGLE))
           {
-            SFG_monsterChangeHealth(m,
-              -1 * SFG_getDamageValue(SFG_WEAPON_FIRE_TYPE_MELEE));
+            LHR_monsterChangeHealth(m,
+              -1 * LHR_getDamageValue(LHR_WEAPON_FIRE_TYPE_MELEE));
 
-            SFG_createDust(pX,pY,pZ);
+            LHR_createDust(pX,pY,pZ);
 
             break;
           }
         }
       }
 
-      SFG_player.weaponCooldownFrames =
+      LHR_player.weaponCooldownFrames =
         RCL_max(
-          SFG_GET_WEAPON_FIRE_COOLDOWN_FRAMES(SFG_player.weapon),
-          SFG_MIN_WEAPON_COOLDOWN_FRAMES);
+          LHR_GET_WEAPON_FIRE_COOLDOWN_FRAMES(LHR_player.weapon),
+          LHR_MIN_WEAPON_COOLDOWN_FRAMES);
 
-      SFG_getPlayerWeaponInfo(&ammo,&projectileCount,&canShoot);
+      LHR_getPlayerWeaponInfo(&ammo,&projectileCount,&canShoot);
 
       if (!canShoot)
       {
         // No more ammo, switch to the second strongest weapon.
 
-        SFG_playerRotateWeapon(1);
+        LHR_playerRotateWeapon(1);
 
-        uint8_t previousWeapon = SFG_player.weapon;
+        uint8_t previousWeapon = LHR_player.weapon;
 
-        SFG_playerRotateWeapon(0);
+        LHR_playerRotateWeapon(0);
 
-        if (previousWeapon > SFG_player.weapon)
-          SFG_playerRotateWeapon(1);
+        if (previousWeapon > LHR_player.weapon)
+          LHR_playerRotateWeapon(1);
       }
     } // endif: has enough ammo?
   } // attack
-#endif // SFG_PREVIEW_MODE == 0
+#endif // LHR_PREVIEW_MODE == 0
 
-  SFG_player.squarePosition[0] =
-    SFG_player.camera.position.x / RCL_UNITS_PER_SQUARE;
+  LHR_player.squarePosition[0] =
+    LHR_player.camera.position.x / RCL_UNITS_PER_SQUARE;
 
-  SFG_player.squarePosition[1] =
-    SFG_player.camera.position.y / RCL_UNITS_PER_SQUARE;
+  LHR_player.squarePosition[1] =
+    LHR_player.camera.position.y / RCL_UNITS_PER_SQUARE;
 
-  SFG_currentLevel.mapRevealMask |= 
-    SFG_getMapRevealBit(
-      SFG_player.squarePosition[0],
-      SFG_player.squarePosition[1]);
+  LHR_currentLevel.mapRevealMask |= 
+    LHR_getMapRevealBit(
+      LHR_player.squarePosition[0],
+      LHR_player.squarePosition[1]);
               
   uint8_t properties;
 
-  SFG_getMapTile(SFG_currentLevel.levelPointer,SFG_player.squarePosition[0],
-    SFG_player.squarePosition[1],&properties);
+  LHR_getMapTile(LHR_currentLevel.levelPointer,LHR_player.squarePosition[0],
+    LHR_player.squarePosition[1],&properties);
 
   if ( // squeezer check
-     (properties == SFG_TILE_PROPERTY_SQUEEZER) &&
-     ((SFG_ceilingHeightAt(
-       SFG_player.squarePosition[0],SFG_player.squarePosition[1]) -
-     SFG_floorHeightAt(
-       SFG_player.squarePosition[0],SFG_player.squarePosition[1]))
+     (properties == LHR_TILE_PROPERTY_SQUEEZER) &&
+     ((LHR_ceilingHeightAt(
+       LHR_player.squarePosition[0],LHR_player.squarePosition[1]) -
+     LHR_floorHeightAt(
+       LHR_player.squarePosition[0],LHR_player.squarePosition[1]))
      <
      (RCL_CAMERA_COLL_HEIGHT_ABOVE + RCL_CAMERA_COLL_HEIGHT_BELOW)))
   {
-    SFG_LOG("player is squeezed");
-    SFG_player.health = 0;
+    LHR_LOG("player is squeezed");
+    LHR_player.health = 0;
   }
 
-  if (SFG_player.weapon != currentWeapon) // if weapon switched, start cooldown
+  if (LHR_player.weapon != currentWeapon) // if weapon switched, start cooldown
   {
-    if (SFG_player.weapon == (currentWeapon + 1) % SFG_WEAPONS_TOTAL)
-      SFG_player.previousWeaponDirection = -1;
-    else if (currentWeapon == (SFG_player.weapon + 1) % SFG_WEAPONS_TOTAL)
-      SFG_player.previousWeaponDirection = 1;
+    if (LHR_player.weapon == (currentWeapon + 1) % LHR_WEAPONS_TOTAL)
+      LHR_player.previousWeaponDirection = -1;
+    else if (currentWeapon == (LHR_player.weapon + 1) % LHR_WEAPONS_TOTAL)
+      LHR_player.previousWeaponDirection = 1;
     else
-      SFG_player.previousWeaponDirection = 0;
+      LHR_player.previousWeaponDirection = 0;
 
-    SFG_player.weaponCooldownFrames =
-      SFG_GET_WEAPON_FIRE_COOLDOWN_FRAMES(SFG_player.weapon) / 2;
+    LHR_player.weaponCooldownFrames =
+      LHR_GET_WEAPON_FIRE_COOLDOWN_FRAMES(LHR_player.weapon) / 2;
   }
 
-#if SFG_IMMORTAL == 0
-  if (SFG_player.health == 0)
+#if LHR_IMMORTAL == 0
+  if (LHR_player.health == 0)
   {
-    SFG_LOG("player dies");
-    SFG_levelEnds();
-    SFG_processEvent(SFG_EVENT_VIBRATE,0);
-    SFG_processEvent(SFG_EVENT_PLAYER_DIES,0);
-    SFG_setGameState(SFG_GAME_STATE_LOSE);
+    LHR_LOG("player dies");
+    LHR_levelEnds();
+    LHR_processEvent(LHR_EVENT_VIBRATE,0);
+    LHR_processEvent(LHR_EVENT_PLAYER_DIES,0);
+    LHR_setGameState(LHR_GAME_STATE_LOSE);
   }
 #endif
 }
@@ -3789,413 +3789,413 @@ void SFG_gameStepPlaying(void)
 /**
   This function defines which items are displayed in the menu.
 */
-uint8_t SFG_getMenuItem(uint8_t index)
+uint8_t LHR_getMenuItem(uint8_t index)
 {
   uint8_t current = 0;
 
   while (1) // find first legitimate item
   {
     if ( // skip non-legitimate items
-      ((current <= SFG_MENU_ITEM_MAP) && (SFG_currentLevel.levelPointer == 0))
-      || ((current == SFG_MENU_ITEM_LOAD) && ((SFG_game.save[0] >> 4) == 0))
-      || ((current == SFG_MENU_ITEM_LANGUAGE) && !SFG_LOCALE_RUNTIME_SWITCH)
-      || ((current == SFG_MENU_ITEM_SHEAR) && SFG_PC))
+      ((current <= LHR_MENU_ITEM_MAP) && (LHR_currentLevel.levelPointer == 0))
+      || ((current == LHR_MENU_ITEM_LOAD) && ((LHR_game.save[0] >> 4) == 0))
+      || ((current == LHR_MENU_ITEM_LANGUAGE) && !LHR_LOCALE_RUNTIME_SWITCH)
+      || ((current == LHR_MENU_ITEM_SHEAR) && LHR_PC))
     {
       current++;
       continue;
     }
 
     if (index == 0)
-      return (current <= (SFG_MENU_ITEM_EXIT - (SFG_CAN_EXIT ? 0 : 1))
-        ) ? current : SFG_MENU_ITEM_NONE;
+      return (current <= (LHR_MENU_ITEM_EXIT - (LHR_CAN_EXIT ? 0 : 1))
+        ) ? current : LHR_MENU_ITEM_NONE;
 
     current++;
     index--;
   }
 
-  return SFG_MENU_ITEM_NONE;
+  return LHR_MENU_ITEM_NONE;
 }
 
-void SFG_handleCheats(void)
+void LHR_handleCheats(void)
 {
   // this is a state machine handling cheat typing
 
   uint8_t expectedKey;
 
-  switch (SFG_game.cheatState & 0x0f)
+  switch (LHR_game.cheatState & 0x0f)
   {
     case 0: case 3: case 5: case 7: case 10:
-      expectedKey = SFG_KEY_A; break;
+      expectedKey = LHR_KEY_A; break;
     case 1: case 8:
-      expectedKey = SFG_KEY_B; break;
+      expectedKey = LHR_KEY_B; break;
     case 2: case 9:
-      expectedKey = SFG_KEY_RIGHT; break;
+      expectedKey = LHR_KEY_RIGHT; break;
     case 4:
-      expectedKey = SFG_KEY_C; break;
+      expectedKey = LHR_KEY_C; break;
     case 6: default:
-      expectedKey = SFG_KEY_DOWN; break;
+      expectedKey = LHR_KEY_DOWN; break;
   }
 
-  for (uint8_t i = 0; i < SFG_KEY_COUNT; ++i) // no other keys must be pressed
-    if ((i != expectedKey) && SFG_keyJustPressed(i))
+  for (uint8_t i = 0; i < LHR_KEY_COUNT; ++i) // no other keys must be pressed
+    if ((i != expectedKey) && LHR_keyJustPressed(i))
     {
-      SFG_game.cheatState &= 0xf0; // back to start state
+      LHR_game.cheatState &= 0xf0; // back to start state
       return;
     }
  
-  if (!SFG_keyJustPressed(expectedKey))
+  if (!LHR_keyJustPressed(expectedKey))
     return;
 
-  SFG_game.cheatState++; // go to next state
+  LHR_game.cheatState++; // go to next state
 
-  if ((SFG_game.cheatState & 0x0f) > 10) // final state resolved?
+  if ((LHR_game.cheatState & 0x0f) > 10) // final state resolved?
   {
-    if (SFG_game.cheatState & 0x80)
+    if (LHR_game.cheatState & 0x80)
     {
-      SFG_LOG("cheat disabled");
-      SFG_game.cheatState = 0;
+      LHR_LOG("cheat disabled");
+      LHR_game.cheatState = 0;
     }
     else
     {
-      SFG_LOG("cheat activated");
-      SFG_playGameSound(4,255);
-      SFG_playerChangeHealth(SFG_PLAYER_MAX_HEALTH);
-      SFG_player.ammo[SFG_AMMO_BULLETS] = SFG_AMMO_MAX_BULLETS;
-      SFG_player.ammo[SFG_AMMO_ROCKETS] = SFG_AMMO_MAX_ROCKETS;
-      SFG_player.ammo[SFG_AMMO_PLASMA] = SFG_AMMO_MAX_PLASMA;
-      SFG_player.weapon = SFG_WEAPON_SOLUTION;
-      SFG_player.cards |= 0x07;
-      SFG_game.cheatState = 0x80;
+      LHR_LOG("cheat activated");
+      LHR_playGameSound(4,255);
+      LHR_playerChangeHealth(LHR_PLAYER_MAX_HEALTH);
+      LHR_player.ammo[LHR_AMMO_BULLETS] = LHR_AMMO_MAX_BULLETS;
+      LHR_player.ammo[LHR_AMMO_ROCKETS] = LHR_AMMO_MAX_ROCKETS;
+      LHR_player.ammo[LHR_AMMO_PLASMA] = LHR_AMMO_MAX_PLASMA;
+      LHR_player.weapon = LHR_WEAPON_SOLUTION;
+      LHR_player.cards |= 0x07;
+      LHR_game.cheatState = 0x80;
     }
   }
 }
 
-void SFG_gameStepMenu(void)
+void LHR_gameStepMenu(void)
 {
   uint8_t menuItems = 0;
 
-  while (SFG_getMenuItem(menuItems) != SFG_MENU_ITEM_NONE)
+  while (LHR_getMenuItem(menuItems) != LHR_MENU_ITEM_NONE)
     menuItems++;
 
-  uint8_t item = SFG_getMenuItem(SFG_game.selectedMenuItem);
+  uint8_t item = LHR_getMenuItem(LHR_game.selectedMenuItem);
 
-  if ((SFG_keyRegisters(SFG_KEY_DOWN) || SFG_keyRegisters(SFG_KEY_PREVIOUS_WEAPON)) && 
-    (SFG_game.selectedMenuItem < menuItems - 1))
+  if ((LHR_keyRegisters(LHR_KEY_DOWN) || LHR_keyRegisters(LHR_KEY_PREVIOUS_WEAPON)) && 
+    (LHR_game.selectedMenuItem < menuItems - 1))
   {
-    SFG_game.selectedMenuItem++;
-    SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
+    LHR_game.selectedMenuItem++;
+    LHR_playGameSound(3,LHR_MENU_CLICK_VOLUME);
   }
-  else if ((SFG_keyRegisters(SFG_KEY_UP) || SFG_keyRegisters(SFG_KEY_NEXT_WEAPON)) && (SFG_game.selectedMenuItem > 0))
+  else if ((LHR_keyRegisters(LHR_KEY_UP) || LHR_keyRegisters(LHR_KEY_NEXT_WEAPON)) && (LHR_game.selectedMenuItem > 0))
   {
-    SFG_game.selectedMenuItem--;
-    SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
+    LHR_game.selectedMenuItem--;
+    LHR_playGameSound(3,LHR_MENU_CLICK_VOLUME);
   }
-  else if (SFG_keyJustPressed(SFG_KEY_A))
+  else if (LHR_keyJustPressed(LHR_KEY_A))
   {
     switch (item)
     {
-      case SFG_MENU_ITEM_PLAY:
-        for (uint8_t i = 6; i < SFG_SAVE_SIZE; ++i) // reset totals in save
-          SFG_game.save[i] = 0;
+      case LHR_MENU_ITEM_PLAY:
+        for (uint8_t i = 6; i < LHR_SAVE_SIZE; ++i) // reset totals in save
+          LHR_game.save[i] = 0;
 
-        if (SFG_game.selectedLevel == 0)
+        if (LHR_game.selectedLevel == 0)
         {
-          if (SFG_DEMO_MODE)
-            SFG_setAndInitLevel(0);
+          if (LHR_DEMO_MODE)
+            LHR_setAndInitLevel(0);
           else
           {
-            SFG_game.storyType = SFG_STORY_GLOBAL_INTRO;
-            SFG_game.introTargetLevel = 0;
-            SFG_setGameState(SFG_GAME_STATE_INTRO);
+            LHR_game.storyType = LHR_STORY_GLOBAL_INTRO;
+            LHR_game.introTargetLevel = 0;
+            LHR_setGameState(LHR_GAME_STATE_INTRO);
           }
         }
         else
         {
-          const SFG_LevelMeta *meta =
-            SFG_activeLocale->levelMeta + SFG_game.selectedLevel;
+          const LHR_LevelMeta *meta =
+            LHR_activeLocale->levelMeta + LHR_game.selectedLevel;
 
-          if (!SFG_DEMO_MODE && meta->introText != 0)
+          if (!LHR_DEMO_MODE && meta->introText != 0)
           {
-            SFG_game.storyType = SFG_STORY_MAP_INTRO;
-            SFG_game.introTargetLevel = SFG_game.selectedLevel;
+            LHR_game.storyType = LHR_STORY_MAP_INTRO;
+            LHR_game.introTargetLevel = LHR_game.selectedLevel;
 
             if (meta->introMusicTrack > 0)
             {
-              SFG_setMusic(SFG_MUSIC_NEXT);
-              SFG_setMusic(SFG_MUSIC_TURN_ON);
+              LHR_setMusic(LHR_MUSIC_NEXT);
+              LHR_setMusic(LHR_MUSIC_TURN_ON);
             }
 
-            SFG_setGameState(SFG_GAME_STATE_INTRO);
+            LHR_setGameState(LHR_GAME_STATE_INTRO);
           }
           else
-            SFG_setAndInitLevel(SFG_game.selectedLevel);
+            LHR_setAndInitLevel(LHR_game.selectedLevel);
         }
 
         break;
 
-      case SFG_MENU_ITEM_LOAD:
+      case LHR_MENU_ITEM_LOAD:
       {
-        SFG_gameLoad();
+        LHR_gameLoad();
 
-        uint8_t saveBackup[SFG_SAVE_SIZE];
+        uint8_t saveBackup[LHR_SAVE_SIZE];
 
-        for (uint8_t i = 0; i < SFG_SAVE_SIZE; ++i)
-          saveBackup[i] = SFG_game.save[i];
+        for (uint8_t i = 0; i < LHR_SAVE_SIZE; ++i)
+          saveBackup[i] = LHR_game.save[i];
 
-        SFG_setAndInitLevel(SFG_game.save[0] >> 4);
+        LHR_setAndInitLevel(LHR_game.save[0] >> 4);
 
-        for (uint8_t i = 0; i < SFG_SAVE_SIZE; ++i)
-          SFG_game.save[i] = saveBackup[i];
+        for (uint8_t i = 0; i < LHR_SAVE_SIZE; ++i)
+          LHR_game.save[i] = saveBackup[i];
 
-        SFG_player.health = SFG_game.save[2];
-        SFG_player.ammo[0] = SFG_game.save[3];
-        SFG_player.ammo[1] = SFG_game.save[4];
-        SFG_player.ammo[2] = SFG_game.save[5];
+        LHR_player.health = LHR_game.save[2];
+        LHR_player.ammo[0] = LHR_game.save[3];
+        LHR_player.ammo[1] = LHR_game.save[4];
+        LHR_player.ammo[2] = LHR_game.save[5];
 
-        SFG_playerRotateWeapon(1); // this chooses weapon with ammo available
+        LHR_playerRotateWeapon(1); // this chooses weapon with ammo available
         break;
       }
 
-      case SFG_MENU_ITEM_CONTINUE:
-        SFG_setGameState(SFG_GAME_STATE_PLAYING);
+      case LHR_MENU_ITEM_CONTINUE:
+        LHR_setGameState(LHR_GAME_STATE_PLAYING);
         break;
 
-      case SFG_MENU_ITEM_MAP:
-        SFG_setGameState(SFG_GAME_STATE_MAP);
+      case LHR_MENU_ITEM_MAP:
+        LHR_setGameState(LHR_GAME_STATE_MAP);
         break;
 
-      case SFG_MENU_ITEM_SFX:
-        SFG_LOG("sfx changed");
+      case LHR_MENU_ITEM_SFX:
+        LHR_LOG("sfx changed");
 
-        SFG_game.settings ^= 0x01;
+        LHR_game.settings ^= 0x01;
 
-        SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
+        LHR_playGameSound(3,LHR_MENU_CLICK_VOLUME);
 
-        SFG_game.save[1] = SFG_game.settings;
-        SFG_gameSave();
-
-        break;
-
-      case SFG_MENU_ITEM_MUSIC:
-        SFG_LOG("music changed");
-
-        SFG_game.settings ^= 0x02;
-
-        SFG_setMusic((SFG_game.settings & 0x02) ? 
-          SFG_MUSIC_TURN_ON : SFG_MUSIC_TURN_OFF);
-
-        SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
-
-        SFG_game.save[1] = SFG_game.settings;
-        SFG_gameSave();
+        LHR_game.save[1] = LHR_game.settings;
+        LHR_gameSave();
 
         break;
 
-      case SFG_MENU_ITEM_SHEAR:
+      case LHR_MENU_ITEM_MUSIC:
+        LHR_LOG("music changed");
+
+        LHR_game.settings ^= 0x02;
+
+        LHR_setMusic((LHR_game.settings & 0x02) ? 
+          LHR_MUSIC_TURN_ON : LHR_MUSIC_TURN_OFF);
+
+        LHR_playGameSound(3,LHR_MENU_CLICK_VOLUME);
+
+        LHR_game.save[1] = LHR_game.settings;
+        LHR_gameSave();
+
+        break;
+
+      case LHR_MENU_ITEM_SHEAR:
       {
-        uint8_t current = (SFG_game.settings >> 2) & 0x03;
+        uint8_t current = (LHR_game.settings >> 2) & 0x03;
 
         current++;
 
         if (current == 2) // option that doesn't make sense, skip
           current++;
 
-        SFG_game.settings = 
-          (SFG_game.settings & ~0x0c) | ((current & 0x03) << 2);
+        LHR_game.settings = 
+          (LHR_game.settings & ~0x0c) | ((current & 0x03) << 2);
 
-        SFG_game.save[1] = SFG_game.settings;
-        SFG_gameSave();
+        LHR_game.save[1] = LHR_game.settings;
+        LHR_gameSave();
 
         break;
       }
 
-      case SFG_MENU_ITEM_LANGUAGE:
+      case LHR_MENU_ITEM_LANGUAGE:
       {
-        SFG_setLocaleByIndex(SFG_activeLocaleIndex + 1);
-        SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
+        LHR_setLocaleByIndex(LHR_activeLocaleIndex + 1);
+        LHR_playGameSound(3,LHR_MENU_CLICK_VOLUME);
         break;
       }
 
-      case SFG_MENU_ITEM_EXIT:
-        SFG_game.continues = 0;
+      case LHR_MENU_ITEM_EXIT:
+        LHR_game.continues = 0;
         break;
 
       default:
         break;
     }
   }
-  else if (item == SFG_MENU_ITEM_PLAY)
+  else if (item == LHR_MENU_ITEM_PLAY)
   {
-    if (SFG_keyRegisters(SFG_KEY_RIGHT) && 
-      (SFG_game.selectedLevel < (SFG_game.save[0] & 0x0f)))
+    if (LHR_keyRegisters(LHR_KEY_RIGHT) && 
+      (LHR_game.selectedLevel < (LHR_game.save[0] & 0x0f)))
     {
-      SFG_game.selectedLevel++;
-      SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
+      LHR_game.selectedLevel++;
+      LHR_playGameSound(3,LHR_MENU_CLICK_VOLUME);
     }
-    else if (SFG_keyRegisters(SFG_KEY_LEFT) && SFG_game.selectedLevel > 0)
+    else if (LHR_keyRegisters(LHR_KEY_LEFT) && LHR_game.selectedLevel > 0)
     {
-      SFG_game.selectedLevel--;
-      SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
+      LHR_game.selectedLevel--;
+      LHR_playGameSound(3,LHR_MENU_CLICK_VOLUME);
     }
   }
 }
 
 /**
-  Performs one game step (logic, physics, menu, ...), happening SFG_MS_PER_FRAME
+  Performs one game step (logic, physics, menu, ...), happening LHR_MS_PER_FRAME
   after the previous step.
 */
-void SFG_gameStep(void)
+void LHR_gameStep(void)
 {
-  SFG_GAME_STEP_COMMAND
+  LHR_GAME_STEP_COMMAND
 
-  SFG_game.soundsPlayedThisFrame = 0;
+  LHR_game.soundsPlayedThisFrame = 0;
   
-  SFG_game.blink = (SFG_game.frame / SFG_BLINK_PERIOD_FRAMES) % 2;
+  LHR_game.blink = (LHR_game.frame / LHR_BLINK_PERIOD_FRAMES) % 2;
 
-  for (uint8_t i = 0; i < SFG_KEY_COUNT; ++i)
-    if (!SFG_keyPressed(i))
-      SFG_game.keyStates[i] = 0;
-    else if (SFG_game.keyStates[i] < 255)
-      SFG_game.keyStates[i]++;
+  for (uint8_t i = 0; i < LHR_KEY_COUNT; ++i)
+    if (!LHR_keyPressed(i))
+      LHR_game.keyStates[i] = 0;
+    else if (LHR_game.keyStates[i] < 255)
+      LHR_game.keyStates[i]++;
 
-  if ((SFG_currentLevel.frameStart - SFG_game.frame) %
-      SFG_SPRITE_ANIMATION_FRAME_DURATION == 0)
-    SFG_game.spriteAnimationFrame++;
+  if ((LHR_currentLevel.frameStart - LHR_game.frame) %
+      LHR_SPRITE_ANIMATION_FRAME_DURATION == 0)
+    LHR_game.spriteAnimationFrame++;
 
-  switch (SFG_game.state)
+  switch (LHR_game.state)
   {
-    case SFG_GAME_STATE_PLAYING:
-      SFG_handleCheats();
-      SFG_gameStepPlaying();
+    case LHR_GAME_STATE_PLAYING:
+      LHR_handleCheats();
+      LHR_gameStepPlaying();
       break;
 
-    case SFG_GAME_STATE_MENU: 
-      SFG_gameStepMenu();
+    case LHR_GAME_STATE_MENU: 
+      LHR_gameStepMenu();
       break;
 
-    case SFG_GAME_STATE_LOSE:
+    case LHR_GAME_STATE_LOSE:
     { 
       // player die animation (lose)
 
-      SFG_updateLevel(); // let monsters and other things continue moving
-      SFG_updatePlayerHeight(); // in case player is on elevator 
+      LHR_updateLevel(); // let monsters and other things continue moving
+      LHR_updatePlayerHeight(); // in case player is on elevator 
 
-      int32_t t = SFG_game.stateTime;
+      int32_t t = LHR_game.stateTime;
 
-      RCL_Unit h = SFG_floorHeightAt(SFG_player.squarePosition[0],
-        SFG_player.squarePosition[1]); 
+      RCL_Unit h = LHR_floorHeightAt(LHR_player.squarePosition[0],
+        LHR_player.squarePosition[1]); 
 
-      SFG_player.camera.height = 
-        RCL_max(h,h + ((SFG_LOSE_ANIMATION_DURATION - t) *
-            RCL_CAMERA_COLL_HEIGHT_BELOW) / SFG_LOSE_ANIMATION_DURATION);
+      LHR_player.camera.height = 
+        RCL_max(h,h + ((LHR_LOSE_ANIMATION_DURATION - t) *
+            RCL_CAMERA_COLL_HEIGHT_BELOW) / LHR_LOSE_ANIMATION_DURATION);
 
-      SFG_player.camera.shear = 
-        RCL_min(SFG_CAMERA_MAX_SHEAR_PIXELS / 4,
-        (t * (SFG_CAMERA_MAX_SHEAR_PIXELS / 4)) / SFG_LOSE_ANIMATION_DURATION);
+      LHR_player.camera.shear = 
+        RCL_min(LHR_CAMERA_MAX_SHEAR_PIXELS / 4,
+        (t * (LHR_CAMERA_MAX_SHEAR_PIXELS / 4)) / LHR_LOSE_ANIMATION_DURATION);
 
-      if (t > SFG_LOSE_ANIMATION_DURATION && 
-        (SFG_keyIsDown(SFG_KEY_A) || SFG_keyIsDown(SFG_KEY_B)))
+      if (t > LHR_LOSE_ANIMATION_DURATION && 
+        (LHR_keyIsDown(LHR_KEY_A) || LHR_keyIsDown(LHR_KEY_B)))
       {
-        for (uint8_t i = 6; i < SFG_SAVE_SIZE; ++i)
-          SFG_game.save[i] = 0;
+        for (uint8_t i = 6; i < LHR_SAVE_SIZE; ++i)
+          LHR_game.save[i] = 0;
 
-        SFG_setGameState(SFG_GAME_STATE_MENU);
+        LHR_setGameState(LHR_GAME_STATE_MENU);
       }
 
       break;
     }
 
-    case SFG_GAME_STATE_WIN:
+    case LHR_GAME_STATE_WIN:
     {
       // win animation
      
-      SFG_updateLevel();
+      LHR_updateLevel();
 
-      int32_t t = SFG_game.stateTime;
+      int32_t t = LHR_game.stateTime;
 
-      if (t > SFG_WIN_ANIMATION_DURATION)
+      if (t > LHR_WIN_ANIMATION_DURATION)
       {
-        if (SFG_currentLevel.levelNumber == (SFG_NUMBER_OF_LEVELS - 1))
+        if (LHR_currentLevel.levelNumber == (LHR_NUMBER_OF_LEVELS - 1))
         {
-          if (SFG_keyIsDown(SFG_KEY_A))
+          if (LHR_keyIsDown(LHR_KEY_A))
           {
-            if (SFG_DEMO_MODE)
+            if (LHR_DEMO_MODE)
             {
-              SFG_currentLevel.levelPointer = 0;
-              SFG_currentLevel.levelNumber = 0;
-              SFG_setGameState(SFG_GAME_STATE_MENU);
-              SFG_setMusic(SFG_MUSIC_TURN_ON);
+              LHR_currentLevel.levelPointer = 0;
+              LHR_currentLevel.levelNumber = 0;
+              LHR_setGameState(LHR_GAME_STATE_MENU);
+              LHR_setMusic(LHR_MUSIC_TURN_ON);
             }
             else
             {
-              SFG_game.storyType = SFG_STORY_GLOBAL_OUTRO;
-              SFG_game.outroTargetLevel = 255;
-              SFG_setGameState(SFG_GAME_STATE_OUTRO);
-              SFG_setMusic(SFG_MUSIC_TURN_OFF);
+              LHR_game.storyType = LHR_STORY_GLOBAL_OUTRO;
+              LHR_game.outroTargetLevel = 255;
+              LHR_setGameState(LHR_GAME_STATE_OUTRO);
+              LHR_setMusic(LHR_MUSIC_TURN_OFF);
             }
           }
         }
-        else if (SFG_keyIsDown(SFG_KEY_RIGHT) ||
-            SFG_keyIsDown(SFG_KEY_LEFT) ||
-            SFG_keyIsDown(SFG_KEY_STRAFE_LEFT) ||
-            SFG_keyIsDown(SFG_KEY_STRAFE_RIGHT))
+        else if (LHR_keyIsDown(LHR_KEY_RIGHT) ||
+            LHR_keyIsDown(LHR_KEY_LEFT) ||
+            LHR_keyIsDown(LHR_KEY_STRAFE_LEFT) ||
+            LHR_keyIsDown(LHR_KEY_STRAFE_RIGHT))
         {
-          uint8_t nextLevel = SFG_currentLevel.levelNumber + 1;
-          const SFG_LevelMeta *meta =
-            SFG_activeLocale->levelMeta + SFG_currentLevel.levelNumber;
+          uint8_t nextLevel = LHR_currentLevel.levelNumber + 1;
+          const LHR_LevelMeta *meta =
+            LHR_activeLocale->levelMeta + LHR_currentLevel.levelNumber;
 
-          if (!SFG_DEMO_MODE && meta->outroText != 0)
+          if (!LHR_DEMO_MODE && meta->outroText != 0)
           {
-            SFG_game.storyType = SFG_STORY_MAP_OUTRO;
-            SFG_game.outroTargetLevel = nextLevel;
+            LHR_game.storyType = LHR_STORY_MAP_OUTRO;
+            LHR_game.outroTargetLevel = nextLevel;
 
             if (meta->outroMusicTrack > 0)
             {
-              SFG_setMusic(SFG_MUSIC_NEXT);
-              SFG_setMusic(SFG_MUSIC_TURN_ON);
+              LHR_setMusic(LHR_MUSIC_NEXT);
+              LHR_setMusic(LHR_MUSIC_TURN_ON);
             }
 
-            SFG_setGameState(SFG_GAME_STATE_OUTRO);
+            LHR_setGameState(LHR_GAME_STATE_OUTRO);
             break;
           }
 
-          if (!SFG_DEMO_MODE)
+          if (!LHR_DEMO_MODE)
           {
-            const SFG_LevelMeta *nextMeta = SFG_activeLocale->levelMeta + nextLevel;
+            const LHR_LevelMeta *nextMeta = LHR_activeLocale->levelMeta + nextLevel;
 
             if (nextMeta->introText != 0)
             {
-              SFG_game.storyType = SFG_STORY_MAP_INTRO;
-              SFG_game.introTargetLevel = nextLevel;
+              LHR_game.storyType = LHR_STORY_MAP_INTRO;
+              LHR_game.introTargetLevel = nextLevel;
 
               if (nextMeta->introMusicTrack > 0)
               {
-                SFG_setMusic(SFG_MUSIC_NEXT);
-                SFG_setMusic(SFG_MUSIC_TURN_ON);
+                LHR_setMusic(LHR_MUSIC_NEXT);
+                LHR_setMusic(LHR_MUSIC_TURN_ON);
               }
 
-              SFG_setGameState(SFG_GAME_STATE_INTRO);
+              LHR_setGameState(LHR_GAME_STATE_INTRO);
               break;
             }
           }
 
-          SFG_setAndInitLevel(nextLevel);
+          LHR_setAndInitLevel(nextLevel);
           
-          SFG_player.health = SFG_game.save[2];
-          SFG_player.ammo[0] = SFG_game.save[3];
-          SFG_player.ammo[1] = SFG_game.save[4];
-          SFG_player.ammo[2] = SFG_game.save[5];
+          LHR_player.health = LHR_game.save[2];
+          LHR_player.ammo[0] = LHR_game.save[3];
+          LHR_player.ammo[1] = LHR_game.save[4];
+          LHR_player.ammo[2] = LHR_game.save[5];
         
-          SFG_playerRotateWeapon(1);
+          LHR_playerRotateWeapon(1);
 
-          if (SFG_keyIsDown(SFG_KEY_RIGHT) || SFG_keyIsDown(SFG_KEY_STRAFE_RIGHT))
+          if (LHR_keyIsDown(LHR_KEY_RIGHT) || LHR_keyIsDown(LHR_KEY_STRAFE_RIGHT))
           {
             // save the current position
-            SFG_game.save[0] = 
-              (SFG_game.save[0] & 0x0f) | (SFG_currentLevel.levelNumber << 4);
+            LHR_game.save[0] = 
+              (LHR_game.save[0] & 0x0f) | (LHR_currentLevel.levelNumber << 4);
 
-            SFG_gameSave();
-            SFG_game.saved = 1;
+            LHR_gameSave();
+            LHR_game.saved = 1;
           }
         }
       }
@@ -4203,68 +4203,68 @@ void SFG_gameStep(void)
       break;
     }
 
-    case SFG_GAME_STATE_MAP:
-      if (SFG_keyIsDown(SFG_KEY_B) || SFG_keyJustPressed(SFG_KEY_MENU))
-        SFG_setGameState(SFG_GAME_STATE_MENU);
+    case LHR_GAME_STATE_MAP:
+      if (LHR_keyIsDown(LHR_KEY_B) || LHR_keyJustPressed(LHR_KEY_MENU))
+        LHR_setGameState(LHR_GAME_STATE_MENU);
 
       break;
 
-    case SFG_GAME_STATE_INTRO:
-      if (SFG_keyJustPressed(SFG_KEY_A) || SFG_keyJustPressed(SFG_KEY_B))
-        SFG_setAndInitLevel(SFG_game.introTargetLevel);
+    case LHR_GAME_STATE_INTRO:
+      if (LHR_keyJustPressed(LHR_KEY_A) || LHR_keyJustPressed(LHR_KEY_B))
+        LHR_setAndInitLevel(LHR_game.introTargetLevel);
 
       break;
 
-    case SFG_GAME_STATE_OUTRO:
-      if ((SFG_game.stateTime > SFG_STORYTEXT_DURATION) &&
-           (SFG_keyIsDown(SFG_KEY_A) ||
-           SFG_keyIsDown(SFG_KEY_B)))
+    case LHR_GAME_STATE_OUTRO:
+      if ((LHR_game.stateTime > LHR_STORYTEXT_DURATION) &&
+           (LHR_keyIsDown(LHR_KEY_A) ||
+           LHR_keyIsDown(LHR_KEY_B)))
       {
-        if (SFG_game.storyType == SFG_STORY_MAP_OUTRO &&
-            SFG_game.outroTargetLevel != 255)
+        if (LHR_game.storyType == LHR_STORY_MAP_OUTRO &&
+            LHR_game.outroTargetLevel != 255)
         {
-          uint8_t level = SFG_game.outroTargetLevel;
-          const SFG_LevelMeta *nextMeta = SFG_activeLocale->levelMeta + level;
+          uint8_t level = LHR_game.outroTargetLevel;
+          const LHR_LevelMeta *nextMeta = LHR_activeLocale->levelMeta + level;
 
-          if (!SFG_DEMO_MODE && nextMeta->introText != 0)
+          if (!LHR_DEMO_MODE && nextMeta->introText != 0)
           {
-            SFG_game.storyType = SFG_STORY_MAP_INTRO;
-            SFG_game.introTargetLevel = level;
+            LHR_game.storyType = LHR_STORY_MAP_INTRO;
+            LHR_game.introTargetLevel = level;
 
             if (nextMeta->introMusicTrack > 0)
             {
-              SFG_setMusic(SFG_MUSIC_NEXT);
-              SFG_setMusic(SFG_MUSIC_TURN_ON);
+              LHR_setMusic(LHR_MUSIC_NEXT);
+              LHR_setMusic(LHR_MUSIC_TURN_ON);
             }
 
-            SFG_setGameState(SFG_GAME_STATE_INTRO);
+            LHR_setGameState(LHR_GAME_STATE_INTRO);
           }
           else
-            SFG_setAndInitLevel(level);
+            LHR_setAndInitLevel(level);
         }
         else
         {
-          SFG_currentLevel.levelPointer = 0;
-          SFG_currentLevel.levelNumber = 0;
-          SFG_setGameState(SFG_GAME_STATE_MENU);
-          SFG_playGameSound(3,SFG_MENU_CLICK_VOLUME);
-          SFG_setMusic(SFG_MUSIC_TURN_ON);
+          LHR_currentLevel.levelPointer = 0;
+          LHR_currentLevel.levelNumber = 0;
+          LHR_setGameState(LHR_GAME_STATE_MENU);
+          LHR_playGameSound(3,LHR_MENU_CLICK_VOLUME);
+          LHR_setMusic(LHR_MUSIC_TURN_ON);
         }
       }
 
       break;
 
-    case SFG_GAME_STATE_LEVEL_START:
+    case LHR_GAME_STATE_LEVEL_START:
     {
-      SFG_updateLevel();
-      SFG_updatePlayerHeight(); // in case player is on elevator
+      LHR_updateLevel();
+      LHR_updatePlayerHeight(); // in case player is on elevator
 
       int16_t x = 0, y = 0;
       
-      SFG_getMouseOffset(&x,&y); // this keeps centering the mouse
+      LHR_getMouseOffset(&x,&y); // this keeps centering the mouse
 
-      if (SFG_game.stateTime >= SFG_LEVEL_START_DURATION)
-        SFG_setGameState(SFG_GAME_STATE_PLAYING);
+      if (LHR_game.stateTime >= LHR_LEVEL_START_DURATION)
+        LHR_setGameState(LHR_GAME_STATE_PLAYING);
 
       break;
     }
@@ -4273,53 +4273,53 @@ void SFG_gameStep(void)
       break;
   }
 
-  SFG_game.stateTime += SFG_MS_PER_FRAME;
+  LHR_game.stateTime += LHR_MS_PER_FRAME;
 }
 
-void SFG_fillRectangle(
+void LHR_fillRectangle(
   uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t color)
 {
-  if ((x + width > SFG_GAME_RESOLUTION_X) ||
-      (y + height > SFG_GAME_RESOLUTION_Y))
+  if ((x + width > LHR_GAME_RESOLUTION_X) ||
+      (y + height > LHR_GAME_RESOLUTION_Y))
     return;
 
   for (uint16_t j = y; j < y + height; ++j)
     for (uint16_t i = x; i < x + width; ++i)
-      SFG_setGamePixel(i,j,color);
+      LHR_setGamePixel(i,j,color);
 }
 
-static inline void SFG_clearScreen(uint8_t color)
+static inline void LHR_clearScreen(uint8_t color)
 {
-  SFG_fillRectangle(0,0,SFG_GAME_RESOLUTION_X,
-    SFG_GAME_RESOLUTION_Y,color);
+  LHR_fillRectangle(0,0,LHR_GAME_RESOLUTION_X,
+    LHR_GAME_RESOLUTION_Y,color);
 }
 
 /**
   Draws fullscreen map of the current level.
 */
-void SFG_drawMap(void)
+void LHR_drawMap(void)
 {
-  SFG_clearScreen(0);
+  LHR_clearScreen(0);
    
   uint16_t maxJ =
-    (SFG_MAP_PIXEL_SIZE * SFG_MAP_SIZE) < SFG_GAME_RESOLUTION_Y ?
-    (SFG_MAP_SIZE) : (SFG_GAME_RESOLUTION_Y / SFG_MAP_PIXEL_SIZE);
+    (LHR_MAP_PIXEL_SIZE * LHR_MAP_SIZE) < LHR_GAME_RESOLUTION_Y ?
+    (LHR_MAP_SIZE) : (LHR_GAME_RESOLUTION_Y / LHR_MAP_PIXEL_SIZE);
 
   uint16_t maxI =
-    (SFG_MAP_PIXEL_SIZE * SFG_MAP_SIZE) < SFG_GAME_RESOLUTION_X ?
-    (SFG_MAP_SIZE) : (SFG_GAME_RESOLUTION_X / SFG_MAP_PIXEL_SIZE);
+    (LHR_MAP_PIXEL_SIZE * LHR_MAP_SIZE) < LHR_GAME_RESOLUTION_X ?
+    (LHR_MAP_SIZE) : (LHR_GAME_RESOLUTION_X / LHR_MAP_PIXEL_SIZE);
 
   uint16_t topLeftX =
-    (SFG_GAME_RESOLUTION_X - (maxI * SFG_MAP_PIXEL_SIZE)) / 2;
+    (LHR_GAME_RESOLUTION_X - (maxI * LHR_MAP_PIXEL_SIZE)) / 2;
 
   uint16_t topLeftY =
-    (SFG_GAME_RESOLUTION_Y - (maxJ * SFG_MAP_PIXEL_SIZE)) / 2;
+    (LHR_GAME_RESOLUTION_Y - (maxJ * LHR_MAP_PIXEL_SIZE)) / 2;
 
   uint16_t x;
   uint16_t y = topLeftY;
 
   uint8_t playerColor = 
-    SFG_game.blink ? SFG_MAP_PLAYER_COLOR1 : SFG_MAP_PLAYER_COLOR2;
+    LHR_game.blink ? LHR_MAP_PLAYER_COLOR1 : LHR_MAP_PLAYER_COLOR2;
 
   for (int16_t j = 0; j < maxJ; ++j)
   {
@@ -4329,91 +4329,110 @@ void SFG_drawMap(void)
     {
       uint8_t color = 0; // init with non-revealed color
 
-      if (SFG_currentLevel.mapRevealMask & SFG_getMapRevealBit(i,j)) 
+      if (LHR_currentLevel.mapRevealMask & LHR_getMapRevealBit(i,j)) 
       {
         uint8_t properties;
 
-        SFG_TileDefinition tile =
-          SFG_getMapTile(SFG_currentLevel.levelPointer,i,j,&properties);
+        LHR_TileDefinition tile =
+          LHR_getMapTile(LHR_currentLevel.levelPointer,i,j,&properties);
 
         color = playerColor; // start with player color
 
-        if (i != SFG_player.squarePosition[0] ||
-            j != SFG_player.squarePosition[1])
+        if (i != LHR_player.squarePosition[0] ||
+            j != LHR_player.squarePosition[1])
         {
-          if (properties == SFG_TILE_PROPERTY_ELEVATOR)
-            color = SFG_MAP_ELEVATOR_COLOR;
-          else if (properties == SFG_TILE_PROPERTY_SQUEEZER)
-            color = SFG_MAP_SQUEEZER_COLOR;
-          else if (properties == SFG_TILE_PROPERTY_DOOR)
-            color = SFG_MAP_DOOR_COLOR;
+          if (properties == LHR_TILE_PROPERTY_ELEVATOR)
+            color = LHR_MAP_ELEVATOR_COLOR;
+          else if (properties == LHR_TILE_PROPERTY_SQUEEZER)
+            color = LHR_MAP_SQUEEZER_COLOR;
+          else if (properties == LHR_TILE_PROPERTY_DOOR)
+            color = LHR_MAP_DOOR_COLOR;
           else
           {
             color = 0;
 
-            uint8_t c = SFG_TILE_CEILING_HEIGHT(tile) / 4;
+            uint8_t c = LHR_TILE_CEILING_HEIGHT(tile) / 4;
 
             if (c != 0)
-              color = (SFG_TILE_FLOOR_HEIGHT(tile) % 8 + 3) * 8 + c - 1;
+              color = (LHR_TILE_FLOOR_HEIGHT(tile) % 8 + 3) * 8 + c - 1;
           }
         }
       }
 
-      for (int_fast16_t k = 0; k < SFG_MAP_PIXEL_SIZE; ++k)
-        for (int_fast16_t l = 0; l < SFG_MAP_PIXEL_SIZE; ++l)
-          SFG_setGamePixel(x + l, y + k,color);
+      for (int_fast16_t k = 0; k < LHR_MAP_PIXEL_SIZE; ++k)
+        for (int_fast16_t l = 0; l < LHR_MAP_PIXEL_SIZE; ++l)
+          LHR_setGamePixel(x + l, y + k,color);
 
-      x += SFG_MAP_PIXEL_SIZE;
+      x += LHR_MAP_PIXEL_SIZE;
     }
 
-    y += SFG_MAP_PIXEL_SIZE;
+    y += LHR_MAP_PIXEL_SIZE;
   } 
 }
 
 /**
   Draws fullscreen story text (intro/outro).
 */
-void SFG_drawStoryText(void)
+void LHR_drawStoryText(void)
 {
-  const char *text = SFG_outroText;
+  const char *text = LHR_outroText;
   uint16_t textColor = 23;
   uint8_t clearColor = 9;
   uint8_t sprite = 18;
 
-  if (SFG_game.state == SFG_GAME_STATE_INTRO)
-  {
-    if (SFG_game.storyType == SFG_STORY_MAP_INTRO)
-    {
-      uint8_t idx = SFG_game.introTargetLevel;
+  const LHR_MapImage *bgImage = 0;
 
-      if (idx >= SFG_NUMBER_OF_LEVELS)
+  if (LHR_game.state == LHR_GAME_STATE_INTRO)
+  {
+    if (LHR_game.storyType == LHR_STORY_MAP_INTRO)
+    {
+      uint8_t idx = LHR_game.introTargetLevel;
+
+      if (idx >= LHR_NUMBER_OF_LEVELS)
         idx = 0;
 
-      text = SFG_activeLocale->levelMeta[idx].introText;
+      text = LHR_activeLocale->levelMeta[idx].introText;
+      bgImage = LHR_activeLocale->levelMeta[idx].introImage;
     }
     else
-      text = SFG_introText;
+      text = LHR_introText;
 
     textColor = 7;
     clearColor = 0;
-    sprite = SFG_game.blink * 2;
+    sprite = LHR_game.blink * 2;
   }
-  else if (SFG_game.storyType == SFG_STORY_MAP_OUTRO)
+  else if (LHR_game.storyType == LHR_STORY_MAP_OUTRO)
   {
-    if (SFG_currentLevel.levelNumber < SFG_NUMBER_OF_LEVELS)
-      text = SFG_activeLocale->levelMeta[SFG_currentLevel.levelNumber].outroText;
+    if (LHR_currentLevel.levelNumber < LHR_NUMBER_OF_LEVELS) {
+      text = LHR_activeLocale->levelMeta[LHR_currentLevel.levelNumber].outroText;
+      bgImage = LHR_activeLocale->levelMeta[LHR_currentLevel.levelNumber].outroImage;
+    }
   }
 
   if (text == 0)
     text = "";
-    
-  SFG_clearScreen(clearColor);
 
-  if (SFG_GAME_RESOLUTION_Y > 50) 
-    SFG_blitImage(SFG_monsterSprites + sprite * SFG_TEXTURE_STORE_SIZE,
-        (SFG_GAME_RESOLUTION_X - SFG_TEXTURE_SIZE * SFG_FONT_SIZE_SMALL) / 2,
-        SFG_GAME_RESOLUTION_Y - (SFG_TEXTURE_SIZE + 3) * SFG_FONT_SIZE_SMALL,
-        SFG_FONT_SIZE_SMALL);  
+  if (bgImage != 0) {
+    uint16_t frame = LHR_getMapImageFrame(bgImage, LHR_game.stateTime);
+    uint32_t frameOffset = frame * bgImage->width * bgImage->height;
+    
+    for (uint16_t y = 0; y < LHR_GAME_RESOLUTION_Y; ++y) {
+      uint32_t srcY = (y * bgImage->height) / LHR_GAME_RESOLUTION_Y;
+      for (uint16_t x = 0; x < LHR_GAME_RESOLUTION_X; ++x) {
+        uint32_t srcX = (x * bgImage->width) / LHR_GAME_RESOLUTION_X;
+        uint8_t color = bgImage->data[frameOffset + srcY * bgImage->width + srcX];
+        LHR_setPixel(x, y, color);
+      }
+    }
+  } else {
+    LHR_clearScreen(clearColor);
+  }
+
+  if (LHR_GAME_RESOLUTION_Y > 50) 
+    LHR_blitImage(LHR_monsterSprites + sprite * LHR_TEXTURE_STORE_SIZE,
+        (LHR_GAME_RESOLUTION_X - LHR_TEXTURE_SIZE * LHR_FONT_SIZE_SMALL) / 2,
+        LHR_GAME_RESOLUTION_Y - (LHR_TEXTURE_SIZE + 3) * LHR_FONT_SIZE_SMALL,
+        LHR_FONT_SIZE_SMALL);  
 
   uint16_t textLen = 0;
 
@@ -4421,11 +4440,11 @@ void SFG_drawStoryText(void)
     textLen++;
 
   uint16_t drawLen = RCL_min(
-    textLen,(SFG_game.stateTime * textLen) / SFG_STORYTEXT_DURATION + 1);
+    textLen,(LHR_game.stateTime * textLen) / LHR_STORYTEXT_DURATION + 1);
 
-#define CHAR_SIZE (SFG_FONT_SIZE_SMALL * (SFG_FONT_CHARACTER_SIZE + 1))
-#define LINE_LENGTH (SFG_GAME_RESOLUTION_X / CHAR_SIZE)
-#define MAX_LENGTH (((SFG_GAME_RESOLUTION_Y / CHAR_SIZE) / 2) * LINE_LENGTH  )
+#define CHAR_SIZE (LHR_FONT_SIZE_SMALL * (LHR_FONT_CHARACTER_SIZE + 1))
+#define LINE_LENGTH (LHR_GAME_RESOLUTION_X / CHAR_SIZE)
+#define MAX_LENGTH (((LHR_GAME_RESOLUTION_Y / CHAR_SIZE) / 2) * LINE_LENGTH  )
 
   uint16_t drawShift = (drawLen < MAX_LENGTH) ? 0 :
     (((drawLen - MAX_LENGTH) / LINE_LENGTH) * LINE_LENGTH);
@@ -4437,14 +4456,14 @@ void SFG_drawStoryText(void)
   text += drawShift;
   drawLen -= drawShift;
 
-  SFG_drawText(text,SFG_HUD_MARGIN,SFG_HUD_MARGIN,SFG_FONT_SIZE_SMALL,textColor,
-    drawLen,SFG_GAME_RESOLUTION_X - SFG_HUD_MARGIN);
+  LHR_drawText(text,LHR_HUD_MARGIN,LHR_HUD_MARGIN,LHR_FONT_SIZE_SMALL,textColor,
+    drawLen,LHR_GAME_RESOLUTION_X - LHR_HUD_MARGIN);
 }
 
 /**
   Draws a number as text on screen, returns the number of characters drawn.
 */
-uint8_t SFG_drawNumber(
+uint8_t LHR_drawNumber(
   int16_t number,
   uint16_t x,
   uint16_t y,
@@ -4482,7 +4501,7 @@ uint8_t SFG_drawNumber(
     position--;
   }
 
-  SFG_drawText(text + position + 1,x,y,size,color,0,0);
+  LHR_drawText(text + position + 1,x,y,size,color,0,0);
 
   return 5 - position;
 }
@@ -4491,32 +4510,32 @@ uint8_t SFG_drawNumber(
   Draws a screen border that indicates something is happening, e.g. being hurt
   or taking an item.
 */
-void SFG_drawIndicationBorder(uint16_t width, uint8_t color)
+void LHR_drawIndicationBorder(uint16_t width, uint8_t color)
 {
   for (int_fast16_t j = 0; j < width; ++j)
   {
-    uint16_t j2 = SFG_GAME_RESOLUTION_Y - 1 - j;
+    uint16_t j2 = LHR_GAME_RESOLUTION_Y - 1 - j;
 
-    for (int_fast16_t i = 0; i < SFG_GAME_RESOLUTION_X; ++i)
+    for (int_fast16_t i = 0; i < LHR_GAME_RESOLUTION_X; ++i)
     {
       if ((i & 0x01) == (j & 0x01))
       {
-        SFG_setGamePixel(i,j,color);
-        SFG_setGamePixel(i,j2,color);
+        LHR_setGamePixel(i,j,color);
+        LHR_setGamePixel(i,j2,color);
       }
     }
   }
 
   for (int_fast16_t i = 0; i < width; ++i)
   {
-    uint16_t i2 = SFG_GAME_RESOLUTION_X - 1 - i;
+    uint16_t i2 = LHR_GAME_RESOLUTION_X - 1 - i;
 
-    for (int_fast16_t j = width; j < SFG_GAME_RESOLUTION_Y - width; ++j)
+    for (int_fast16_t j = width; j < LHR_GAME_RESOLUTION_Y - width; ++j)
     {
       if ((i & 0x01) == (j & 0x01))
       {
-        SFG_setGamePixel(i,j,color);
-        SFG_setGamePixel(i2,j,color);
+        LHR_setGamePixel(i,j,color);
+        LHR_setGamePixel(i2,j,color);
       }
     }
   }
@@ -4525,51 +4544,51 @@ void SFG_drawIndicationBorder(uint16_t width, uint8_t color)
 /**
   Draws the player weapon, includes handling the shoot animation.
 */
-void SFG_drawWeapon(int16_t bobOffset)
+void LHR_drawWeapon(int16_t bobOffset)
 {
   uint32_t animationLength =
-    RCL_max(SFG_MIN_WEAPON_COOLDOWN_FRAMES,
-      SFG_GET_WEAPON_FIRE_COOLDOWN_FRAMES(SFG_player.weapon));
+    RCL_max(LHR_MIN_WEAPON_COOLDOWN_FRAMES,
+      LHR_GET_WEAPON_FIRE_COOLDOWN_FRAMES(LHR_player.weapon));
 
   uint32_t shotAnimationFrame =
-    animationLength - SFG_player.weaponCooldownFrames;
+    animationLength - LHR_player.weaponCooldownFrames;
 
-  bobOffset -= SFG_HUD_BAR_HEIGHT;
+  bobOffset -= LHR_HUD_BAR_HEIGHT;
      
-  uint8_t fireType = SFG_GET_WEAPON_FIRE_TYPE(SFG_player.weapon);
+  uint8_t fireType = LHR_GET_WEAPON_FIRE_TYPE(LHR_player.weapon);
 
   if (shotAnimationFrame < animationLength)
   {
-    if (fireType == SFG_WEAPON_FIRE_TYPE_MELEE)
+    if (fireType == LHR_WEAPON_FIRE_TYPE_MELEE)
     {
       bobOffset = shotAnimationFrame < animationLength / 2 ? 0 :
-        2 * SFG_WEAPONBOB_OFFSET_PIXELS;
+        2 * LHR_WEAPONBOB_OFFSET_PIXELS;
     }
     else
     {
       bobOffset +=  
-          ((animationLength - shotAnimationFrame) * SFG_WEAPON_IMAGE_SCALE * 20)
+          ((animationLength - shotAnimationFrame) * LHR_WEAPON_IMAGE_SCALE * 20)
           / animationLength;
    
       if (
-        ((fireType == SFG_WEAPON_FIRE_TYPE_FIREBALL) ||
-         (fireType == SFG_WEAPON_FIRE_TYPE_BULLET)) &&
+        ((fireType == LHR_WEAPON_FIRE_TYPE_FIREBALL) ||
+         (fireType == LHR_WEAPON_FIRE_TYPE_BULLET)) &&
         shotAnimationFrame < animationLength / 2)
-        SFG_blitImage(SFG_effectSprites,
-          SFG_WEAPON_IMAGE_POSITION_X,
-          SFG_WEAPON_IMAGE_POSITION_Y -
-            (SFG_TEXTURE_SIZE / 3) * SFG_WEAPON_IMAGE_SCALE + bobOffset,
-          SFG_WEAPON_IMAGE_SCALE);
+        LHR_blitImage(LHR_effectSprites,
+          LHR_WEAPON_IMAGE_POSITION_X,
+          LHR_WEAPON_IMAGE_POSITION_Y -
+            (LHR_TEXTURE_SIZE / 3) * LHR_WEAPON_IMAGE_SCALE + bobOffset,
+          LHR_WEAPON_IMAGE_SCALE);
     }
   }
 
-  SFG_blitImage(SFG_weaponImages + SFG_player.weapon * SFG_TEXTURE_STORE_SIZE,
-  SFG_WEAPON_IMAGE_POSITION_X,
-  SFG_WEAPON_IMAGE_POSITION_Y + bobOffset - 1,
-  SFG_WEAPON_IMAGE_SCALE);
+  LHR_blitImage(LHR_weaponImages + LHR_player.weapon * LHR_TEXTURE_STORE_SIZE,
+  LHR_WEAPON_IMAGE_POSITION_X,
+  LHR_WEAPON_IMAGE_POSITION_Y + bobOffset - 1,
+  LHR_WEAPON_IMAGE_SCALE);
 }
 
-uint16_t SFG_textLen(const char *text)
+uint16_t LHR_textLen(const char *text)
 {
   uint16_t result = 0;
 
@@ -4579,52 +4598,52 @@ uint16_t SFG_textLen(const char *text)
   return result;
 }
 
-static inline uint16_t SFG_characterSize(uint8_t textSize)
+static inline uint16_t LHR_characterSize(uint8_t textSize)
 {
-  return (SFG_FONT_CHARACTER_SIZE + 1) * textSize;
+  return (LHR_FONT_CHARACTER_SIZE + 1) * textSize;
 }
 
 static inline uint16_t
-  SFG_textHorizontalSize(const char *text, uint8_t textSize)
+  LHR_textHorizontalSize(const char *text, uint8_t textSize)
 {
-  return (SFG_textLen(text) * SFG_characterSize(textSize));
+  return (LHR_textLen(text) * LHR_characterSize(textSize));
 }
 
-void SFG_drawMenu(void)
+void LHR_drawMenu(void)
 {
-  #define BACKGROUND_SCALE (SFG_GAME_RESOLUTION_X / (4 * SFG_TEXTURE_SIZE))
+  #define BACKGROUND_SCALE (LHR_GAME_RESOLUTION_X / (4 * LHR_TEXTURE_SIZE))
 
   #if BACKGROUND_SCALE == 0
     #undef BACKGROUND_SCALE
     #define BACKGROUND_SCALE 1
   #endif
 
-  #define SCROLL_PIXELS_PER_FRAME ((64 * SFG_GAME_RESOLUTION_X) / (8 * SFG_FPS))
+  #define SCROLL_PIXELS_PER_FRAME ((64 * LHR_GAME_RESOLUTION_X) / (8 * LHR_FPS))
 
   #if SCROLL_PIXELS_PER_FRAME == 0
     #undef SCROLL_PIXELS_PER_FRAME
     #define SCROLL_PIXELS_PER_FRAME 1
   #endif
 
-  #define SELECTION_START_X ((SFG_GAME_RESOLUTION_X - 12 * SFG_FONT_SIZE_MEDIUM\
-    * (SFG_FONT_CHARACTER_SIZE + 1)) / 2)
+  #define SELECTION_START_X ((LHR_GAME_RESOLUTION_X - 12 * LHR_FONT_SIZE_MEDIUM\
+    * (LHR_FONT_CHARACTER_SIZE + 1)) / 2)
 
-  uint16_t scroll = (SFG_game.frame * SCROLL_PIXELS_PER_FRAME) / 64;
+  uint16_t scroll = (LHR_game.frame * SCROLL_PIXELS_PER_FRAME) / 64;
 
-  for (uint16_t y = 0; y < SFG_GAME_RESOLUTION_Y; ++y)
-    for (uint16_t x = 0; x < SFG_GAME_RESOLUTION_X; ++x)
-      SFG_setGamePixel(x,y,
-        (y >= (SFG_TEXTURE_SIZE * BACKGROUND_SCALE)) ? 0 :
-        SFG_getTexel(SFG_backgroundImages,((x + scroll) / BACKGROUND_SCALE)
-          % SFG_TEXTURE_SIZE,y / BACKGROUND_SCALE));
+  for (uint16_t y = 0; y < LHR_GAME_RESOLUTION_Y; ++y)
+    for (uint16_t x = 0; x < LHR_GAME_RESOLUTION_X; ++x)
+      LHR_setGamePixel(x,y,
+        (y >= (LHR_TEXTURE_SIZE * BACKGROUND_SCALE)) ? 0 :
+        LHR_getTexel(LHR_backgroundImages,((x + scroll) / BACKGROUND_SCALE)
+          % LHR_TEXTURE_SIZE,y / BACKGROUND_SCALE));
 
-  uint16_t y = SFG_characterSize(SFG_FONT_SIZE_MEDIUM);
+  uint16_t y = LHR_characterSize(LHR_FONT_SIZE_MEDIUM);
 
-  SFG_blitImage(SFG_logoImage,SFG_GAME_RESOLUTION_X / 2 - 
-    (SFG_TEXTURE_SIZE / 2) * SFG_FONT_SIZE_SMALL,y,SFG_FONT_SIZE_SMALL);
+  LHR_blitImage(LHR_logoImage,LHR_GAME_RESOLUTION_X / 2 - 
+    (LHR_TEXTURE_SIZE / 2) * LHR_FONT_SIZE_SMALL,y,LHR_FONT_SIZE_SMALL);
 
-#if SFG_GAME_RESOLUTION_Y > 50
-  y += 32 * SFG_FONT_SIZE_MEDIUM + SFG_characterSize(SFG_FONT_SIZE_MEDIUM);
+#if LHR_GAME_RESOLUTION_Y > 50
+  y += 32 * LHR_FONT_SIZE_MEDIUM + LHR_characterSize(LHR_FONT_SIZE_MEDIUM);
 #else
   y = 2;
 #endif
@@ -4633,81 +4652,81 @@ void SFG_drawMenu(void)
 
   while (1) // draw menu items
   {
-    uint8_t item = SFG_getMenuItem(i);
+    uint8_t item = LHR_getMenuItem(i);
 
-    if (item == SFG_MENU_ITEM_NONE)
+    if (item == LHR_MENU_ITEM_NONE)
       break;
 
-#if (SFG_GAME_RESOLUTION_Y < 70) || SFG_FORCE_SINGLE_ITEM_MENU
+#if (LHR_GAME_RESOLUTION_Y < 70) || LHR_FORCE_SINGLE_ITEM_MENU
     // with low resolution only display the selected item
 
-    if (i != SFG_game.selectedMenuItem)
+    if (i != LHR_game.selectedMenuItem)
     {
       i++;
       continue;
     }
 #endif
 
-    const char *text = SFG_menuItemTexts[item];
-    uint8_t textLen = SFG_textLen(text);
+    const char *text = LHR_menuItemTexts[item];
+    uint8_t textLen = LHR_textLen(text);
 
-    uint16_t drawX = (SFG_GAME_RESOLUTION_X -
-      SFG_textHorizontalSize(text,SFG_FONT_SIZE_MEDIUM)) / 2;
+    uint16_t drawX = (LHR_GAME_RESOLUTION_X -
+      LHR_textHorizontalSize(text,LHR_FONT_SIZE_MEDIUM)) / 2;
 
     uint8_t textColor = 7;
 
-    if (i != SFG_game.selectedMenuItem)
+    if (i != LHR_game.selectedMenuItem)
       textColor = 23;
     else
-      SFG_fillRectangle( // menu item highlight
+      LHR_fillRectangle( // menu item highlight
         SELECTION_START_X,
-        y - SFG_FONT_SIZE_MEDIUM,
-        SFG_GAME_RESOLUTION_X - SELECTION_START_X * 2,
-        SFG_characterSize(SFG_FONT_SIZE_MEDIUM),2);
+        y - LHR_FONT_SIZE_MEDIUM,
+        LHR_GAME_RESOLUTION_X - SELECTION_START_X * 2,
+        LHR_characterSize(LHR_FONT_SIZE_MEDIUM),2);
   
-    SFG_drawText(text,drawX,y,SFG_FONT_SIZE_MEDIUM,textColor,0,0);
+    LHR_drawText(text,drawX,y,LHR_FONT_SIZE_MEDIUM,textColor,0,0);
 
-        if ((item == SFG_MENU_ITEM_PLAY || item == SFG_MENU_ITEM_SFX || item == SFG_MENU_ITEM_MUSIC
-          || item == SFG_MENU_ITEM_SHEAR || item == SFG_MENU_ITEM_LANGUAGE) &&
-        ((i != SFG_game.selectedMenuItem) || SFG_game.blink))
+        if ((item == LHR_MENU_ITEM_PLAY || item == LHR_MENU_ITEM_SFX || item == LHR_MENU_ITEM_MUSIC
+          || item == LHR_MENU_ITEM_SHEAR || item == LHR_MENU_ITEM_LANGUAGE) &&
+        ((i != LHR_game.selectedMenuItem) || LHR_game.blink))
     {
       uint32_t x =
-        drawX + SFG_characterSize(SFG_FONT_SIZE_MEDIUM) * (textLen + 1);
+        drawX + LHR_characterSize(LHR_FONT_SIZE_MEDIUM) * (textLen + 1);
 
       uint8_t c = 93;
 
-      if (item == SFG_MENU_ITEM_PLAY)
-        SFG_drawNumber(SFG_game.selectedLevel + 1,x,y,SFG_FONT_SIZE_MEDIUM,c);
-      else if (item == SFG_MENU_ITEM_SHEAR)
+      if (item == LHR_MENU_ITEM_PLAY)
+        LHR_drawNumber(LHR_game.selectedLevel + 1,x,y,LHR_FONT_SIZE_MEDIUM,c);
+      else if (item == LHR_MENU_ITEM_SHEAR)
       {
-        uint8_t n = (SFG_game.settings >> 2) & 0x03;
+        uint8_t n = (LHR_game.settings >> 2) & 0x03;
 
-        SFG_drawNumber(n == 3 ? 2 : n,x,y,SFG_FONT_SIZE_MEDIUM,c);
+        LHR_drawNumber(n == 3 ? 2 : n,x,y,LHR_FONT_SIZE_MEDIUM,c);
       }
-      else if (item == SFG_MENU_ITEM_SFX)
+      else if (item == LHR_MENU_ITEM_SFX)
       {
-        SFG_drawText((SFG_game.settings & 0x01) ? SFG_activeLocale->textOn : SFG_activeLocale->textOff,x,y,SFG_FONT_SIZE_MEDIUM,c,0,0);
+        LHR_drawText((LHR_game.settings & 0x01) ? LHR_activeLocale->textOn : LHR_activeLocale->textOff,x,y,LHR_FONT_SIZE_MEDIUM,c,0,0);
       }
-      else if (item == SFG_MENU_ITEM_MUSIC)
+      else if (item == LHR_MENU_ITEM_MUSIC)
       {
-        SFG_drawText((SFG_game.settings & 0x02) ? SFG_activeLocale->textOn : SFG_activeLocale->textOff,x,y,SFG_FONT_SIZE_MEDIUM,c,0,0);
+        LHR_drawText((LHR_game.settings & 0x02) ? LHR_activeLocale->textOn : LHR_activeLocale->textOff,x,y,LHR_FONT_SIZE_MEDIUM,c,0,0);
       }
       else
-        SFG_drawText(SFG_activeLocale->localeId,x,y,SFG_FONT_SIZE_MEDIUM,c,0,0);
+        LHR_drawText(LHR_activeLocale->localeId,x,y,LHR_FONT_SIZE_MEDIUM,c,0,0);
     }
 
-    y += SFG_characterSize(SFG_FONT_SIZE_MEDIUM) + SFG_FONT_SIZE_MEDIUM;
+    y += LHR_characterSize(LHR_FONT_SIZE_MEDIUM) + LHR_FONT_SIZE_MEDIUM;
     i++;
   }
   
-  SFG_drawText(SFG_VERSION_STRING " GPL",SFG_HUD_MARGIN,SFG_GAME_RESOLUTION_Y -
-    SFG_HUD_MARGIN - SFG_FONT_SIZE_SMALL * SFG_FONT_CHARACTER_SIZE,
-    SFG_FONT_SIZE_SMALL,4,0,0);
+  LHR_drawText(LHR_VERSION_STRING " GPL",LHR_HUD_MARGIN,LHR_GAME_RESOLUTION_Y -
+    LHR_HUD_MARGIN - LHR_FONT_SIZE_SMALL * LHR_FONT_CHARACTER_SIZE,
+    LHR_FONT_SIZE_SMALL,4,0,0);
 
-  #if SFG_OS_IS_MALWARE
-    if (SFG_game.blink)
-      SFG_drawText(SFG_MALWARE_WARNING,SFG_HUD_MARGIN,SFG_HUD_MARGIN,
-        SFG_FONT_SIZE_MEDIUM,95,0,0);
+  #if LHR_OS_IS_MALWARE
+    if (LHR_game.blink)
+      LHR_drawText(LHR_MALWARE_WARNING,LHR_HUD_MARGIN,LHR_HUD_MARGIN,
+        LHR_FONT_SIZE_MEDIUM,95,0,0);
   #endif
 
   #undef MAX_ITEMS
@@ -4715,90 +4734,90 @@ void SFG_drawMenu(void)
   #undef SCROLL_PIXELS_PER_FRAME
 }
 
-void SFG_drawWinOverlay(void)
+void LHR_drawWinOverlay(void)
 {
-  uint32_t t = RCL_min(SFG_WIN_ANIMATION_DURATION,SFG_game.stateTime);
+  uint32_t t = RCL_min(LHR_WIN_ANIMATION_DURATION,LHR_game.stateTime);
 
-  uint32_t t2 = RCL_min(t,SFG_WIN_ANIMATION_DURATION / 4);
+  uint32_t t2 = RCL_min(t,LHR_WIN_ANIMATION_DURATION / 4);
 
-  #define STRIP_HEIGHT (SFG_GAME_RESOLUTION_Y / 2)
+  #define STRIP_HEIGHT (LHR_GAME_RESOLUTION_Y / 2)
   #define INNER_STRIP_HEIGHT ((STRIP_HEIGHT * 3) / 4)
-  #define STRIP_START ((SFG_GAME_RESOLUTION_Y - STRIP_HEIGHT) / 2)
+  #define STRIP_START ((LHR_GAME_RESOLUTION_Y - STRIP_HEIGHT) / 2)
 
-  RCL_Unit l = (t2 * STRIP_HEIGHT * 4) / SFG_WIN_ANIMATION_DURATION;
+  RCL_Unit l = (t2 * STRIP_HEIGHT * 4) / LHR_WIN_ANIMATION_DURATION;
 
   for (uint16_t y = STRIP_START; y < STRIP_START + l; ++y)
-    for (uint16_t x = 0; x < SFG_GAME_RESOLUTION_X; ++x)
-      SFG_setGamePixel(x,y, 
-        RCL_abs(y - (SFG_GAME_RESOLUTION_Y / 2)) <= (INNER_STRIP_HEIGHT / 2) ?
+    for (uint16_t x = 0; x < LHR_GAME_RESOLUTION_X; ++x)
+      LHR_setGamePixel(x,y, 
+        RCL_abs(y - (LHR_GAME_RESOLUTION_Y / 2)) <= (INNER_STRIP_HEIGHT / 2) ?
           0 : 172);
 
-  const char *textLine = SFG_TEXT_LEVEL_COMPLETE;
+  const char *textLine = LHR_TEXT_LEVEL_COMPLETE;
 
-  uint16_t y = SFG_GAME_RESOLUTION_Y / 2 - 
+  uint16_t y = LHR_GAME_RESOLUTION_Y / 2 - 
     ((STRIP_HEIGHT + INNER_STRIP_HEIGHT) / 2) / 2;
 
-  uint16_t x = (SFG_GAME_RESOLUTION_X - 
-    SFG_textHorizontalSize(textLine,SFG_FONT_SIZE_BIG)) / 2;
+  uint16_t x = (LHR_GAME_RESOLUTION_X - 
+    LHR_textHorizontalSize(textLine,LHR_FONT_SIZE_BIG)) / 2;
 
-  SFG_drawText(textLine,x,y,SFG_FONT_SIZE_BIG,7 + SFG_game.blink * 95,255,0);
+  LHR_drawText(textLine,x,y,LHR_FONT_SIZE_BIG,7 + LHR_game.blink * 95,255,0);
 
-  uint32_t timeTotal = SFG_SAVE_TOTAL_TIME;
+  uint32_t timeTotal = LHR_SAVE_TOTAL_TIME;
 
   // don't show totals in level 1:
-  uint8_t blink = (SFG_game.blink) && (SFG_currentLevel.levelNumber != 0)
+  uint8_t blink = (LHR_game.blink) && (LHR_currentLevel.levelNumber != 0)
     && (timeTotal != 0);
 
-  if (t >= (SFG_WIN_ANIMATION_DURATION / 2))
+  if (t >= (LHR_WIN_ANIMATION_DURATION / 2))
   {
-    y += (SFG_FONT_SIZE_BIG + SFG_FONT_SIZE_MEDIUM) * SFG_FONT_CHARACTER_SIZE;
-    x = SFG_HUD_MARGIN;
+    y += (LHR_FONT_SIZE_BIG + LHR_FONT_SIZE_MEDIUM) * LHR_FONT_CHARACTER_SIZE;
+    x = LHR_HUD_MARGIN;
 
-    #define CHAR_SIZE (SFG_FONT_SIZE_SMALL * SFG_FONT_CHARACTER_SIZE)
+    #define CHAR_SIZE (LHR_FONT_SIZE_SMALL * LHR_FONT_CHARACTER_SIZE)
 
-    uint32_t time = blink ? timeTotal : SFG_currentLevel.completionTime10sOfS;
+    uint32_t time = blink ? timeTotal : LHR_currentLevel.completionTime10sOfS;
 
-    x += SFG_drawNumber(time / 10,x,y,SFG_FONT_SIZE_SMALL,7) *
-      CHAR_SIZE + SFG_FONT_SIZE_SMALL;
+    x += LHR_drawNumber(time / 10,x,y,LHR_FONT_SIZE_SMALL,7) *
+      CHAR_SIZE + LHR_FONT_SIZE_SMALL;
 
     char timeRest[5] = ".X s";
 
     timeRest[1] = '0' + (time % 10);
     
-    SFG_drawText(timeRest,x,y,SFG_FONT_SIZE_SMALL,7,4,0);
+    LHR_drawText(timeRest,x,y,LHR_FONT_SIZE_SMALL,7,4,0);
 
-    x = SFG_HUD_MARGIN;
-    y += (SFG_FONT_SIZE_BIG + SFG_FONT_SIZE_MEDIUM) * SFG_FONT_CHARACTER_SIZE;
+    x = LHR_HUD_MARGIN;
+    y += (LHR_FONT_SIZE_BIG + LHR_FONT_SIZE_MEDIUM) * LHR_FONT_CHARACTER_SIZE;
 
     if (blink)
     {
-      x += (SFG_drawNumber(SFG_game.save[10] + SFG_game.save[11] * 256,x,y,
-        SFG_FONT_SIZE_SMALL,7) + 1) * CHAR_SIZE;
+      x += (LHR_drawNumber(LHR_game.save[10] + LHR_game.save[11] * 256,x,y,
+        LHR_FONT_SIZE_SMALL,7) + 1) * CHAR_SIZE;
     }
     else
     {
-      x += SFG_drawNumber(SFG_currentLevel.monstersDead,x,y,
-        SFG_FONT_SIZE_SMALL,7) * CHAR_SIZE;
+      x += LHR_drawNumber(LHR_currentLevel.monstersDead,x,y,
+        LHR_FONT_SIZE_SMALL,7) * CHAR_SIZE;
 
-      SFG_drawText("/",x,y,SFG_FONT_SIZE_SMALL,7,1,0);
+      LHR_drawText("/",x,y,LHR_FONT_SIZE_SMALL,7,1,0);
 
       x += CHAR_SIZE;
 
-      x += (SFG_drawNumber(SFG_currentLevel.monsterRecordCount,x,y,
-        SFG_FONT_SIZE_SMALL,7) + 1) * CHAR_SIZE;
+      x += (LHR_drawNumber(LHR_currentLevel.monsterRecordCount,x,y,
+        LHR_FONT_SIZE_SMALL,7) + 1) * CHAR_SIZE;
     }
     
-    SFG_drawText(SFG_TEXT_KILLS,x,y,SFG_FONT_SIZE_SMALL,7,255,0);
+    LHR_drawText(LHR_TEXT_KILLS,x,y,LHR_FONT_SIZE_SMALL,7,255,0);
 
-    if ((t >= (SFG_WIN_ANIMATION_DURATION - 1)) && 
-      (SFG_currentLevel.levelNumber != (SFG_NUMBER_OF_LEVELS - 1)) &&
-      SFG_game.blink)
+    if ((t >= (LHR_WIN_ANIMATION_DURATION - 1)) && 
+      (LHR_currentLevel.levelNumber != (LHR_NUMBER_OF_LEVELS - 1)) &&
+      LHR_game.blink)
     {
-      y += (SFG_FONT_SIZE_BIG + SFG_FONT_SIZE_MEDIUM) * SFG_FONT_CHARACTER_SIZE;
+      y += (LHR_FONT_SIZE_BIG + LHR_FONT_SIZE_MEDIUM) * LHR_FONT_CHARACTER_SIZE;
 
-      SFG_drawText(SFG_TEXT_SAVE_PROMPT,
-        (SFG_GAME_RESOLUTION_X - SFG_textHorizontalSize(SFG_TEXT_SAVE_PROMPT,
-          SFG_FONT_SIZE_MEDIUM)) / 2,y,SFG_FONT_SIZE_MEDIUM,7,255,0);
+      LHR_drawText(LHR_TEXT_SAVE_PROMPT,
+        (LHR_GAME_RESOLUTION_X - LHR_textHorizontalSize(LHR_TEXT_SAVE_PROMPT,
+          LHR_FONT_SIZE_MEDIUM)) / 2,y,LHR_FONT_SIZE_MEDIUM,7,255,0);
     }
 
     #undef CHAR_SIZE
@@ -4809,171 +4828,171 @@ void SFG_drawWinOverlay(void)
   #undef INNER_STRIP_HEIGHT
 }
 
-void SFG_draw(void)
+void LHR_draw(void)
 {
-#if SFG_BACKGROUND_BLUR != 0
-  SFG_backgroundBlurIndex = 0;
+#if LHR_BACKGROUND_BLUR != 0
+  LHR_backgroundBlurIndex = 0;
 #endif
 
-  if (SFG_game.state == SFG_GAME_STATE_MENU)
+  if (LHR_game.state == LHR_GAME_STATE_MENU)
   {
-    SFG_drawMenu();
+    LHR_drawMenu();
     return;
   }
 
-  if (SFG_game.state == SFG_GAME_STATE_INTRO ||
-      SFG_game.state == SFG_GAME_STATE_OUTRO)
+  if (LHR_game.state == LHR_GAME_STATE_INTRO ||
+      LHR_game.state == LHR_GAME_STATE_OUTRO)
   {
-    SFG_drawStoryText();
+    LHR_drawStoryText();
     return;
   }
 
-  if (SFG_keyIsDown(SFG_KEY_MAP) || (SFG_game.state == SFG_GAME_STATE_MAP))
+  if (LHR_keyIsDown(LHR_KEY_MAP) || (LHR_game.state == LHR_GAME_STATE_MAP))
   {
-    SFG_drawMap();
+    LHR_drawMap();
   } 
   else
   { 
-    for (int_fast16_t i = 0; i < SFG_Z_BUFFER_SIZE; ++i)
-      SFG_game.zBuffer[i] = 255;
+    for (int_fast16_t i = 0; i < LHR_Z_BUFFER_SIZE; ++i)
+      LHR_game.zBuffer[i] = 255;
 
     int16_t weaponBobOffset = 0;
 
-#if SFG_HEADBOB_ENABLED
+#if LHR_HEADBOB_ENABLED
     RCL_Unit headBobOffset = 0;
 
-#if SFG_HEADBOB_SHEAR != 0
+#if LHR_HEADBOB_SHEAR != 0
     int16_t headBobShearOffset = 0;
 #endif
 
-    if (SFG_game.state != SFG_GAME_STATE_LOSE)
+    if (LHR_game.state != LHR_GAME_STATE_LOSE)
     {
-      RCL_Unit bobSin = RCL_sin(SFG_player.headBobFrame);
+      RCL_Unit bobSin = RCL_sin(LHR_player.headBobFrame);
 
-      headBobOffset = (bobSin * SFG_HEADBOB_OFFSET) / RCL_UNITS_PER_SQUARE;
+      headBobOffset = (bobSin * LHR_HEADBOB_OFFSET) / RCL_UNITS_PER_SQUARE;
 
-#if SFG_HEADBOB_SHEAR != 0
-      headBobShearOffset = (bobSin * SFG_HEADBOB_SHEAR) / RCL_UNITS_PER_SQUARE;
-      SFG_player.camera.shear += headBobShearOffset;
+#if LHR_HEADBOB_SHEAR != 0
+      headBobShearOffset = (bobSin * LHR_HEADBOB_SHEAR) / RCL_UNITS_PER_SQUARE;
+      LHR_player.camera.shear += headBobShearOffset;
 #endif
 
       weaponBobOffset =
-        (bobSin * SFG_WEAPONBOB_OFFSET_PIXELS) / (RCL_UNITS_PER_SQUARE) + 
-        SFG_WEAPONBOB_OFFSET_PIXELS;
+        (bobSin * LHR_WEAPONBOB_OFFSET_PIXELS) / (RCL_UNITS_PER_SQUARE) + 
+        LHR_WEAPONBOB_OFFSET_PIXELS;
     }
     else
     {
       // player die animation
 
       weaponBobOffset =
-        (SFG_WEAPON_IMAGE_SCALE * SFG_TEXTURE_SIZE * SFG_game.stateTime) /
-        SFG_LOSE_ANIMATION_DURATION;
+        (LHR_WEAPON_IMAGE_SCALE * LHR_TEXTURE_SIZE * LHR_game.stateTime) /
+        LHR_LOSE_ANIMATION_DURATION;
     }
       
     // add head bob just for the rendering (we'll will subtract it back later)
 
-    SFG_player.camera.height += headBobOffset;
+    LHR_player.camera.height += headBobOffset;
 #endif // headbob enabled?
 
     RCL_renderComplex(
-      SFG_player.camera,
-      SFG_floorHeightAt,
-      SFG_ceilingHeightAt,
-      SFG_texturesAt,
-      SFG_game.rayConstraints);
+      LHR_player.camera,
+      LHR_floorHeightAt,
+      LHR_ceilingHeightAt,
+      LHR_texturesAt,
+      LHR_game.rayConstraints);
  
     // draw sprites:
 
     // monster sprites:
-    for (int_fast16_t i = 0; i < SFG_currentLevel.monsterRecordCount; ++i)
+    for (int_fast16_t i = 0; i < LHR_currentLevel.monsterRecordCount; ++i)
     {
-      SFG_MonsterRecord m = SFG_currentLevel.monsterRecords[i];
-      uint8_t state = SFG_MR_STATE(m);
+      LHR_MonsterRecord m = LHR_currentLevel.monsterRecords[i];
+      uint8_t state = LHR_MR_STATE(m);
 
-      if (state != SFG_MONSTER_STATE_INACTIVE)
+      if (state != LHR_MONSTER_STATE_INACTIVE)
       {
         RCL_Vector2D worldPosition;
 
-        worldPosition.x = SFG_MONSTER_COORD_TO_RCL_UNITS(m.coords[0]);
-        worldPosition.y = SFG_MONSTER_COORD_TO_RCL_UNITS(m.coords[1]);
+        worldPosition.x = LHR_MONSTER_COORD_TO_RCL_UNITS(m.coords[0]);
+        worldPosition.y = LHR_MONSTER_COORD_TO_RCL_UNITS(m.coords[1]);
 
-        uint8_t spriteSize = SFG_GET_MONSTER_SPRITE_SIZE(
-          SFG_MONSTER_TYPE_TO_INDEX(SFG_MR_TYPE(m)));
+        uint8_t spriteSize = LHR_GET_MONSTER_SPRITE_SIZE(
+          LHR_MONSTER_TYPE_TO_INDEX(LHR_MR_TYPE(m)));
 
         RCL_Unit worldHeight = 
-          SFG_floorHeightAt(
-            SFG_MONSTER_COORD_TO_SQUARES(m.coords[0]),
-            SFG_MONSTER_COORD_TO_SQUARES(m.coords[1]))
-            + SFG_SPRITE_SIZE_TO_HEIGHT_ABOVE_GROUND(spriteSize);
+          LHR_floorHeightAt(
+            LHR_MONSTER_COORD_TO_SQUARES(m.coords[0]),
+            LHR_MONSTER_COORD_TO_SQUARES(m.coords[1]))
+            + LHR_SPRITE_SIZE_TO_HEIGHT_ABOVE_GROUND(spriteSize);
 
         RCL_PixelInfo p =
-          RCL_mapToScreen(worldPosition,worldHeight,SFG_player.camera);
+          RCL_mapToScreen(worldPosition,worldHeight,LHR_player.camera);
 
         if (p.depth > 0 &&
-          SFG_spriteIsVisible(worldPosition,worldHeight))
+          LHR_spriteIsVisible(worldPosition,worldHeight))
         {
           const uint8_t *s =
-            SFG_getMonsterSprite(
-              SFG_MR_TYPE(m),
+            LHR_getMonsterSprite(
+              LHR_MR_TYPE(m),
               state,
-              SFG_game.spriteAnimationFrame & 0x01);
+              LHR_game.spriteAnimationFrame & 0x01);
 
-          SFG_drawScaledSprite(s,
-            p.position.x * SFG_RAYCASTING_SUBSAMPLE,p.position.y,
+          LHR_drawScaledSprite(s,
+            p.position.x * LHR_RAYCASTING_SUBSAMPLE,p.position.y,
             RCL_perspectiveScaleVertical(
-            SFG_SPRITE_SIZE_PIXELS(spriteSize),
+            LHR_SPRITE_SIZE_PIXELS(spriteSize),
             p.depth),
-            SFG_fogValueDiminish(p.depth),
+            LHR_fogValueDiminish(p.depth),
             p.depth);
         }
       }
     }
 
     // item sprites:
-    for (int_fast16_t i = 0; i < SFG_currentLevel.itemRecordCount; ++i)
-      if (SFG_currentLevel.itemRecords[i] & SFG_ITEM_RECORD_ACTIVE_MASK)
+    for (int_fast16_t i = 0; i < LHR_currentLevel.itemRecordCount; ++i)
+      if (LHR_currentLevel.itemRecords[i] & LHR_ITEM_RECORD_ACTIVE_MASK)
       {
         RCL_Vector2D worldPosition;
 
-        SFG_LevelElement e = 
-          SFG_currentLevel.levelPointer->elements[
-            SFG_currentLevel.itemRecords[i] & ~SFG_ITEM_RECORD_ACTIVE_MASK];
+        LHR_LevelElement e = 
+          LHR_currentLevel.levelPointer->elements[
+            LHR_currentLevel.itemRecords[i] & ~LHR_ITEM_RECORD_ACTIVE_MASK];
 
         worldPosition.x =
-          SFG_ELEMENT_COORD_TO_RCL_UNITS(e.coords[0]);
+          LHR_ELEMENT_COORD_TO_RCL_UNITS(e.coords[0]);
 
         worldPosition.y =
-          SFG_ELEMENT_COORD_TO_RCL_UNITS(e.coords[1]);
+          LHR_ELEMENT_COORD_TO_RCL_UNITS(e.coords[1]);
 
         const uint8_t *sprite;
         uint8_t spriteSize;
 
-        SFG_getItemSprite(e.type,&sprite,&spriteSize);
+        LHR_getItemSprite(e.type,&sprite,&spriteSize);
 
         if (sprite != 0)
         {
-          RCL_Unit worldHeight = SFG_floorHeightAt(e.coords[0],e.coords[1])
-            + SFG_SPRITE_SIZE_TO_HEIGHT_ABOVE_GROUND(spriteSize);
+          RCL_Unit worldHeight = LHR_floorHeightAt(e.coords[0],e.coords[1])
+            + LHR_SPRITE_SIZE_TO_HEIGHT_ABOVE_GROUND(spriteSize);
 
           RCL_PixelInfo p =
-            RCL_mapToScreen(worldPosition,worldHeight,SFG_player.camera);
+            RCL_mapToScreen(worldPosition,worldHeight,LHR_player.camera);
 
           if (p.depth > 0 &&
-            SFG_spriteIsVisible(worldPosition,worldHeight))
-            SFG_drawScaledSprite(sprite,p.position.x * SFG_RAYCASTING_SUBSAMPLE,
+            LHR_spriteIsVisible(worldPosition,worldHeight))
+            LHR_drawScaledSprite(sprite,p.position.x * LHR_RAYCASTING_SUBSAMPLE,
               p.position.y,
-              RCL_perspectiveScaleVertical(SFG_SPRITE_SIZE_PIXELS(spriteSize),
+              RCL_perspectiveScaleVertical(LHR_SPRITE_SIZE_PIXELS(spriteSize),
               p.depth),
-              SFG_fogValueDiminish(p.depth),p.depth);
+              LHR_fogValueDiminish(p.depth),p.depth);
         }
       }
 
     // projectile sprites:
-    for (uint8_t i = 0; i < SFG_currentLevel.projectileRecordCount; ++i)
+    for (uint8_t i = 0; i < LHR_currentLevel.projectileRecordCount; ++i)
     {
-      SFG_ProjectileRecord *proj = &(SFG_currentLevel.projectileRecords[i]);
+      LHR_ProjectileRecord *proj = &(LHR_currentLevel.projectileRecords[i]);
 
-      if (proj->type == SFG_PROJECTILE_BULLET)
+      if (proj->type == LHR_PROJECTILE_BULLET)
         continue; // bullets aren't drawn
 
       RCL_Vector2D worldPosition;
@@ -4982,22 +5001,22 @@ void SFG_draw(void)
       worldPosition.y = proj->position[1];
 
       RCL_PixelInfo p =
-        RCL_mapToScreen(worldPosition,proj->position[2],SFG_player.camera);
+        RCL_mapToScreen(worldPosition,proj->position[2],LHR_player.camera);
        
       const uint8_t *s =
-        SFG_effectSprites + proj->type * SFG_TEXTURE_STORE_SIZE;
+        LHR_effectSprites + proj->type * LHR_TEXTURE_STORE_SIZE;
 
-      int16_t spriteSize = SFG_SPRITE_SIZE_PIXELS(0);
+      int16_t spriteSize = LHR_SPRITE_SIZE_PIXELS(0);
 
-      if (proj->type == SFG_PROJECTILE_EXPLOSION ||
-          proj->type == SFG_PROJECTILE_DUST)
+      if (proj->type == LHR_PROJECTILE_EXPLOSION ||
+          proj->type == LHR_PROJECTILE_DUST)
       {
         int16_t doubleFramesToLive =
-          RCL_nonZero(SFG_GET_PROJECTILE_FRAMES_TO_LIVE(proj->type) / 2);
+          RCL_nonZero(LHR_GET_PROJECTILE_FRAMES_TO_LIVE(proj->type) / 2);
 
         // grow the explosion/dust sprite as an animation
         spriteSize = (
-            SFG_SPRITE_SIZE_PIXELS(2) *
+            LHR_SPRITE_SIZE_PIXELS(2) *
             RCL_sin(          
               ((doubleFramesToLive -
                proj->doubleFramesToLive) * RCL_UNITS_PER_SQUARE / 4)
@@ -5006,26 +5025,26 @@ void SFG_draw(void)
       }
 
       if (p.depth > 0 && 
-        SFG_spriteIsVisible(worldPosition,proj->position[2]))
-        SFG_drawScaledSprite(s,
-            p.position.x * SFG_RAYCASTING_SUBSAMPLE,p.position.y,
+        LHR_spriteIsVisible(worldPosition,proj->position[2]))
+        LHR_drawScaledSprite(s,
+            p.position.x * LHR_RAYCASTING_SUBSAMPLE,p.position.y,
             RCL_perspectiveScaleVertical(spriteSize,p.depth),
-            SFG_fogValueDiminish(p.depth),
+            LHR_fogValueDiminish(p.depth),
             p.depth);  
     }
 
-#if SFG_HEADBOB_ENABLED
+#if LHR_HEADBOB_ENABLED
     // after rendering sprites subtract back the head bob offset
-    SFG_player.camera.height -= headBobOffset;
+    LHR_player.camera.height -= headBobOffset;
 
-#if SFG_HEADBOB_SHEAR != 0
-    SFG_player.camera.shear -= headBobShearOffset;
+#if LHR_HEADBOB_SHEAR != 0
+    LHR_player.camera.shear -= headBobShearOffset;
 #endif
 
 #endif // head bob enabled?
 
-#if SFG_PREVIEW_MODE == 0
-    SFG_drawWeapon(weaponBobOffset);
+#if LHR_PREVIEW_MODE == 0
+    LHR_drawWeapon(weaponBobOffset);
 #endif
 
     // draw HUD:
@@ -5035,144 +5054,144 @@ void SFG_draw(void)
     uint8_t color = 61;
     uint8_t color2 = 48;
 
-    if (SFG_game.cheatState & 0x80)
+    if (LHR_game.cheatState & 0x80)
     {
       color = 170;
       color2 = 0;
     }
 
-    for (uint16_t j = SFG_GAME_RESOLUTION_Y - SFG_HUD_BAR_HEIGHT;
-      j < SFG_GAME_RESOLUTION_Y; ++j)
+    for (uint16_t j = LHR_GAME_RESOLUTION_Y - LHR_HUD_BAR_HEIGHT;
+      j < LHR_GAME_RESOLUTION_Y; ++j)
     {
-      for (uint16_t i = 0; i < SFG_GAME_RESOLUTION_X; ++i)
-        SFG_setGamePixel(i,j,color);
+      for (uint16_t i = 0; i < LHR_GAME_RESOLUTION_X; ++i)
+        LHR_setGamePixel(i,j,color);
 
       color = color2;
     }
 
-    #define TEXT_Y (SFG_GAME_RESOLUTION_Y - SFG_HUD_MARGIN - \
-      SFG_FONT_CHARACTER_SIZE * SFG_FONT_SIZE_MEDIUM)
+    #define TEXT_Y (LHR_GAME_RESOLUTION_Y - LHR_HUD_MARGIN - \
+      LHR_FONT_CHARACTER_SIZE * LHR_FONT_SIZE_MEDIUM)
 
-    SFG_drawNumber( // health
-      SFG_player.health,
-      SFG_HUD_MARGIN,
+    LHR_drawNumber( // health
+      LHR_player.health,
+      LHR_HUD_MARGIN,
       TEXT_Y,
-      SFG_FONT_SIZE_MEDIUM,
-      SFG_player.health > SFG_PLAYER_HEALTH_WARNING_LEVEL ? 6 : 175);
+      LHR_FONT_SIZE_MEDIUM,
+      LHR_player.health > LHR_PLAYER_HEALTH_WARNING_LEVEL ? 6 : 175);
 
-    SFG_drawNumber( // ammo
-      SFG_player.weapon != SFG_WEAPON_KNIFE ?
-        SFG_player.ammo[SFG_weaponAmmo(SFG_player.weapon)] : 0,
-      SFG_GAME_RESOLUTION_X - SFG_HUD_MARGIN -
-        (SFG_FONT_CHARACTER_SIZE + 1) * SFG_FONT_SIZE_MEDIUM * 3,
+    LHR_drawNumber( // ammo
+      LHR_player.weapon != LHR_WEAPON_KNIFE ?
+        LHR_player.ammo[LHR_weaponAmmo(LHR_player.weapon)] : 0,
+      LHR_GAME_RESOLUTION_X - LHR_HUD_MARGIN -
+        (LHR_FONT_CHARACTER_SIZE + 1) * LHR_FONT_SIZE_MEDIUM * 3,
       TEXT_Y,
-      SFG_FONT_SIZE_MEDIUM,
+      LHR_FONT_SIZE_MEDIUM,
       6); 
 
     for (uint8_t i = 0; i < 3; ++i) // access cards
       if ( 
-        ((SFG_player.cards >> i) | ((SFG_player.cards >> (i + 3))
-        & SFG_game.blink)) & 0x01)
-        SFG_fillRectangle(
-          SFG_HUD_MARGIN + (SFG_FONT_CHARACTER_SIZE + 1) *
-            SFG_FONT_SIZE_MEDIUM * (5 + i),
+        ((LHR_player.cards >> i) | ((LHR_player.cards >> (i + 3))
+        & LHR_game.blink)) & 0x01)
+        LHR_fillRectangle(
+          LHR_HUD_MARGIN + (LHR_FONT_CHARACTER_SIZE + 1) *
+            LHR_FONT_SIZE_MEDIUM * (5 + i),
           TEXT_Y,
-          SFG_FONT_SIZE_MEDIUM * SFG_FONT_CHARACTER_SIZE,
-          SFG_FONT_SIZE_MEDIUM * SFG_FONT_CHARACTER_SIZE,
+          LHR_FONT_SIZE_MEDIUM * LHR_FONT_CHARACTER_SIZE,
+          LHR_FONT_SIZE_MEDIUM * LHR_FONT_CHARACTER_SIZE,
           i == 0 ? 93 : (i == 1 ? 124 : 60));
 
     #undef TEXT_Y
 
     // border indicator
 
-    if ((SFG_game.frame - SFG_player.lastHurtFrame
-        <= SFG_HUD_BORDER_INDICATOR_DURATION_FRAMES) ||
-        (SFG_game.state == SFG_GAME_STATE_LOSE))
-      SFG_drawIndicationBorder(SFG_HUD_BORDER_INDICATOR_WIDTH_PIXELS,
-      SFG_HUD_HURT_INDICATION_COLOR);
-    else if (SFG_game.frame - SFG_player.lastItemTakenFrame
-        <= SFG_HUD_BORDER_INDICATOR_DURATION_FRAMES)
-      SFG_drawIndicationBorder(SFG_HUD_BORDER_INDICATOR_WIDTH_PIXELS,
-      SFG_HUD_ITEM_TAKEN_INDICATION_COLOR);
+    if ((LHR_game.frame - LHR_player.lastHurtFrame
+        <= LHR_HUD_BORDER_INDICATOR_DURATION_FRAMES) ||
+        (LHR_game.state == LHR_GAME_STATE_LOSE))
+      LHR_drawIndicationBorder(LHR_HUD_BORDER_INDICATOR_WIDTH_PIXELS,
+      LHR_HUD_HURT_INDICATION_COLOR);
+    else if (LHR_game.frame - LHR_player.lastItemTakenFrame
+        <= LHR_HUD_BORDER_INDICATOR_DURATION_FRAMES)
+      LHR_drawIndicationBorder(LHR_HUD_BORDER_INDICATOR_WIDTH_PIXELS,
+      LHR_HUD_ITEM_TAKEN_INDICATION_COLOR);
 
-    if (SFG_game.state == SFG_GAME_STATE_WIN)
-      SFG_drawWinOverlay();
-    else if (SFG_game.state == SFG_GAME_STATE_LEVEL_START)
-      SFG_drawLevelStartOverlay();
+    if (LHR_game.state == LHR_GAME_STATE_WIN)
+      LHR_drawWinOverlay();
+    else if (LHR_game.state == LHR_GAME_STATE_LEVEL_START)
+      LHR_drawLevelStartOverlay();
   }
 }
 
-uint8_t SFG_mainLoopBody(void)
+uint8_t LHR_mainLoopBody(void)
 {
   /* Standard deterministic game loop, independed of actual achieved FPS.
-     Each game logic (physics) frame is performed with the SFG_MS_PER_FRAME
+     Each game logic (physics) frame is performed with the LHR_MS_PER_FRAME
      delta time. */
 
-  if (SFG_game.state != SFG_GAME_STATE_INIT)
+  if (LHR_game.state != LHR_GAME_STATE_INIT)
   {
-    uint32_t timeNow = SFG_getTimeMs();
+    uint32_t timeNow = LHR_getTimeMs();
 
-#if SFG_TIME_MULTIPLIER != 1024
-    timeNow = (timeNow * SFG_TIME_MULTIPLIER) / 1024;
+#if LHR_TIME_MULTIPLIER != 1024
+    timeNow = (timeNow * LHR_TIME_MULTIPLIER) / 1024;
 #endif
 
-    int32_t timeSinceLastFrame = timeNow - SFG_game.frameTime;
+    int32_t timeSinceLastFrame = timeNow - LHR_game.frameTime;
 
-    if (timeSinceLastFrame >= SFG_MS_PER_FRAME)
+    if (timeSinceLastFrame >= LHR_MS_PER_FRAME)
     {
       uint8_t steps = 0;
 
-      uint8_t wasFirstFrame = SFG_game.frame == 0;
+      uint8_t wasFirstFrame = LHR_game.frame == 0;
 
-      while (timeSinceLastFrame >= SFG_MS_PER_FRAME)
+      while (timeSinceLastFrame >= LHR_MS_PER_FRAME)
       {
-        uint8_t previousWeapon = SFG_player.weapon;
+        uint8_t previousWeapon = LHR_player.weapon;
 
-        SFG_game.frameTime += SFG_MS_PER_FRAME;
+        LHR_game.frameTime += LHR_MS_PER_FRAME;
 
-        SFG_gameStep();
+        LHR_gameStep();
 
-        if (SFG_player.weapon != previousWeapon)
-          SFG_processEvent(SFG_EVENT_PLAYER_CHANGES_WEAPON,SFG_player.weapon);
+        if (LHR_player.weapon != previousWeapon)
+          LHR_processEvent(LHR_EVENT_PLAYER_CHANGES_WEAPON,LHR_player.weapon);
 
-        timeSinceLastFrame -= SFG_MS_PER_FRAME;
+        timeSinceLastFrame -= LHR_MS_PER_FRAME;
 
-        SFG_game.frame++;
+        LHR_game.frame++;
         steps++;
       }
 
-      if ((steps > 1) && (SFG_game.antiSpam == 0) && (!wasFirstFrame))
+      if ((steps > 1) && (LHR_game.antiSpam == 0) && (!wasFirstFrame))
       {
-        SFG_LOG("failed to reach target FPS! consider setting a lower value")
-        SFG_game.antiSpam = 30;
+        LHR_LOG("failed to reach target FPS! consider setting a lower value")
+        LHR_game.antiSpam = 30;
       }
 
-      if (SFG_game.antiSpam > 0)
-        SFG_game.antiSpam--;
+      if (LHR_game.antiSpam > 0)
+        LHR_game.antiSpam--;
 
       // render only once
-      SFG_draw();
+      LHR_draw();
 
-      if (SFG_game.frame % 16 == 0)
-        SFG_CPU_LOAD(((SFG_getTimeMs() - timeNow) * 100) / SFG_MS_PER_FRAME);
+      if (LHR_game.frame % 16 == 0)
+        LHR_CPU_LOAD(((LHR_getTimeMs() - timeNow) * 100) / LHR_MS_PER_FRAME);
     }
     else
     {
       // wait, relieve CPU
-      SFG_sleepMs(RCL_max(1,
-        (3 * (SFG_game.frameTime + SFG_MS_PER_FRAME - timeNow)) / 4));
+      LHR_sleepMs(RCL_max(1,
+        (3 * (LHR_game.frameTime + LHR_MS_PER_FRAME - timeNow)) / 4));
     }
   }
-  else if (!SFG_keyPressed(SFG_KEY_A) && !SFG_keyPressed(SFG_KEY_B))
+  else if (!LHR_keyPressed(LHR_KEY_A) && !LHR_keyPressed(LHR_KEY_B))
   {
     /* At the beginning we have to wait for the release of the keys in order not
     to immediatelly confirm a menu item. */
-    SFG_setGameState(SFG_GAME_STATE_MENU);
+    LHR_setGameState(LHR_GAME_STATE_MENU);
   }
 
-  return SFG_game.continues;
+  return LHR_game.continues;
 }
 
-#undef SFG_SAVE_TOTAL_TIME
+#undef LHR_SAVE_TOTAL_TIME
 
 #endif // guard

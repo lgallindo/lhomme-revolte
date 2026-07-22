@@ -9,7 +9,7 @@
 */
 
 #if defined(_WIN32) || defined(WIN32) || defined(__WIN32__) || defined(__NT__) || defined(__APPLE__)
-  #define SFG_OS_IS_MALWARE 1
+  #define LHR_OS_IS_MALWARE 1
 #endif
 
 #include <stdio.h>
@@ -22,52 +22,52 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define SFG_FPS 30
-#define SFG_SCREEN_RESOLUTION_X 320
-#define SFG_SCREEN_RESOLUTION_Y 240
-#define SFG_RAYCASTING_SUBSAMPLE 2
-#define SFG_RESOLUTION_SCALEDOWN 2
-#define SFG_LOG(str) puts(str);
-#define SFG_DITHERED_SHADOW 1
-#define SFG_BACKGROUND_BLUR 0
-#define SFG_RAYCASTING_MAX_STEPS 18
-#define SFG_RAYCASTING_MAX_HITS 8
+#define LHR_FPS 30
+#define LHR_SCREEN_RESOLUTION_X 320
+#define LHR_SCREEN_RESOLUTION_Y 240
+#define LHR_RAYCASTING_SUBSAMPLE 2
+#define LHR_RESOLUTION_SCALEDOWN 2
+#define LHR_LOG(str) puts(str);
+#define LHR_DITHERED_SHADOW 1
+#define LHR_BACKGROUND_BLUR 0
+#define LHR_RAYCASTING_MAX_STEPS 18
+#define LHR_RAYCASTING_MAX_HITS 8
 
-#define SFG_PC 1
+#define LHR_PC 1
 #include "game.h"
 #include "palette.h"
 #define WIPE_PIXEL_TYPE uint_least16_t
 #include "wipe_effect.h"
 #include <string.h>
 
-static uint_least16_t wipe_scr_start[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
-static uint_least16_t wipe_scr_end[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
-static int wipe_y[SFG_SCREEN_RESOLUTION_X];
+static uint_least16_t wipe_scr_start[LHR_SCREEN_RESOLUTION_X * LHR_SCREEN_RESOLUTION_Y];
+static uint_least16_t wipe_scr_end[LHR_SCREEN_RESOLUTION_X * LHR_SCREEN_RESOLUTION_Y];
+static int wipe_y[LHR_SCREEN_RESOLUTION_X];
 
-uint_least16_t x11_screen[SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y];
+uint_least16_t x11_screen[LHR_SCREEN_RESOLUTION_X * LHR_SCREEN_RESOLUTION_Y];
 // ^ Each value is current (lower 8 bits) and previous pixel.
 
-uint8_t x11_buttons[SFG_KEY_COUNT];
+uint8_t x11_buttons[LHR_KEY_COUNT];
 unsigned long x11_palette[256];
 unsigned int interlaceFrame = 0;
 unsigned int drawLine = 0;
 
-void SFG_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
+void LHR_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
 {
-  uint_least16_t *word = x11_screen + y * SFG_SCREEN_RESOLUTION_X + x;
+  uint_least16_t *word = x11_screen + y * LHR_SCREEN_RESOLUTION_X + x;
   *word = ((*word) & 0xff00) | colorIndex;
 }
 
-uint32_t SFG_getTimeMs(void)
+uint32_t LHR_getTimeMs(void)
 {
   struct timeval now;
   gettimeofday(&now,NULL);
   return now.tv_sec * 1000 + now.tv_usec / 1000;
 }
 
-void SFG_save(uint8_t data[SFG_SAVE_SIZE])
+void LHR_save(uint8_t data[LHR_SAVE_SIZE])
 {
-  FILE *f = fopen(SFG_SAVE_FILE_PATH,"wb");
+  FILE *f = fopen(LHR_SAVE_FILE_PATH,"wb");
 
   puts("X11: opening and writing save file");
 
@@ -77,14 +77,14 @@ void SFG_save(uint8_t data[SFG_SAVE_SIZE])
     return;
   }
 
-  fwrite(data,1,SFG_SAVE_SIZE,f);
+  fwrite(data,1,LHR_SAVE_SIZE,f);
 
   fclose(f);
 }
 
-uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
+uint8_t LHR_load(uint8_t data[LHR_SAVE_SIZE])
 {
-  FILE *f = fopen(SFG_SAVE_FILE_PATH,"rb");
+  FILE *f = fopen(LHR_SAVE_FILE_PATH,"rb");
 
   puts("X11: opening and reading save file");
 
@@ -94,7 +94,7 @@ uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
   }
   else
   {
-    if (fread(data, 1, SFG_SAVE_SIZE, f) != SFG_SAVE_SIZE)
+    if (fread(data, 1, LHR_SAVE_SIZE, f) != LHR_SAVE_SIZE)
     {
       puts("X11: warning: save file size mismatch or read error");
     }
@@ -104,31 +104,31 @@ uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
   return 1;
 }
 
-void SFG_sleepMs(uint16_t timeMs)
+void LHR_sleepMs(uint16_t timeMs)
 {
   usleep(timeMs * 1000);
 }
 
-void SFG_getMouseOffset(int16_t *x, int16_t *y)
+void LHR_getMouseOffset(int16_t *x, int16_t *y)
 {
 }
 
-void SFG_processEvent(uint8_t event, uint8_t data)
+void LHR_processEvent(uint8_t event, uint8_t data)
 {
   printf("event: %d\n",event);
 }
 
-int8_t SFG_keyPressed(uint8_t key)
+int8_t LHR_keyPressed(uint8_t key)
 {
   return x11_buttons[key];
 }
 
-void SFG_setMusic(uint8_t value)
+void LHR_setMusic(uint8_t value)
 {
   printf("music: %d\n",value);
 }
 
-void SFG_playSound(uint8_t soundIndex, uint8_t volume)
+void LHR_playSound(uint8_t soundIndex, uint8_t volume)
 {
   printf("sound: %d\n",soundIndex);
 }
@@ -148,15 +148,15 @@ int main(int argc, char *argv[])
   }
 
   puts(
-    "L'Homme Révolté v" SFG_VERSION_STRING "X11 frontend (no sound)\n");
+    "L'Homme Révolté v" LHR_VERSION_STRING "X11 frontend (no sound)\n");
 
-  SFG_init();
+  LHR_init();
 
-  if (targetStartLevel >= 0 && targetStartLevel < SFG_NUMBER_OF_LEVELS)
+  if (targetStartLevel >= 0 && targetStartLevel < LHR_NUMBER_OF_LEVELS)
   {
-    SFG_game.save[0] = (SFG_game.save[0] & 0xF0) | (SFG_NUMBER_OF_LEVELS - 1);
-    SFG_game.selectedLevel = targetStartLevel;
-    SFG_setAndInitLevel(targetStartLevel);
+    LHR_game.save[0] = (LHR_game.save[0] & 0xF0) | (LHR_NUMBER_OF_LEVELS - 1);
+    LHR_game.selectedLevel = targetStartLevel;
+    LHR_setAndInitLevel(targetStartLevel);
   }
 
   Display *display = XOpenDisplay(0);
@@ -170,16 +170,16 @@ int main(int argc, char *argv[])
   int screen = DefaultScreen(display);
 
   Window window = XCreateSimpleWindow(display,RootWindow(display,screen),10,10,
-    SFG_SCREEN_RESOLUTION_X,SFG_SCREEN_RESOLUTION_Y,1,
+    LHR_SCREEN_RESOLUTION_X,LHR_SCREEN_RESOLUTION_Y,1,
     BlackPixel(display,screen),BlackPixel(display,screen));
 
   XMapWindow(display,window);
 
   XSizeHints *hints = XAllocSizeHints();
   hints->flags = PMinSize | PMaxSize;
-  hints->min_width = SFG_SCREEN_RESOLUTION_X;
+  hints->min_width = LHR_SCREEN_RESOLUTION_X;
   hints->max_width = hints->min_width;
-  hints->min_height = SFG_SCREEN_RESOLUTION_Y;
+  hints->min_height = LHR_SCREEN_RESOLUTION_Y;
   hints->max_height = hints->min_height;
   XSetWMNormalHints(display,window,hints);
   XFree(hints);
@@ -233,29 +233,29 @@ int main(int argc, char *argv[])
   {
     uint_least16_t *pixel;
 
-    uint8_t stateBefore = SFG_game.state;
-    if (stateBefore == SFG_GAME_STATE_MENU || stateBefore == SFG_GAME_STATE_WIN || stateBefore == SFG_GAME_STATE_LOSE || stateBefore == SFG_GAME_STATE_INTRO) {
+    uint8_t stateBefore = LHR_game.state;
+    if (stateBefore == LHR_GAME_STATE_MENU || stateBefore == LHR_GAME_STATE_WIN || stateBefore == LHR_GAME_STATE_LOSE || stateBefore == LHR_GAME_STATE_INTRO) {
         memcpy(wipe_scr_start, x11_screen, sizeof(x11_screen));
     }
 
-    running = SFG_mainLoopBody();
+    running = LHR_mainLoopBody();
 
-    if ( (stateBefore == SFG_GAME_STATE_MENU && SFG_game.state != SFG_GAME_STATE_MENU) ||
-         (stateBefore == SFG_GAME_STATE_WIN && SFG_game.state != SFG_GAME_STATE_WIN) ||
-         (stateBefore == SFG_GAME_STATE_LOSE && SFG_game.state == SFG_GAME_STATE_MENU) ) {
+    if ( (stateBefore == LHR_GAME_STATE_MENU && LHR_game.state != LHR_GAME_STATE_MENU) ||
+         (stateBefore == LHR_GAME_STATE_WIN && LHR_game.state != LHR_GAME_STATE_WIN) ||
+         (stateBefore == LHR_GAME_STATE_LOSE && LHR_game.state == LHR_GAME_STATE_MENU) ) {
          
          memcpy(wipe_scr_end, x11_screen, sizeof(x11_screen));
-         wipe_initMelt(wipe_y, SFG_SCREEN_RESOLUTION_X);
+         wipe_initMelt(wipe_y, LHR_SCREEN_RESOLUTION_X);
          
          int done = 0;
          while (!done && running) {
-            done = wipe_doMelt(x11_screen, wipe_scr_start, wipe_scr_end, wipe_y, SFG_SCREEN_RESOLUTION_X, SFG_SCREEN_RESOLUTION_Y);
+            done = wipe_doMelt(x11_screen, wipe_scr_start, wipe_scr_end, wipe_y, LHR_SCREEN_RESOLUTION_X, LHR_SCREEN_RESOLUTION_Y);
             
             uint_least16_t pixelNow = 0, pixelPrev = 1;
             XSetForeground(display,context,x11_palette[pixelNow]);
-            for (int i = 0; i < SFG_SCREEN_RESOLUTION_Y; ++i) {
-                uint_least16_t *px = x11_screen + SFG_SCREEN_RESOLUTION_X * drawLine;
-                for (int x = 0; x < SFG_SCREEN_RESOLUTION_X; ++x) {
+            for (int i = 0; i < LHR_SCREEN_RESOLUTION_Y; ++i) {
+                uint_least16_t *px = x11_screen + LHR_SCREEN_RESOLUTION_X * drawLine;
+                for (int x = 0; x < LHR_SCREEN_RESOLUTION_X; ++x) {
                     uint_least16_t pixels = *px;
                     if ((pixels >> 8) != (pixels & 0x00ff)) {
                         pixelNow = pixels & 0x00ff;
@@ -268,10 +268,10 @@ int main(int argc, char *argv[])
                     }
                     px++;
                 }
-                drawLine = (drawLine + 1) % SFG_SCREEN_RESOLUTION_Y;
+                drawLine = (drawLine + 1) % LHR_SCREEN_RESOLUTION_Y;
             }
             XFlush(display);
-            SFG_sleepMs(10);
+            LHR_sleepMs(10);
          }
     }
 
@@ -280,11 +280,11 @@ int main(int argc, char *argv[])
 
     int drawCounter = 0;
 
-    for (int i = 0; i < SFG_SCREEN_RESOLUTION_Y; ++i)
+    for (int i = 0; i < LHR_SCREEN_RESOLUTION_Y; ++i)
     {
-      pixel = x11_screen + SFG_SCREEN_RESOLUTION_X * drawLine;
+      pixel = x11_screen + LHR_SCREEN_RESOLUTION_X * drawLine;
 
-      for (int x = 0; x < SFG_SCREEN_RESOLUTION_X; ++x)
+      for (int x = 0; x < LHR_SCREEN_RESOLUTION_X; ++x)
       {
         uint_least16_t pixels = *pixel;
 
@@ -309,7 +309,7 @@ int main(int argc, char *argv[])
         pixel++;
       }
 
-      drawLine = (drawLine + 1) % SFG_SCREEN_RESOLUTION_Y;
+      drawLine = (drawLine + 1) % LHR_SCREEN_RESOLUTION_Y;
 
       if (drawCounter > 40000) // if too many pixels drawn, stop
         break;
@@ -322,7 +322,7 @@ int main(int argc, char *argv[])
       if (event.type == Expose)
       {
         // exposed => make next frame render as a whole:
-        for (long int i = 0; i < SFG_SCREEN_RESOLUTION_X * SFG_SCREEN_RESOLUTION_Y; ++i)
+        for (long int i = 0; i < LHR_SCREEN_RESOLUTION_X * LHR_SCREEN_RESOLUTION_Y; ++i)
           x11_screen[i] = 1;
       }
       else
@@ -332,7 +332,7 @@ int main(int argc, char *argv[])
 
         if (state && keysym != XK_Shift_L && keysym != XK_Shift_R && keysym != XK_Caps_Lock)
         {
-          if (SFG_game.state == SFG_GAME_STATE_MENU)
+          if (LHR_game.state == LHR_GAME_STATE_MENU)
           {
             static const KeySym lhrwarp_seq[] = {
               XK_l, XK_h, XK_r, XK_w, XK_a, XK_r, XK_p
@@ -344,7 +344,7 @@ int main(int argc, char *argv[])
               lhrwarp_idx++;
               if (lhrwarp_idx == 7)
               {
-                SFG_game.save[0] = (SFG_game.save[0] & 0xF0) | (SFG_NUMBER_OF_LEVELS - 1);
+                LHR_game.save[0] = (LHR_game.save[0] & 0xF0) | (LHR_NUMBER_OF_LEVELS - 1);
                 puts("LHRWARP cheat activated: All levels unlocked!");
                 lhrwarp_idx = 0;
               }
@@ -377,45 +377,45 @@ int main(int argc, char *argv[])
           case XK_Escape: running = 0; break;
           case XK_Up: // fallthrough
           case XK_KP_8:
-          case XK_w: x11_buttons[SFG_KEY_UP] = state; break;
+          case XK_w: x11_buttons[LHR_KEY_UP] = state; break;
           case XK_Left: // fallthrough
           case XK_KP_7:
-          case XK_q: x11_buttons[SFG_KEY_LEFT] = state; break;
+          case XK_q: x11_buttons[LHR_KEY_LEFT] = state; break;
           case XK_Right: // fallthrough
           case XK_KP_9:
-          case XK_e: x11_buttons[SFG_KEY_RIGHT] = state; break;
+          case XK_e: x11_buttons[LHR_KEY_RIGHT] = state; break;
           case XK_Down: // fallthrough
           case XK_KP_5:
-          case XK_s: x11_buttons[SFG_KEY_DOWN] = state; break;
+          case XK_s: x11_buttons[LHR_KEY_DOWN] = state; break;
           case XK_y: // fallthrough
           case XK_z: // fallthrough
           case XK_j: // fallthrough
           case XK_Control_L:
           case XK_Control_R:
-          case XK_Return: x11_buttons[SFG_KEY_A] = state; break;
+          case XK_Return: x11_buttons[LHR_KEY_A] = state; break;
           case XK_Alt_L:
           case XK_Alt_R:
           case XK_x: // fallthrough
-          case XK_k: x11_buttons[SFG_KEY_B] = state; break;
+          case XK_k: x11_buttons[LHR_KEY_B] = state; break;
           case XK_c: // fallthrough
-          case XK_l: x11_buttons[SFG_KEY_C] = state; break;
+          case XK_l: x11_buttons[LHR_KEY_C] = state; break;
 
           // extra keys:
-          case XK_space: x11_buttons[SFG_KEY_JUMP] = state; break;
-          case XK_Tab: x11_buttons[SFG_KEY_MAP] = state; break;
+          case XK_space: x11_buttons[LHR_KEY_JUMP] = state; break;
+          case XK_Tab: x11_buttons[LHR_KEY_MAP] = state; break;
           case XK_a: // fallthrough 
-          case XK_KP_4: x11_buttons[SFG_KEY_STRAFE_LEFT] = state; break;
+          case XK_KP_4: x11_buttons[LHR_KEY_STRAFE_LEFT] = state; break;
           case XK_d: // fallthrough
-          case XK_KP_6: x11_buttons[SFG_KEY_STRAFE_RIGHT] = state; break;
-          case XK_v: x11_buttons[SFG_KEY_CYCLE_WEAPON] = state; break;
+          case XK_KP_6: x11_buttons[LHR_KEY_STRAFE_RIGHT] = state; break;
+          case XK_v: x11_buttons[LHR_KEY_CYCLE_WEAPON] = state; break;
           case XK_r: // fallthrough
           case XK_F1: // fallthrough
-          case XK_Page_Down: x11_buttons[SFG_KEY_PREVIOUS_WEAPON] = state; break;
+          case XK_Page_Down: x11_buttons[LHR_KEY_PREVIOUS_WEAPON] = state; break;
           case XK_t: // fallthrough
           case XK_F2: // fallthrough
-          case XK_Page_Up: x11_buttons[SFG_KEY_NEXT_WEAPON] = state; break;
+          case XK_Page_Up: x11_buttons[LHR_KEY_NEXT_WEAPON] = state; break;
           case XK_p: // fallthrough
-          case XK_Home: x11_buttons[SFG_KEY_TOGGLE_FREELOOK] = state; break;
+          case XK_Home: x11_buttons[LHR_KEY_TOGGLE_FREELOOK] = state; break;
 
           default: break;
         }

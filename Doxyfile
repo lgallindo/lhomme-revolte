@@ -3,7 +3,7 @@
 PROJECT_NAME               = "L'Homme Révolté"
 DOXYFILE_ENCODING          = UTF-8
 INPUT_ENCODING             = UTF-8
-PROJECT_BRIEF              = "Ultra-small GPL Wolfenstein 3D clone inspired by Anarch suckless by drummerfish. Can probably be compiled without hacks to any embedded platform."
+PROJECT_BRIEF              = "L'Homme Révolté: A philosophical boomer shooter built on a highly portable, ultra-small C engine."
 PROJECT_LOGO               = ./media/logo_big.png
 OUTPUT_DIRECTORY           = ./build/docs
 CREATE_SUBDIRS             = NO

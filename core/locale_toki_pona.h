@@ -6,12 +6,12 @@
   SPDX-License-Identifier: GPL-3.0-or-later
 */
 
-#ifndef _SFG_LOCALE_TOKI_PONA_H
-#define _SFG_LOCALE_TOKI_PONA_H
+#ifndef _LHR_LOCALE_TOKI_PONA_H
+#define _LHR_LOCALE_TOKI_PONA_H
 
-static const SFG_LevelMeta SFG_levelMeta_tok[SFG_NUMBER_OF_LEVELS] = {0};
+static const LHR_LevelMeta LHR_levelMeta_tok[LHR_NUMBER_OF_LEVELS] = {0};
 
-static const char *const SFG_menuItemTexts_tok[] =
+static const char *const LHR_menuItemTexts_tok[] =
 {
   "awen",
   "sitelen",
@@ -24,10 +24,10 @@ static const char *const SFG_menuItemTexts_tok[] =
   "pini"
 };
 
-static const SFG_Locale SFG_locale_tok =
+static const LHR_Locale LHR_locale_tok =
 {
   "tok",
-  SFG_menuItemTexts_tok,
+  LHR_menuItemTexts_tok,
   "moli",
   "awen? L ala lon R",
   "awen",
@@ -37,7 +37,7 @@ static const SFG_Locale SFG_locale_tok =
   "MALWARE OS DETECTED",
   "lon",
   "ala",
-  SFG_levelMeta_tok
+  LHR_levelMeta_tok
 };
 
 #endif

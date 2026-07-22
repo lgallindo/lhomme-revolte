@@ -6,12 +6,12 @@
   SPDX-License-Identifier: GPL-3.0-or-later
 */
 
-#ifndef _SFG_LOCALE_PT_BR_H
-#define _SFG_LOCALE_PT_BR_H
+#ifndef _LHR_LOCALE_PT_BR_H
+#define _LHR_LOCALE_PT_BR_H
 
-static const SFG_LevelMeta SFG_levelMeta_pt_br[SFG_NUMBER_OF_LEVELS] = {0};
+static const LHR_LevelMeta LHR_levelMeta_pt_br[LHR_NUMBER_OF_LEVELS] = {0};
 
-static const char *const SFG_menuItemTexts_pt_br[] =
+static const char *const LHR_menuItemTexts_pt_br[] =
 {
   "continuar",
   "mapa",
@@ -24,10 +24,10 @@ static const char *const SFG_menuItemTexts_pt_br[] =
   "sair"
 };
 
-static const SFG_Locale SFG_locale_pt_br =
+static const LHR_Locale LHR_locale_pt_br =
 {
   "pt_BR",
-  SFG_menuItemTexts_pt_br,
+  LHR_menuItemTexts_pt_br,
   "abates",
   "salvar? L nao sim R",
   "salvo",
@@ -42,7 +42,7 @@ static const SFG_Locale SFG_locale_pt_br =
   "SISTEMA MALICIOSO DETECTADO",
   "ligado",
   "desligado",
-  SFG_levelMeta_pt_br
+  LHR_levelMeta_pt_br
 };
 
 #endif

@@ -43,20 +43,20 @@
 #endif
 
 #if USE_LINUX_FRAMEBUFFER
-  #define SFG_SCREEN_RESOLUTION_X 640
-  #define SFG_SCREEN_RESOLUTION_Y 480
+  #define LHR_SCREEN_RESOLUTION_X 640
+  #define LHR_SCREEN_RESOLUTION_Y 480
 #else
-  #define SFG_SCREEN_RESOLUTION_X 127
-  #define SFG_SCREEN_RESOLUTION_Y 42
+  #define LHR_SCREEN_RESOLUTION_X 127
+  #define LHR_SCREEN_RESOLUTION_Y 42
 #endif
 
-#define SFG_DITHERED_SHADOW 1
-#define SFG_FPS 30
+#define LHR_DITHERED_SHADOW 1
+#define LHR_FPS 30
 
-#define SFG_PC 1
+#define LHR_PC 1
 #include "game.h"
 
-#define SCREENSIZE ((SFG_SCREEN_RESOLUTION_X + 1) * SFG_SCREEN_RESOLUTION_Y + 1)
+#define SCREENSIZE ((LHR_SCREEN_RESOLUTION_X + 1) * LHR_SCREEN_RESOLUTION_Y + 1)
 
 char screen[SCREENSIZE];
 uint8_t *screenUnsigned = (uint8_t *) screen;
@@ -76,37 +76,37 @@ uint32_t getTime()
   return now.tv_sec * 1000 + now.tv_usec / 1000;
 }
 
-void SFG_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
+void LHR_setPixel(uint16_t x, uint16_t y, uint8_t colorIndex)
 {
 #if USE_LINUX_FRAMEBUFFER
-  screenUnsigned[y * SFG_SCREEN_RESOLUTION_X + x] = 
+  screenUnsigned[y * LHR_SCREEN_RESOLUTION_X + x] = 
     colorIndex;
 #else
-  screen[y * (SFG_SCREEN_RESOLUTION_X + 1) + x] = 
+  screen[y * (LHR_SCREEN_RESOLUTION_X + 1) + x] = 
     shades[(colorIndex > 7) * 8 + colorIndex % 8];
 #endif
 }
 
-uint32_t SFG_getTimeMs()
+uint32_t LHR_getTimeMs()
 {
   return getTime() - timeStart;
 }
 
-void SFG_save(uint8_t data[SFG_SAVE_SIZE])
+void LHR_save(uint8_t data[LHR_SAVE_SIZE])
 {
 }
 
-uint8_t SFG_load(uint8_t data[SFG_SAVE_SIZE])
+uint8_t LHR_load(uint8_t data[LHR_SAVE_SIZE])
 {
   return 0;
 }
 
-void SFG_sleepMs(uint16_t timeMs)
+void LHR_sleepMs(uint16_t timeMs)
 {
   usleep(timeMs * 1000);
 }
 
-void SFG_getMouseOffset(int16_t *x, int16_t *y)
+void LHR_getMouseOffset(int16_t *x, int16_t *y)
 {
   int32_t a,b;
 
@@ -116,37 +116,37 @@ void SFG_getMouseOffset(int16_t *x, int16_t *y)
   input_setMousePos(0,0);
 }
 
-void SFG_processEvent(uint8_t event, uint8_t data)
+void LHR_processEvent(uint8_t event, uint8_t data)
 {
 }
 
-int8_t SFG_keyPressed(uint8_t key)
+int8_t LHR_keyPressed(uint8_t key)
 {
   switch (key)
   {
-    case SFG_KEY_UP:     return input_getKey('w') || input_getKey(SMALLINPUT_ARROW_UP); break;
-    case SFG_KEY_RIGHT:  return input_getKey('d') || input_getKey(SMALLINPUT_ARROW_RIGHT); break;
-    case SFG_KEY_DOWN:   return input_getKey('s') || input_getKey(SMALLINPUT_ARROW_DOWN); break;
-    case SFG_KEY_LEFT:   return input_getKey('a') || input_getKey(SMALLINPUT_ARROW_LEFT); break;
-    case SFG_KEY_A:      return input_getKey('j') || input_getKey(SMALLINPUT_RETURN) || input_getKey(SMALLINPUT_MOUSE_L); break;
-    case SFG_KEY_B:      return input_getKey('k') || input_getKey(SMALLINPUT_CTRL); break;
-    case SFG_KEY_C:      return input_getKey('l'); break;
-    case SFG_KEY_MAP:    return input_getKey(SMALLINPUT_TAB); break;
-    case SFG_KEY_JUMP:   return input_getKey(' '); break;
-    case SFG_KEY_MENU:   return input_getKey(SMALLINPUT_ESCAPE); break;
-    case SFG_KEY_NEXT_WEAPON: return input_getKey('2'); break;
-    case SFG_KEY_PREVIOUS_WEAPON: return input_getKey('1'); break;
-    case SFG_KEY_CYCLE_WEAPON: return input_getKey('f'); break;
-    case SFG_KEY_TOGGLE_FREELOOK: return input_getKey(SMALLINPUT_MOUSE_R); break;
+    case LHR_KEY_UP:     return input_getKey('w') || input_getKey(SMALLINPUT_ARROW_UP); break;
+    case LHR_KEY_RIGHT:  return input_getKey('d') || input_getKey(SMALLINPUT_ARROW_RIGHT); break;
+    case LHR_KEY_DOWN:   return input_getKey('s') || input_getKey(SMALLINPUT_ARROW_DOWN); break;
+    case LHR_KEY_LEFT:   return input_getKey('a') || input_getKey(SMALLINPUT_ARROW_LEFT); break;
+    case LHR_KEY_A:      return input_getKey('j') || input_getKey(SMALLINPUT_RETURN) || input_getKey(SMALLINPUT_MOUSE_L); break;
+    case LHR_KEY_B:      return input_getKey('k') || input_getKey(SMALLINPUT_CTRL); break;
+    case LHR_KEY_C:      return input_getKey('l'); break;
+    case LHR_KEY_MAP:    return input_getKey(SMALLINPUT_TAB); break;
+    case LHR_KEY_JUMP:   return input_getKey(' '); break;
+    case LHR_KEY_MENU:   return input_getKey(SMALLINPUT_ESCAPE); break;
+    case LHR_KEY_NEXT_WEAPON: return input_getKey('2'); break;
+    case LHR_KEY_PREVIOUS_WEAPON: return input_getKey('1'); break;
+    case LHR_KEY_CYCLE_WEAPON: return input_getKey('f'); break;
+    case LHR_KEY_TOGGLE_FREELOOK: return input_getKey(SMALLINPUT_MOUSE_R); break;
     default:             return 0; break;
   }
 }
 
-void SFG_setMusic(uint8_t value)
+void LHR_setMusic(uint8_t value)
 {
 }
 
-void SFG_playSound(uint8_t soundIndex, uint8_t volume)
+void LHR_playSound(uint8_t soundIndex, uint8_t volume)
 {
 }
 
@@ -169,7 +169,7 @@ int main()
   timeStart = getTime();
 
   input_init(SMALLINPUT_MODE_NORMAL,0,0);
-  SFG_init();
+  LHR_init();
 
   screen[SCREENSIZE - 1] = 0; // string terminator
 
@@ -205,8 +205,8 @@ int main()
       t = varInfo.transp.offset / 8;
 
 #else
-  for (uint16_t i = 1; i <= SFG_SCREEN_RESOLUTION_Y; ++i)
-    screen[i * (SFG_SCREEN_RESOLUTION_X + 1) - 1] = '\n';
+  for (uint16_t i = 1; i <= LHR_SCREEN_RESOLUTION_Y; ++i)
+    screen[i * (LHR_SCREEN_RESOLUTION_X + 1) - 1] = '\n';
 
   setvbuf(stdout, NULL, _IOFBF, SCREENSIZE + 1);
 
@@ -224,13 +224,13 @@ int main()
 
     char *p = fbScreen;
 
-    int linePad = fixInfo.line_length - SFG_SCREEN_RESOLUTION_X * bpp;
+    int linePad = fixInfo.line_length - LHR_SCREEN_RESOLUTION_X * bpp;
 
     int index = 0;
 
-    for (int y = 0; y < SFG_SCREEN_RESOLUTION_Y; ++y)
+    for (int y = 0; y < LHR_SCREEN_RESOLUTION_Y; ++y)
     {
-      for (int x = 0; x < SFG_SCREEN_RESOLUTION_X; ++x)
+      for (int x = 0; x < LHR_SCREEN_RESOLUTION_X; ++x)
       {
         // inefficient, should be a precomputed RGB32 palette
         uint16_t c = paletteRGB565[screenUnsigned[index]];
@@ -251,10 +251,10 @@ int main()
     fflush(stdout);
 #endif
 
-    if (!SFG_mainLoopBody())
+    if (!LHR_mainLoopBody())
       running = 0;
 
-//  if (SFG_game.frame > 1000) break; // uncomment for testing, prevents locking
+//  if (LHR_game.frame > 1000) break; // uncomment for testing, prevents locking
 
   }
     

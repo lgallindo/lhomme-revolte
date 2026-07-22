@@ -13,37 +13,37 @@
   SPDX-License-Identifier: GPL-3.0-or-later
 */
 
-#ifndef _SFG_IMAGES_H
-#define _SFG_IMAGES_H
+#ifndef _LHR_IMAGES_H
+#define _LHR_IMAGES_H
 
-#define SFG_TEXTURE_SIZE 32
+#define LHR_TEXTURE_SIZE 32
 
-#define SFG_TEXTURE_STORE_SIZE (16 + (SFG_TEXTURE_SIZE * SFG_TEXTURE_SIZE) / 2)
+#define LHR_TEXTURE_STORE_SIZE (16 + (LHR_TEXTURE_SIZE * LHR_TEXTURE_SIZE) / 2)
 
 /**
   Color index which will in textures and sprites be considered transparent.
 */
-#define SFG_TRANSPARENT_COLOR 175
+#define LHR_TRANSPARENT_COLOR 175
 
 /**
   Special index of an implicit texture that consists of only transparent pixels.
 */
-#define SFG_TRANSPARENT_TEXTURE 255
+#define LHR_TRANSPARENT_TEXTURE 255
 
-static inline uint8_t SFG_getTexel(const uint8_t *texture, uint8_t x, uint8_t y)
+static inline uint8_t LHR_getTexel(const uint8_t *texture, uint8_t x, uint8_t y)
 {
   x &= 0x1f;
   y &= 0x1f;
 
-  return SFG_PROGRAM_MEMORY_U8(texture +
-    ((SFG_PROGRAM_MEMORY_U8(texture + 16 + (x * SFG_TEXTURE_SIZE + y) / 2) >> 
+  return LHR_PROGRAM_MEMORY_U8(texture +
+    ((LHR_PROGRAM_MEMORY_U8(texture + 16 + (x * LHR_TEXTURE_SIZE + y) / 2) >> 
      (4 * (y % 2 == 0))) & 0x0f));
 }
 
-#define SFG_WALL_TEXTURE_COUNT 16
+#define LHR_WALL_TEXTURE_COUNT 16
 
-SFG_PROGRAM_MEMORY uint8_t
-  SFG_wallTextures[SFG_WALL_TEXTURE_COUNT * SFG_TEXTURE_STORE_SIZE] =
+LHR_PROGRAM_MEMORY uint8_t
+  LHR_wallTextures[LHR_WALL_TEXTURE_COUNT * LHR_TEXTURE_STORE_SIZE] =
 {
 // 0, white wooden planks
 4,21,5,3,20,0,2,26,6,18,57,65,1,16,17,49,0,1,0,3,32,1,33,0,161,64,1,16,64,3,3,
@@ -363,7 +363,7 @@ SFG_PROGRAM_MEMORY uint8_t
 144,0,48,0,0,17,0,0,0,48,34,49,48,0,0,3,48,0,0,0,10,17,0,0,0,0,38,0,0,0,0,51
 };
 
-SFG_PROGRAM_MEMORY uint8_t SFG_itemSprites[13 * SFG_TEXTURE_STORE_SIZE] =
+LHR_PROGRAM_MEMORY uint8_t LHR_itemSprites[13 * LHR_TEXTURE_STORE_SIZE] =
 {
 // 0, barrel
 175,6,106,29,100,84,7,92,2,43,10,11,46,4,28,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -631,7 +631,7 @@ SFG_PROGRAM_MEMORY uint8_t SFG_itemSprites[13 * SFG_TEXTURE_STORE_SIZE] =
 0,0,0,0,0,0,0,0,0,0,0,0
 };
 
-SFG_PROGRAM_MEMORY uint8_t SFG_backgroundImages[3 * SFG_TEXTURE_STORE_SIZE] =
+LHR_PROGRAM_MEMORY uint8_t LHR_backgroundImages[3 * LHR_TEXTURE_STORE_SIZE] =
 {
 // 0, city
 64,10,73,168,19,12,14,13,80,1,72,101,0,100,136,57,17,17,17,68,87,119,119,119,
@@ -697,7 +697,7 @@ SFG_PROGRAM_MEMORY uint8_t SFG_backgroundImages[3 * SFG_TEXTURE_STORE_SIZE] =
 101,85,34,34,34,35,54,119,23,16,0,0,0,0,0,0,4,69,82,34,34,35,51
 };
 
-SFG_PROGRAM_MEMORY uint8_t SFG_weaponImages[6 * SFG_TEXTURE_STORE_SIZE] =
+LHR_PROGRAM_MEMORY uint8_t LHR_weaponImages[6 * LHR_TEXTURE_STORE_SIZE] =
 {
 // 0, knife
 175,5,4,2,0,3,6,1,61,83,85,60,63,77,40,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -824,7 +824,7 @@ SFG_PROGRAM_MEMORY uint8_t SFG_weaponImages[6 * SFG_TEXTURE_STORE_SIZE] =
 50,56,100,67,21,34,34,34,34,34,34,34,34,35,51,51,34,35,51,50,51
 };
 
-SFG_PROGRAM_MEMORY uint8_t SFG_effectSprites[4 * SFG_TEXTURE_STORE_SIZE] =
+LHR_PROGRAM_MEMORY uint8_t LHR_effectSprites[4 * LHR_TEXTURE_STORE_SIZE] =
 {
 // 0, explostion
 175,183,174,15,103,111,191,7,31,95,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,48,48,0,0,0,
@@ -900,7 +900,7 @@ SFG_PROGRAM_MEMORY uint8_t SFG_effectSprites[4 * SFG_TEXTURE_STORE_SIZE] =
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 };
 
-SFG_PROGRAM_MEMORY uint8_t SFG_monsterSprites[19 * SFG_TEXTURE_STORE_SIZE] =
+LHR_PROGRAM_MEMORY uint8_t LHR_monsterSprites[19 * LHR_TEXTURE_STORE_SIZE] =
 {
 // 0, spider idle
 175,0,4,3,5,6,223,1,7,10,2,20,62,95,120,18,0,1,17,16,0,0,0,0,0,0,0,0,1,17,16,0,
@@ -1285,7 +1285,7 @@ SFG_PROGRAM_MEMORY uint8_t SFG_monsterSprites[19 * SFG_TEXTURE_STORE_SIZE] =
 0,0,0,0,0,0,0
 };
 
-SFG_PROGRAM_MEMORY uint8_t SFG_logoImage[SFG_TEXTURE_STORE_SIZE] =
+LHR_PROGRAM_MEMORY uint8_t LHR_logoImage[LHR_TEXTURE_STORE_SIZE] =
 {
 175,1,4,56,32,7,6,0,0,0,0,0,0,0,0,0,0,49,51,49,16,48,49,51,1,19,1,48,49,1,16,67,
 19,16,16,1,17,16,1,16,20,17,52,17,17,51,19,1,16,17,1,52,17,17,17,17,17,51,16,65,
@@ -1309,7 +1309,7 @@ SFG_PROGRAM_MEMORY uint8_t SFG_logoImage[SFG_TEXTURE_STORE_SIZE] =
 65,49,1,3,16,67,17,19,17,17,64,16,17,49
 };
 
-uint8_t SFG_charToFontIndex(char c)
+uint8_t LHR_charToFontIndex(char c)
 {
   if (c >= 'a' && c <= 'z')
     return c - 'a';
@@ -1336,12 +1336,12 @@ uint8_t SFG_charToFontIndex(char c)
   }
 }
 
-#define SFG_FONT_CHARACTER_SIZE 4 ///< width (= height) of font char. in pixels
+#define LHR_FONT_CHARACTER_SIZE 4 ///< width (= height) of font char. in pixels
 
 /**
   4x4 font, each character stored as 16 bits.
 */
-static const uint16_t SFG_font[47] =
+static const uint16_t LHR_font[47] =
 {
   0xfaf0, // 0 "A"
   0xfd70, // 1 "B"
