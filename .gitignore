@@ -1,9 +1,24 @@
-revolte
-revolte.sav
-revolte.opk
-screenshot.bmp
-screenshot_*.bmp
-tools/gif2map/build/*.o
-tools/gif2map/build/*.a
-docs/references/
-._*
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+
+# Compiled Binaries
+*.o
+*.a
+*.so
+tests/test_audio
+tests/test_metadata
+core/*.o
+
+# OS Files
+.DS_Store
+
+# Local plans (also in .git/info/exclude)
+.local/
