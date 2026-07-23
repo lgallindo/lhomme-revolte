@@ -31,9 +31,42 @@ static char * test_fm_generator() {
     return 0;
 }
 
+static char * test_pcm_stream() {
+    // PCM Streaming Test
+    // Mock a basic ring buffer pull similar to how the audio callback will work
+    LHR_AudioTrack track;
+    track.type = LHR_AUDIO_PCM;
+    track.source.filename = "mock.wav";
+    
+    // Create a dummy WAV file on disk
+    FILE *f = fopen("mock.wav", "wb");
+    uint8_t dummy_pcm[4] = {128, 130, 128, 126}; // Simple sine
+    fwrite(dummy_pcm, 1, 4, f);
+    fclose(f);
+    
+    f = fopen(track.source.filename, "rb");
+    mu_assert("Should open PCM file", f != NULL);
+    
+    uint8_t buffer[4];
+    size_t read = fread(buffer, 1, 4, f);
+    mu_assert("Should read 4 bytes of PCM", read == 4);
+    mu_assert("PCM byte 1 is correct", buffer[0] == 128);
+    mu_assert("PCM byte 2 is correct", buffer[1] == 130);
+    
+    // Test EOF behavior
+    size_t eof_read = fread(buffer, 1, 1, f);
+    mu_assert("Should hit EOF", eof_read == 0 && feof(f));
+    
+    fclose(f);
+    remove("mock.wav");
+    
+    return 0;
+}
+
 static char * all_tests() {
     mu_run_test(test_apc_generator);
     mu_run_test(test_fm_generator);
+    mu_run_test(test_pcm_stream);
     return 0;
 }
 

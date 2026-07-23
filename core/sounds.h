@@ -39,12 +39,39 @@
 LHR_PROGRAM_MEMORY uint8_t LHR_musicTrackAverages[LHR_TRACK_COUNT] =
   {14,7,248,148,6,8};
 
+// LHR_MIDI_EMBEDDED: Embeds TinySoundFont or similar
+// LHR_MIDI_SYSTEM: Uses OS Native Sequencer
+// LHR_MIDI_HYBRID: Embeds synth but allows system fallback
+// LHR_PCM_STREAMING: Allows dynamic file streaming for WAV (breaks zero-dep rule)
+
+#ifndef LHR_DISABLE_PCM
+#define LHR_PCM_STREAMING 1
+#endif
+
+typedef enum {
+    LHR_AUDIO_NONE = 0,
+    LHR_AUDIO_BYTEBEAT,
+    LHR_AUDIO_APC,
+    LHR_AUDIO_FM,
+    LHR_AUDIO_PCM,
+    LHR_AUDIO_MIDI
+} LHR_AudioType;
+
+typedef struct {
+    LHR_AudioType type;
+    union {
+        uint8_t track_id;     // For Procedural (Bytebeat, APC, FM)
+        const char* filename; // For PCM and MIDI streaming
+    } source;
+} LHR_AudioTrack;
+
 struct
 { // all should be initialized to 0 by default
   uint8_t track;
   uint32_t t;      // time variable/parameter
   uint32_t t2;     // stores t squared, for better performance
   uint32_t n11t;   // stores a multiple of 11, for better performance
+  LHR_AudioTrack current_track; // Replaces 'track' implicitly, but kept for legacy
 } LHR_MusicState;
 
 /**
