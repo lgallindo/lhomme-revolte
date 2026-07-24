@@ -146,87 +146,82 @@ uint8_t LHR_getNextMusicSample(void)
     LHR_MusicState.n11t = 0;
   }
 
-  uint32_t result;
+  uint32_t result = 127;
 
-  #define S LHR_MusicState.t // can't use "T" because of a C++ template
-  #define S2 LHR_MusicState.t2
-  #define N11S LHR_MusicState.n11t
-
-  /* CAREFUL! Bit shifts in any direction by amount greater than data type
-     width (32) are undefined behavior. Use % 32. */
-
-  switch (LHR_MusicState.track) // individual music tracks
+  if (LHR_MusicState.current_track.type == LHR_AUDIO_APC)
   {
-    case 0:
+    // Generate APC parameters based on time and track
+    uint16_t freq = 100 + ((LHR_MusicState.t >> 10) % 500);
+    if (LHR_MusicState.track % 2 == 1) {
+        freq = 200 + ((LHR_MusicState.t >> 11) % 800);
+    }
+    uint16_t mod = 128 + (LHR_MusicState.t >> 12) % 128;
+    result = LHR_getAPCVolume(LHR_MusicState.t, freq, mod);
+  }
+  else if (LHR_MusicState.current_track.type == LHR_AUDIO_FM)
+  {
+    // Generate FM parameters based on time and track
+    uint16_t c_freq = 220 + ((LHR_MusicState.track * 50) % 400);
+    uint16_t m_freq = 110 + ((LHR_MusicState.t >> 13) % 220);
+    uint8_t m_index = 64 + ((LHR_MusicState.t >> 11) % 64);
+    result = 127 + LHR_getFMVolume(LHR_MusicState.t, c_freq, m_freq, m_index) / 2;
+  }
+  else
+  {
+    // Default Bytebeat
+    #define S LHR_MusicState.t
+    #define S2 LHR_MusicState.t2
+    #define N11S LHR_MusicState.n11t
+
+    switch (LHR_MusicState.track)
     {
-      uint32_t a = ((S >> 7) | (S >> 9) | (~S << 1) | S);
-      result = (((S) & 65536) ? (a & (((S2) >> 16) & 0x09)) : ~a);
-
-      LHR_MusicState.t2 += S;
-
-      break;
+      case 0:
+      {
+        uint32_t a = ((S >> 7) | (S >> 9) | (~S << 1) | S);
+        result = (((S) & 65536) ? (a & (((S2) >> 16) & 0x09)) : ~a);
+        LHR_MusicState.t2 += S;
+        break;
+      }
+      case 1:
+      {
+        uint32_t a = (S >> 10);
+        result = S & (3U << (((a ^ (a << ((S >> 6) % 32)))) % 32));
+        break;
+      }
+      case 2:
+      {
+        result = ~((((S >> ((S >> 2) % 32)) | (S >> ((S >> 5) % 32))) & 0x12) << 1) | (S >> 11);
+        break;
+      }
+      case 3:
+      {
+        result = (((((S >> ((S >> 2) % 32)) + (S >> ((S >> 7) % 32)))) & 0x3f) | (S >> 5) | (S >> 11)) & ((S & (32768 | 8192)) ? 0xf0 : 0x30);
+        break;
+      }
+      case 4:
+      {
+        result = ((0x47 >> ((S >> 9) % 32)) & (S >> (S % 32))) | (0x57 >> ((S >> 7) % 32)) | (0x06 >> ((S >> ((((N11S) >> 14) & 0x0e) % 32)) % 32));
+        LHR_MusicState.n11t += 11;
+        break;
+      }
+      case 5:
+      {
+        uint32_t a = S >> ((S >> 6) % 32);
+        uint32_t b = 0x011121U >> (((a + S) >> 11) % 32);
+        result = (((S >> 9) + (S ^ (S << 1))) & (0x7fU >> (((S >> 15) & 0x03) % 32))) & (b + a);
+        break;
+      }
+      default:
+        result = 127;
+        break;
     }
 
-    case 1:
-    {
-      uint32_t a = (S >> 10);
-      result = S & (3U << (((a ^ (a << ((S >> 6) % 32)))) % 32));
-
-      break;
-    }
-
-    case 2:
-    {
-      result = 
-        ~((((S >> ((S >> 2) % 32)) | (S >> ((S >> 5) % 32))) & 0x12) << 1) 
-        | (S >> 11);
-
-      break;
-    }
-
-    case 3:
-    {
-      result =
-        (((((S >> ((S >> 2) % 32)) + (S >> ((S >> 7) % 32)))) & 0x3f) | (S >> 5)
-        | (S >> 11)) & ((S & (32768 | 8192)) ? 0xf0 : 0x30);
-
-      break;
-    }
-
-    case 4:
-    {
-      result =
-        ((0x47 >> ((S >> 9) % 32)) & (S >> (S % 32))) | 
-        (0x57 >> ((S >> 7) % 32)) |
-        (0x06 >> ((S >> ((((N11S) >> 14) & 0x0e) % 32)) % 32));
-
-      LHR_MusicState.n11t += 11;
-
-      break;
-    }
-
-    case 5:
-    {
-      uint32_t a = S >> ((S >> 6) % 32);
-      uint32_t b = 0x011121U >> (((a + S) >> 11) % 32);
-      result = 
-        (((S >> 9) + (S ^ (S << 1))) & (0x7fU >> (((S >> 15) & 0x03) % 32))) 
-        & (b + a);
-
-      break;
-    }
-
-    default:
-      result = 127;
-      break;
+    #undef S
+    #undef S2
+    #undef N11S
   }
 
-  #undef S
-  #undef S2
-  #undef N11S
-
   LHR_MusicState.t += 1;
-
   return result;
 }
 
