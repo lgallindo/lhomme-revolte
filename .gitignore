@@ -5,7 +5,6 @@ __pycache__/
 *.pyd
 
 # Archives
-*.zip
 *.tar.gz
 *.rar
 

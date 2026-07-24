@@ -1,0 +1,75 @@
+Title                   : Idumea
+Filename                : idumea.wad
+Release date            : 06/10/2024 (RC1)
+Author                  : taviow
+Email Address           : [redacted]
+Other Files By Author   : Some maps in community projects like Hardfest 2 and Doom 2 in City Only, also some maps in other projects like Plutonic Visions, Spectrum Descent, Waffle House and Nostalgia Zero.
+Misc. Author Info       : nothing to point out
+Description             : A very large and non-linear MBF21-compatible (-cl 21) city map based around slaughter combat. It's not meant to be super hard slaughter and I placed many more power-ups than you might actually need during your playthrough, but it's hard enough that I've seen it give people some problems.
+
+Most importantly: this release includes a version of the map for low-end computers! You can select which version you want to play in the episode selection screen, or else just warp to 31 to play the low-spec version.
+
+Additional Credits to   : ravendesk, finnks13, dashlet and ivymagnapinna for latest rounds of playtesting and suggestions. Original playtesters: Insane_gazebo, eater29, finnks13, myolden, maribo, General Roasterock and Jinxie. Thanks to myolden also for creating the Doom 2 in City Only project, this map wouldn't exist without it. 
+
+Art credits:
+Ludi: levelpic, intermission graphics
+Insane_Gazebo: titlepic
+
+Texture credits:
+muumi: animated sky
+Esselfortium: 32in24tex
+D2ICO: HUD
+
+Music credits:
+Title midi/intermission: Thresholds Beyond by Snaxalotl
+Text screen: "Colosseo" from MGS sequenced by Ian Bennett
+MAP01: Guardhouse by Jimmy
+MAP02: Thresholds Beyond by Snaxalotl
+MAP32: Sound of waves by mouldy
+			  
+===========================================================================
+* What is included *
+
+New levels              : 2 + 2 credits maps
+Sounds                  : Yes
+Music                   : Yes
+Graphics                : Yes
+Dehacked/BEX Patch      : No
+Demos                   : No
+Other                   : No
+Other files required    : None
+
+
+* Play Information *
+
+Game                    : Doom 2
+Map #                   : 01,02,31,32
+Single Player           : Designed for
+Cooperative 2-4 Player  : No
+Deathmatch 2-4 Player   : No
+Other game styles       : None
+Difficulty Settings     : Yes.
+
+* Construction *
+
+Base                    : New from scratch
+Build Time              : 3 frenzied weeks followed by a month of implementing the secret exit (I burned myself out a bit). Several months later, about 3 more weeks trying to work out how to make it run well and implementing the required changes.
+Editor(s) used          : Ultimate doom builder, SLADE
+Known Bugs              : It is very important to note that the original version of the map will not perform well on anything other than dsda-doom on OpenGL rendering, as people have let me know many times. The map is very big. If it does not perform well please try MAP31, that one should work with any MBF21 compatible port even while using software rendering.
+May Not Run With        : Anything besides MBF21 compatible ports, gameplay mods have not been tested.
+Tested With             : dsda-doom 0.27.0+ (-cl 21)
+
+* Copyright / Permissions *
+
+This work is licensed under the Creative Commons
+Attribution-NonCommercial-ShareAlike 4.0 International License. To view a
+copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/
+
+You are free to copy and redistribute the material in any medium or format;
+and remix, transform, and build upon the material. If you do so, you must
+give appropriate credit, provide a link to the license, and indicate if
+changes were made. You may do so in any reasonable manner, but not in any way
+that suggests the licensor endorses you or your use. You may not use the
+material for commercial purposes. If you remix, transform, or build upon the
+material, you must distribute your contributions under the same license as
+the original.
