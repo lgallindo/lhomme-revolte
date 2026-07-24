@@ -3118,6 +3118,21 @@ void LHR_winLevel(void)
 /**
   Part of LHR_gameStep() for LHR_GAME_STATE_PLAYING.
 */
+static inline void LHR_updateAnimatedEnvironments(void)
+{
+#if LHR_ANIMATED_ENVIRONMENTS
+  // Cycle floor and ceiling colors for a basic pulsating effect
+  // Every 8 frames, increment color index within a safe 8-color gradient range
+  uint8_t tick = (LHR_game.frame / 8) % 4;
+  LHR_currentLevel.floorColor = LHR_currentLevel.levelPointer->floorColor + tick;
+  LHR_currentLevel.ceilingColor = LHR_currentLevel.levelPointer->ceilingColor + tick;
+  
+  // Skybox animation: cycle through up to 3 background images
+  // For demonstration, cycles every 16 frames if animation is enabled
+  LHR_currentLevel.backgroundImage = (LHR_currentLevel.levelPointer->backgroundImage + (LHR_game.frame / 16)) % 3;
+#endif
+}
+
 void LHR_gameStepPlaying(void)
 {
 #if LHR_QUICK_WIN
@@ -3135,6 +3150,7 @@ void LHR_gameStepPlaying(void)
   }
 
   LHR_updateLevel();
+  LHR_updateAnimatedEnvironments();
 
   int8_t recomputeDirection = LHR_currentLevel.frameStart == LHR_game.frame;
 

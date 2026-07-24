@@ -161,6 +161,14 @@
 #endif
 
 /**
+  Whether to animate level environments (skybox rotation, floor color pulsing).
+  Disabling this will save a small amount of CPU overhead on low-end devices.
+*/
+#ifndef LHR_ANIMATED_ENVIRONMENTS
+  #define LHR_ANIMATED_ENVIRONMENTS 1
+#endif
+
+/**
   If set, floor and ceiling will be colored differently depending on their
   height. This can be useful when fog is turned on and different floor levels
   are hard to distinguish.
