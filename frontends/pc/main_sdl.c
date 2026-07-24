@@ -101,6 +101,11 @@
 #include "wipe_effect.h"
 #include <sys/select.h>
 
+#define TSF_IMPLEMENTATION
+#include "tsf.h"
+#define TML_IMPLEMENTATION
+#include "tml.h"
+
 uint8_t agentSyncMode = 0;
 uint16_t agentKeyBitmask = 0;
 int16_t agentMouseDx = 0;
@@ -603,6 +608,33 @@ void audioFillCallback(void *userdata, uint8_t *s, int l)
     }
   }
 
+  // Handle MIDI logic
+  static tsf *g_TinySoundFont = NULL;
+  static tml_message *g_MidiMessage = NULL;
+  static double g_Msec = 0.0;
+  static const char *currentMidiFilename = NULL;
+
+  if (LHR_MusicState.current_track.type == LHR_AUDIO_MIDI)
+  {
+    if (musicOn && LHR_MusicState.current_track.source.filename != NULL)
+    {
+      if (g_TinySoundFont == NULL) {
+        g_TinySoundFont = tsf_load_filename("tests/samples/gm.sf2");
+        if (g_TinySoundFont) tsf_set_output(g_TinySoundFont, TSF_MONO, 8000, 0);
+      }
+      if (g_TinySoundFont && (g_MidiMessage == NULL || currentMidiFilename != LHR_MusicState.current_track.source.filename))
+      {
+        if (g_MidiMessage) tml_free(g_MidiMessage);
+        currentMidiFilename = LHR_MusicState.current_track.source.filename;
+        g_MidiMessage = tml_load_filename(currentMidiFilename);
+        g_Msec = 0.0;
+      }
+    }
+    else if (g_MidiMessage) {
+        // Just pause playback
+    }
+  }
+
   for (int i = 0; i < l / 2; ++i)
   {
     int16_t sample = 0;
@@ -619,6 +651,41 @@ void audioFillCallback(void *userdata, uint8_t *s, int l)
             fread(&pcmSample, 1, 1, pcmStreamFile);
           }
           sample = SDL_MUSIC_VOLUME * (pcmSample - 127);
+        }
+      }
+      else if (LHR_MusicState.current_track.type == LHR_AUDIO_MIDI)
+      {
+        if (g_TinySoundFont && g_MidiMessage)
+        {
+            // Process MIDI messages for this sample
+            while (g_MidiMessage && g_Msec >= g_MidiMessage->time)
+            {
+                switch (g_MidiMessage->type)
+                {
+                    case TML_PROGRAM_CHANGE:
+                        tsf_channel_set_presetnumber(g_TinySoundFont, g_MidiMessage->channel, g_MidiMessage->program, (g_MidiMessage->channel == 9));
+                        break;
+                    case TML_NOTE_ON:
+                        tsf_channel_note_on(g_TinySoundFont, g_MidiMessage->channel, g_MidiMessage->key, g_MidiMessage->velocity / 127.0f);
+                        break;
+                    case TML_NOTE_OFF:
+                        tsf_channel_note_off(g_TinySoundFont, g_MidiMessage->channel, g_MidiMessage->key);
+                        break;
+                    case TML_PITCH_BEND:
+                        tsf_channel_set_pitchwheel(g_TinySoundFont, g_MidiMessage->channel, g_MidiMessage->pitch_bend);
+                        break;
+                    case TML_CONTROL_CHANGE:
+                        tsf_channel_midi_control(g_TinySoundFont, g_MidiMessage->channel, g_MidiMessage->control, g_MidiMessage->control_value);
+                        break;
+                }
+                g_MidiMessage = g_MidiMessage->next;
+            }
+            
+            short midiSample = 0;
+            tsf_render_short(g_TinySoundFont, &midiSample, 1, 0);
+            sample = (SDL_MUSIC_VOLUME * midiSample) / 128; // scale volume
+            
+            g_Msec += (1000.0 / 8000.0); // 1 sample at 8000Hz = 0.125 ms
         }
       }
       else
