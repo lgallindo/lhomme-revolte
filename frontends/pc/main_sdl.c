@@ -96,6 +96,14 @@
 #include <SDL.h>
 
 #define LHR_PC 1
+
+#define LHR_PLATFORM_CAPABILITIES ( \
+  LHR_CAP_KEYS_16 | LHR_CAP_MOUSE | LHR_CAP_AUDIO_PCM | \
+  LHR_CAP_AUDIO_MIDI | LHR_CAP_AUDIO_BYTEBEAT | \
+  LHR_CAP_FILESYSTEM | LHR_CAP_HIGH_RES | LHR_CAP_SAVE_FILE | \
+  LHR_CAP_COLOR_DEPTH_16 )
+
+#include "mapset.h"
 #include "game.h"
 #include "sounds.h"
 #include "wipe_effect.h"
