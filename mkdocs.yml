@@ -1,0 +1,7 @@
+site_name: L'Homme Révolté
+nav:
+  - Home: index.md
+  - Downloaded Assets & Licenses: assets.md
+  - Enemy AI Behavior: enemy_ai.md
+  - Mapsets & Project Architecture: mapsets_architecture.md
+theme: readthedocs
