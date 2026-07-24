@@ -563,17 +563,71 @@ static inline int16_t mixSamples(int16_t sample1, int16_t sample2)
 uint8_t musicOn = 0;
 // ^ this has to be init to 0 (not 1), else a few samples get played at start
 
+static FILE *pcmStreamFile = NULL;
+static const char *currentPcmFilename = NULL;
+
 void audioFillCallback(void *userdata, uint8_t *s, int l)
 {
   uint16_t *s16 = (uint16_t *) s;
 
+  // Handle PCM stream logic
+  if (LHR_MusicState.current_track.type == LHR_AUDIO_PCM)
+  {
+    if (musicOn && LHR_MusicState.current_track.source.filename != NULL)
+    {
+      if (pcmStreamFile == NULL || currentPcmFilename != LHR_MusicState.current_track.source.filename)
+      {
+        if (pcmStreamFile) fclose(pcmStreamFile);
+        currentPcmFilename = LHR_MusicState.current_track.source.filename;
+        pcmStreamFile = fopen(currentPcmFilename, "rb");
+        if (pcmStreamFile) fseek(pcmStreamFile, 44, SEEK_SET); // Skip WAV header
+      }
+    }
+    else
+    {
+      if (pcmStreamFile)
+      {
+        fclose(pcmStreamFile);
+        pcmStreamFile = NULL;
+        currentPcmFilename = NULL;
+      }
+    }
+  }
+  else
+  {
+    if (pcmStreamFile)
+    {
+      fclose(pcmStreamFile);
+      pcmStreamFile = NULL;
+      currentPcmFilename = NULL;
+    }
+  }
+
   for (int i = 0; i < l / 2; ++i)
   {
-    s16[i] = musicOn ?
-      mixSamples(audioBuff[audioPos], SDL_MUSIC_VOLUME *
-      (LHR_getNextMusicSample() - LHR_musicTrackAverages[LHR_MusicState.track]))
-      : audioBuff[audioPos];
+    int16_t sample = 0;
+    if (musicOn)
+    {
+      if (LHR_MusicState.current_track.type == LHR_AUDIO_PCM)
+      {
+        if (pcmStreamFile)
+        {
+          uint8_t pcmSample = 127;
+          if (fread(&pcmSample, 1, 1, pcmStreamFile) != 1)
+          {
+            fseek(pcmStreamFile, 44, SEEK_SET); // Loop back
+            fread(&pcmSample, 1, 1, pcmStreamFile);
+          }
+          sample = SDL_MUSIC_VOLUME * (pcmSample - 127);
+        }
+      }
+      else
+      {
+        sample = SDL_MUSIC_VOLUME * (LHR_getNextMusicSample() - LHR_musicTrackAverages[LHR_MusicState.track]);
+      }
+    }
 
+    s16[i] = mixSamples(audioBuff[audioPos], sample);
     audioBuff[audioPos] = 0;
     audioPos = (audioPos < LHR_SFX_SAMPLE_COUNT - 1) ? (audioPos + 1) : 0;
   }
