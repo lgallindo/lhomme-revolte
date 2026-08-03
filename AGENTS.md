@@ -1,5 +1,8 @@
 # Instructions for AI Agents
 
+## Agent tooling pointers
+- **BROWSER-001 (Playwright)**: Before browser automation (MCP or scripts), read the house Playwright agent guide at `~/code/research/bureaucracy/docs/workstation/PLAYWRIGHT_FOR_AGENTS_20260803T224500Z.md` (bureaucracy `docs/workstation/PLAYWRIGHT_FOR_AGENTS_20260803T224500Z.md`). Prefer Chromium + a11y snapshots; see that doc for install paths and FOSS MCP alternatives.
+
 ## Core Principles
 - **CORE-001 (Communication Strategy)**: Default to terseness in success, verbosity on failures. Seek clarification for ambiguity. Explicitly declare non-analytical actions (e.g., file edits). (GUID-003)
 - **CORE-002 (Technical Depth)**: Do not hide technical details, the user loves them. Display raw errors and logs before analyzing them. Maintain brevity in prose, but never at the expense of comprehensive technical diagnostic data. (GUID-084)
@@ -26,8 +29,9 @@
 - **TECH-004 (Inference Verification)**: If prompted to infer information that is explicitly defined, pause to verify intent with the user. (GUID-073)
 - **TECH-005 (Escalation Policy)**: If a step fails twice, pause for user guidance. Do not attempt a third time without new data. (GUID-075)
 - **TECH-006 (Empirical Validation)**: Empirically reproduce all reported issues before attempting a resolution. (INST-008)
-- **TECH-007 (Runtime Isolation)**: Use specific runners (e.g., `uv run`, `npm run`) to ensure dependency and environment isolation. (INST-011)
+- **TECH-007 (Runtime Isolation)**: Use specific runners (e.g., `uv run`, `bun run`, nvm-backed `node` when Node is required) to ensure dependency and environment isolation. Rust via **rustup**; JDKs via **SDKMAN!**; Node via **nvm**. (INST-011)
 - **TECH-008 (Artifact Preservation)**: No temporary artifacts or scripts (Implementation Plans, Reports, etc.) should exist outside the repository. Relocate external artifacts to an unobtrusive project subfolder, index them, and ask the user if they should be Git-tracked. (NR-001)
+- **TECH-012 (Git LFS)**: WADs, images, and listed binaries are Git LFS. After clone run `git lfs install && git lfs pull` before compile/test that need those assets.
 
 ## Safety & Destructive Operations
 - **SAFE-001 (Authorization Protocol)**: NEVER perform destructive operations (e.g., deletion, history overwrites, container recreation) without explicit user authorization. (GUID-265)
