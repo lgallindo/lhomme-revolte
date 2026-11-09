@@ -155,3 +155,11 @@ The following tracked code/script/build files have been authored or substantiall
 
 - Legacy assets remain CC0 / Public Domain.
 - New fork assets are CC BY-NC-SA 4.0.
+
+## License Texts
+
+Full texts for each classification above (SPDX identifiers, REUSE layout):
+
+- GPL-3.0-or-later: [`LICENSES/GPL-3.0-or-later.txt`](LICENSES/GPL-3.0-or-later.txt)
+- CC0-1.0: [`LICENSES/CC0-1.0.txt`](LICENSES/CC0-1.0.txt)
+- CC BY-NC-SA 4.0: [`LICENSES/CC-BY-NC-SA-4.0.txt`](LICENSES/CC-BY-NC-SA-4.0.txt)
